@@ -2037,6 +2037,10 @@ export default function App({ authUser }: AppProps) {
                             src={aiGeneratedUrl} 
                             className="w-full h-full object-cover" 
                             alt="AI generated visual reference" 
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80";
+                            }}
                           />
                         )
                       ) : activeCreatedPost.mediaUrl ? (
@@ -2054,6 +2058,10 @@ export default function App({ authUser }: AppProps) {
                             src={activeCreatedPost.mediaUrl} 
                             className="w-full h-full object-cover" 
                             alt="Theme reference visual" 
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80";
+                            }}
                           />
                         )
                       ) : (

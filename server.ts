@@ -856,8 +856,16 @@ Return strictly a JSON object conforming exactly to this structure:
         const mimeType = match ? match[1] : "image/png";
         const ext = mimeType.split("/")[1] || "png";
         const uploadResult = await uploadMediaForUser(uid, referenceMediaUploaded, mimeType, `recreate-${Date.now()}.${ext}`);
-        finalMediaUrl = uploadResult.url;
-        console.log("-> Base64 uploaded successfully! New GCS Download URL:", finalMediaUrl);
+        
+        // If GCS failed and uploadResult.url contains the base64 string fallback,
+        // use the Unsplash placeholder to prevent Firestore 1MB document size crash!
+        if (uploadResult.url && uploadResult.url.startsWith("data:")) {
+          console.warn("-> GCS bucket failed. uploadResult.url is Base64. Falling back to Unsplash placeholder to prevent Firestore 1MB limit crash.");
+          finalMediaUrl = mediaUrl;
+        } else {
+          finalMediaUrl = uploadResult.url;
+        }
+        console.log("-> Base64 processed successfully! Chosen URL:", finalMediaUrl);
       } catch (err: any) {
         console.error("-> Failed to upload base64 to storage, falling back to Unsplash placeholder to prevent Firestore size limit error:", err.message);
         finalMediaUrl = mediaUrl;

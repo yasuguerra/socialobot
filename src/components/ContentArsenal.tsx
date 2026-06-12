@@ -300,6 +300,10 @@ export default function ContentArsenal({
                       alt={item.fileName} 
                       className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                       loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                      }}
                     />
                   )}
                   
