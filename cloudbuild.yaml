@@ -1,0 +1,56 @@
+# Google Cloud Build pipeline for SOCIAL.FLOW.
+# Builds the container, pushes to Artifact Registry, deploys to Cloud Run.
+#
+# Required substitutions:
+#   _REGION            Cloud Run + Artifact Registry region (e.g. us-central1)
+#   _REPO              Artifact Registry repo name (e.g. social-flow)
+#   _SERVICE           Cloud Run service name (e.g. social-flow)
+#   _SERVICE_ACCOUNT   Cloud Run runtime service account email
+#
+# Required Secret Manager secrets (mounted at runtime, NOT baked into image):
+#   GEMINI_API_KEY, FIREBASE_SERVICE_ACCOUNT_JSON, TOKEN_ENCRYPTION_KEY,
+#   SESSION_SECRET, META_APP_ID, META_APP_SECRET
+steps:
+  - name: gcr.io/cloud-builders/docker
+    id: build
+    args:
+      - build
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+      - "-t"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest"
+      - "."
+
+  - name: gcr.io/cloud-builders/docker
+    id: push
+    args:
+      - push
+      - "--all-tags"
+      - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}"
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: deploy
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - "${_SERVICE}"
+      - "--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+      - "--region=${_REGION}"
+      - "--platform=managed"
+      - "--service-account=${_SERVICE_ACCOUNT}"
+      - "--allow-unauthenticated"
+      - "--port=8080"
+      - "--cpu=1"
+      - "--memory=1Gi"
+      - "--min-instances=0"
+      - "--max-instances=10"
+      - "--set-env-vars=NODE_ENV=production,INSTAGRAM_GRAPH_VERSION=v21.0,META_REDIRECT_URI=https://socialobot.web.app/api/oauth/instagram/callback"
+      - "--set-secrets=GEMINI_API_KEY=GEMINI_API_KEY:latest,FIREBASE_SERVICE_ACCOUNT_JSON=FIREBASE_SERVICE_ACCOUNT_JSON:latest,TOKEN_ENCRYPTION_KEY=TOKEN_ENCRYPTION_KEY:latest,SESSION_SECRET=SESSION_SECRET:latest,META_APP_ID=META_APP_ID:latest,META_APP_SECRET=META_APP_SECRET:latest"
+
+images:
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA"
+  - "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest"
+
+options:
+  logging: CLOUD_LOGGING_ONLY

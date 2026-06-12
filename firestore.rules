@@ -1,0 +1,106 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny — everything not matched below is forbidden.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ---- Helpers --------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // ---- Schema validators ---------------------------------------------
+    function isValidBrandProfile(data, userId) {
+      return data.userId == userId
+        && data.name is string && data.name.size() <= 200
+        && (!('industry' in data) || (data.industry is string && data.industry.size() <= 500))
+        && (!('tone' in data) || (data.tone is string && data.tone.size() <= 1000))
+        && (!('website' in data) || (data.website is string && data.website.size() <= 256));
+    }
+
+    function isValidContentIdea(data, userId) {
+      return data.userId == userId
+        && data.id is string && data.id.size() > 0 && data.id.size() <= 128
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.recommendedPlatform is string;
+    }
+
+    function isValidSocialPost(data, userId) {
+      return data.userId == userId
+        && data.id is string && data.id.size() > 0 && data.id.size() <= 128
+        && data.platform is string
+        && data.title is string && data.title.size() > 0 && data.title.size() <= 200
+        && data.status is string;
+    }
+
+    function isValidABCampaign(data, userId) {
+      return data.userId == userId
+        && data.id is string && data.id.size() > 0 && data.id.size() <= 128
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 200
+        && data.status is string;
+    }
+
+    function isValidPlatformConnection(data, userId) {
+      return data.userId == userId
+        && data.platform is string
+        && data.accessTokenCiphertext is string && data.accessTokenCiphertext.size() <= 8192;
+    }
+
+    // ---- Tenant-scoped data: users/{uid}/... ---------------------------
+    match /users/{userId} {
+
+      match /brand_profile/{docId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidBrandProfile(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+
+      match /content_ideas/{ideaId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && isValidId(ideaId)
+          && isValidContentIdea(incoming(), userId);
+        allow delete: if isOwner(userId) && isValidId(ideaId);
+      }
+
+      match /social_posts/{postId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && isValidId(postId)
+          && isValidSocialPost(incoming(), userId);
+        allow delete: if isOwner(userId) && isValidId(postId);
+      }
+
+      match /ab_campaigns/{campaignId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && isValidId(campaignId)
+          && isValidABCampaign(incoming(), userId);
+        allow delete: if isOwner(userId) && isValidId(campaignId);
+      }
+
+      // OAuth tokens — clients should never read these directly; the
+      // server uses admin SDK (which bypasses rules) for publish flows.
+      match /platform_connections/{platform} {
+        allow read: if false;
+        allow create, update: if isOwner(userId) && isValidPlatformConnection(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

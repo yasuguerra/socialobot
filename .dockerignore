@@ -1,0 +1,18 @@
+# Build/runtime artifacts
+node_modules
+dist
+.git
+.env
+.env.*
+*.log
+firebase-debug.log
+.DS_Store
+# Local Firebase emulator data
+.firebase
+# Source/test files we don't need in the image
+coverage
+.vscode
+.idea
+README.md
+*.md
+functions

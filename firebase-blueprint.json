@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "BrandProfile": {
+      "title": "BrandProfile",
+      "description": "Details the social media identity and values for the brand being operated.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Name of the brand" },
+        "website": { "type": "string", "format": "uri", "description": "Target website pointer" },
+        "socialHandles": {
+          "type": "object",
+          "description": "Registered handles across networks"
+        },
+        "industry": { "type": "string" },
+        "tone": { "type": "string" },
+        "targetBuyers": { "type": "string" },
+        "keyProducts": { "type": "string" },
+        "additionalContext": { "type": "string" },
+        "analyzedFromSources": { "type": "boolean" }
+      },
+      "required": ["name", "industry", "tone"]
+    },
+    "ContentIdea": {
+      "title": "ContentIdea",
+      "description": "AI-generated or curated topic and format recommendation.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "hook": { "type": "string" },
+        "recommendedPlatform": { "type": "string" },
+        "recommendedTime": { "type": "string" },
+        "format": { "type": "string" },
+        "visualPrompt": { "type": "string" },
+        "audienceSegment": { "type": "string" },
+        "optimalTimeReasoning": { "type": "string" }
+      },
+      "required": ["id", "title", "recommendedPlatform"]
+    },
+    "SocialPost": {
+      "title": "SocialPost",
+      "description": "Scheduled, published, or draft social media content post item.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "ideaId": { "type": "string" },
+        "platform": { "type": "string" },
+        "title": { "type": "string" },
+        "caption": { "type": "string" },
+        "mediaType": { "type": "string" },
+        "mediaUrl": { "type": "string" },
+        "promptUsed": { "type": "string" },
+        "scheduledTime": { "type": "string" },
+        "status": { "type": "string" },
+        "viralScore": { "type": "integer" },
+        "viralMetrics": { "type": "object" },
+        "viralFeedback": { "type": "string" },
+        "audienceSegment": { "type": "string" },
+        "abGroup": { "type": "string" },
+        "analytics": { "type": "object" }
+      },
+      "required": ["id", "platform", "title", "status"]
+    },
+    "ABCampaign": {
+      "title": "ABCampaign",
+      "description": "High-fidelity social marketing A/B campaign structure comparing two narrative strategies.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "targetProduct": { "type": "string" },
+        "segment": { "type": "string" },
+        "status": { "type": "string" },
+        "strategyA": { "type": "object" },
+        "strategyB": { "type": "object" },
+        "metricCaptured": { "type": "object" }
+      },
+      "required": ["id", "name", "targetProduct", "status"]
+    }
+  },
+  "firestore": {
+    "/brand_profiles/{profileId}": {
+      "schema": "BrandProfile",
+      "description": "Houses detailed dynamic brand dna configuration records"
+    },
+    "/content_ideas/{ideaId}": {
+      "schema": "ContentIdea",
+      "description": "Trained audience content idea suggestions"
+    },
+    "/social_posts/{postId}": {
+      "schema": "SocialPost",
+      "description": "Collection of publisher timelines and scheduled post states"
+    },
+    "/ab_campaigns/{campaignId}": {
+      "schema": "ABCampaign",
+      "description": "Comparative user feedback tests"
+    }
+  }
+}

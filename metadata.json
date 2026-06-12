@@ -1,0 +1,6 @@
+{
+  "name": "Auto Social Media Manager",
+  "description": "An AI autopilot tool that creates, schedules, and automatically posts optimized social media content (images, suggestions, captions) for TikTok, Instagram, LinkedIn, and Facebook, supported by depth performance tracking and viral scorecarding.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
