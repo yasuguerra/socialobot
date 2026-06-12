@@ -282,12 +282,19 @@ app.post("/api/media-arsenal/upload", validateBody(MediaUploadSchema), async (re
       }
     }
 
+    let finalAssetUrl = uploadResult.url;
+    if (uploadResult.url && uploadResult.url.startsWith("data:") && uploadResult.sizeBytes > 800 * 1024) {
+      console.warn("-> Arsenal asset upload failed GCS. Fallback Base64 is too large (>800KB) for Firestore. Falling back to Unsplash placeholder.");
+      const terms = encodeURIComponent(visualPrompt.split(' ').slice(0, 3).join(','));
+      finalAssetUrl = `https://images.unsplash.com/featured/?${terms || "premium,aesthetic"}`;
+    }
+
     // 3. Save as ArsenalMediaAsset to Firestore
     const assetId = `arsenal-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const asset: ArsenalMediaAsset = {
       id: assetId,
       userId: uid,
-      url: uploadResult.url,
+      url: finalAssetUrl,
       storagePath: uploadResult.storagePath,
       fileName: filename || `media-${Date.now()}`,
       mimeType: uploadResult.mimeType,
