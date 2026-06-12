@@ -2290,7 +2290,15 @@ export default function App({ authUser }: AppProps) {
                               {/* Visual Asset representation */}
                               <div className="w-16 h-16 bg-slate-100 rounded-lg overflow-hidden border border-slate-200 shrink-0 relative">
                                 {post.mediaUrl ? (
-                                  <img src={post.mediaUrl} className="w-full h-full object-cover" alt="visual thumbnail" />
+                                  <img 
+                                    src={post.mediaUrl} 
+                                    className="w-full h-full object-cover" 
+                                    alt="visual thumbnail" 
+                                    onError={(e) => {
+                                      e.currentTarget.onerror = null;
+                                      e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                                    }}
+                                  />
                                 ) : (
                                   <div className="flex items-center justify-center h-full text-slate-300">
                                     <ImageIcon className="w-5 h-5" />

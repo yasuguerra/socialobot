@@ -280,7 +280,14 @@ export default function CalendarView({
                   {/* Aesthetic visual image thumbnail indicators */}
                   {post.mediaUrl && (
                     <div className="mt-2 w-full h-11 rounded overflow-hidden border border-slate-100/80 relative">
-                      <img src={post.mediaUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
+                      <img 
+                        src={post.mediaUrl} 
+                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                        }}
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 text-white flex items-center justify-end px-2 p-1">
                         <Eye className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition" />
                       </div>
@@ -477,7 +484,14 @@ export default function CalendarView({
                 <div>
                   <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono mb-1">Visual Asset Preview</h4>
                   <div className="w-full h-44 rounded-xl overflow-hidden border border-slate-200">
-                    <img src={activePreviewPost.mediaUrl} className="w-full h-full object-cover" />
+                    <img 
+                      src={activePreviewPost.mediaUrl} 
+                      className="w-full h-full object-cover" 
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                      }}
+                    />
                   </div>
                 </div>
               )}
