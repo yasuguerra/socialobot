@@ -1411,6 +1411,31 @@ app.post("/api/posts/schedule", validateBody(PostsScheduleSchema), async (req, r
   res.json(updatedPost);
 });
 
+// POST Update an existing post's details
+app.post("/api/posts/update", async (req, res) => {
+  const uid = (req as AuthedRequest).userId!;
+  const { id, ...updates } = req.body;
+
+  if (!id) {
+    return res.status(400).json({ error: "Post ID is required" });
+  }
+
+  const posts = await getSocialPosts(uid);
+  const targetIndex = posts.findIndex(p => p.id === id);
+
+  if (targetIndex === -1) {
+    return res.status(404).json({ error: "Post not found" });
+  }
+
+  const updatedPost: SocialPost = {
+    ...posts[targetIndex],
+    ...updates,
+  };
+
+  await saveSocialPost(uid, updatedPost);
+  res.json(updatedPost);
+});
+
 // DELETE delete post
 app.delete("/api/posts/:id", async (req, res) => {
   const uid = (req as AuthedRequest).userId!;

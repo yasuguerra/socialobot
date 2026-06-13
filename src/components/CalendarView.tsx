@@ -12,7 +12,9 @@ import {
   HelpCircle,
   Eye,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Upload,
+  RefreshCw
 } from 'lucide-react';
 import { SocialPost, SocialPlatform } from '../types';
 import { parseScheduleTime, toIso, formatDisplay } from '../utils/schedule';
@@ -23,6 +25,9 @@ interface CalendarViewProps {
   onPublish: (postId: string) => Promise<void> | void;
   onDelete: (postId: string) => Promise<void> | void;
   onPlanCampaignClick?: () => void;
+  onUpdatePost?: (post: SocialPost) => Promise<void> | void;
+  onRegenerateImage?: (postId: string, promptText: string) => Promise<string | null>;
+  onUploadImage?: (postId: string, dataUri: string, mimeType: string, filename: string) => Promise<string | null>;
 }
 
 export default function CalendarView({ 
@@ -30,7 +35,10 @@ export default function CalendarView({
   onReschedule, 
   onPublish, 
   onDelete,
-  onPlanCampaignClick 
+  onPlanCampaignClick,
+  onUpdatePost,
+  onRegenerateImage,
+  onUploadImage
 }: CalendarViewProps) {
   // Default to the current real-world month.
   const today = new Date();
@@ -41,6 +49,25 @@ export default function CalendarView({
   const [draggedPostId, setDraggedPostId] = useState<string | null>(null);
   const [dragOverDay, setDragOverDay] = useState<number | null>(null);
   const [activePreviewPost, setActivePreviewPost] = useState<SocialPost | null>(null);
+
+  const [isRegenerating, setIsRegenerating] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const [customRegenPrompt, setCustomRegenPrompt] = useState<string>('');
+  const [showPromptInput, setShowPromptInput] = useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (activePreviewPost) {
+      setCustomRegenPrompt(
+        activePreviewPost.promptUsed || 
+        "Premium luxury private plane or helicopter flying over tropical San Blas islands, Panama. Crystal clear turquoise ocean water, white sand islands, cinematic travel photography, sunny day, 4k."
+      );
+      setShowPromptInput(false);
+    } else {
+      setCustomRegenPrompt('');
+      setShowPromptInput(false);
+    }
+  }, [activePreviewPost]);
 
   // Resolve a post's schedule to a calendar day using the shared parser.
   // Returns null for unparseable schedules (those posts won't render on a day).
@@ -481,18 +508,114 @@ export default function CalendarView({
               </div>
 
               {activePreviewPost.mediaUrl && (
-                <div>
+                <div className="space-y-2">
                   <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono mb-1">Visual Asset Preview</h4>
-                  <div className="w-full h-44 rounded-xl overflow-hidden border border-slate-200">
-                    <img 
-                      src={activePreviewPost.mediaUrl} 
-                      className="w-full h-full object-cover" 
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
-                      }}
-                    />
+                  
+                  {/* Media Viewport */}
+                  <div className="w-full h-52 rounded-xl overflow-hidden border border-slate-200 relative group bg-slate-50 flex items-center justify-center shadow-inner">
+                    {activePreviewPost.mediaType === 'video' || activePreviewPost.mediaUrl.includes('.mp4') ? (
+                      <video 
+                        src={activePreviewPost.mediaUrl} 
+                        className="w-full h-full object-cover" 
+                        controls 
+                        playsInline
+                        muted
+                      />
+                    ) : (
+                      <img 
+                        src={activePreviewPost.mediaUrl} 
+                        className="w-full h-full object-cover" 
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                        }}
+                      />
+                    )}
+                    {(isRegenerating || isUploading) && (
+                      <div className="absolute inset-0 bg-slate-900/75 flex flex-col items-center justify-center text-white text-xs font-bold gap-3 z-10 backdrop-blur-xs">
+                        <RefreshCw className="w-6 h-6 animate-spin text-indigo-400" />
+                        <span>{isRegenerating ? "Regenerando imagen con IA..." : "Subiendo archivo..."}</span>
+                      </div>
+                    )}
                   </div>
+
+                  {/* Actions buttons */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      onClick={() => setShowPromptInput(!showPromptInput)}
+                      disabled={isRegenerating || isUploading}
+                      className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-[11px] font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                      <span>{showPromptInput ? "Ocultar Prompt" : "Regenerar con IA"}</span>
+                    </button>
+
+                    <label className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-[11px] font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer text-center">
+                      <Upload className="w-3.5 h-3.5 text-indigo-500" />
+                      <span>Subir Propia Imagen</span>
+                      <input 
+                        type="file" 
+                        accept="image/*,video/*"
+                        disabled={isRegenerating || isUploading}
+                        className="hidden" 
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file || !onUploadImage) return;
+                          setIsUploading(true);
+                          const reader = new FileReader();
+                          reader.onloadend = async () => {
+                            const dataUri = reader.result as string;
+                            const newUrl = await onUploadImage(activePreviewPost.id, dataUri, file.type, file.name);
+                            if (newUrl) {
+                              setActivePreviewPost(prev => prev ? { ...prev, mediaUrl: newUrl, mediaType: file.type.startsWith('video/') ? 'video' : 'image' } : null);
+                            }
+                            setIsUploading(false);
+                          };
+                          reader.readAsDataURL(file);
+                        }}
+                      />
+                    </label>
+                  </div>
+
+                  {/* Prompt Input Block */}
+                  {showPromptInput && (
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 mt-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Escribe tu idea visual</span>
+                        <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-sm font-semibold uppercase">Imagen 3.0</span>
+                      </div>
+                      <textarea
+                        value={customRegenPrompt}
+                        onChange={(e) => setCustomRegenPrompt(e.target.value)}
+                        className="w-full h-16 border border-slate-200 rounded-lg p-2 text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-hidden resize-none"
+                        placeholder="Describe la escena premium que deseas generar..."
+                      />
+                      <div className="flex justify-end gap-1.5">
+                        <button
+                          onClick={() => setShowPromptInput(false)}
+                          className="bg-white hover:bg-slate-100 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200 transition"
+                        >
+                          Cancelar
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!onRegenerateImage || !customRegenPrompt) return;
+                            setIsRegenerating(true);
+                            const newUrl = await onRegenerateImage(activePreviewPost.id, customRegenPrompt);
+                            if (newUrl) {
+                              setActivePreviewPost(prev => prev ? { ...prev, mediaUrl: newUrl, mediaType: 'image', promptUsed: customRegenPrompt } : null);
+                              setShowPromptInput(false);
+                            }
+                            setIsRegenerating(false);
+                          }}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md transition flex items-center gap-1 shadow-xs"
+                        >
+                          <RefreshCw className="w-3 h-3 animate-spin-slow" />
+                          <span>Generar Nueva Imagen</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

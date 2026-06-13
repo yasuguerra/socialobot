@@ -1153,6 +1153,80 @@ export default function App({ authUser }: AppProps) {
     }
   };
 
+  // Update post details (such as mediaUrl, caption, etc.)
+  const handleUpdatePost = async (updatedPost: SocialPost) => {
+    try {
+      const response = await apiFetch('/api/posts/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedPost)
+      });
+      const data = await response.json();
+      setPosts(prev => prev.map(p => p.id === updatedPost.id ? data : p));
+      if (activeCreatedPost?.id === updatedPost.id) {
+        setActiveCreatedPost(data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Regenerate post image with AI
+  const handleRegeneratePostImage = async (postId: string, promptText: string) => {
+    try {
+      const response = await apiFetch('/api/posts/generate-ai-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: promptText })
+      });
+      const data = await response.json();
+      if (data.imageUrl) {
+        const postToUpdate = posts.find(p => p.id === postId);
+        if (postToUpdate) {
+          const updatedPost = { 
+            ...postToUpdate, 
+            mediaUrl: data.imageUrl, 
+            mediaType: 'image' as const,
+            promptUsed: promptText
+          };
+          await handleUpdatePost(updatedPost);
+          return data.imageUrl;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to regenerate post image:", err);
+    }
+    return null;
+  };
+
+  // Upload custom image/video for post
+  const handleUploadPostImage = async (postId: string, dataUri: string, mimeType: string, filename: string) => {
+    try {
+      const response = await apiFetch('/api/media/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dataUri, mimeType, filename })
+      });
+      const data = await response.json();
+      if (data.url) {
+        const postToUpdate = posts.find(p => p.id === postId);
+        if (postToUpdate) {
+          const isVideo = mimeType.startsWith('video/');
+          const updatedPost = { 
+            ...postToUpdate, 
+            mediaUrl: data.url, 
+            mediaType: (isVideo ? 'video' : 'image') as ('video' | 'image' | 'text')
+          };
+          await handleUpdatePost(updatedPost);
+          return data.url;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to upload custom post media:", err);
+    }
+    return null;
+  };
+
   // Create new active comparison campaign (A/B Test Variant)
   const handleCreateAbCampaign = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -2254,6 +2328,9 @@ export default function App({ authUser }: AppProps) {
                   onPublish={handlePublishPostNow}
                   onDelete={handleDeletePost}
                   onPlanCampaignClick={() => setActiveTab('publisher')}
+                  onUpdatePost={handleUpdatePost}
+                  onRegenerateImage={handleRegeneratePostImage}
+                  onUploadImage={handleUploadPostImage}
                 />
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
