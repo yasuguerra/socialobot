@@ -49,25 +49,16 @@ export default function Sidebar({
   };
 
   const menuGroup1 = [
-    { id: 'dashboard', label: 'Performance Analytics', icon: LineChart },
-    { id: 'ideas', label: 'AI Content Idea Vault', icon: Sparkles },
-    { id: 'publisher', label: 'Predictive Creator', icon: FileText },
-    { id: 'arsenal', label: 'Content Arsenal', icon: FolderHeart },
-    { id: 'studio', label: 'AI Creative Studio', icon: Palette },
-    { id: 'scheduler', label: 'Automated Schedule', icon: CalendarRange },
+    { id: 'copilot', label: 'Mi Copiloto de IA', icon: Sparkles },
+    { id: 'arsenal', label: 'Biblioteca de Medios', icon: FolderHeart },
+    { id: 'scheduler', label: 'Agenda de Contenido', icon: CalendarRange },
   ];
 
   const menuGroup2 = [
-    { id: 'brand', label: 'Brand DNA Profile', icon: Building2 },
-    { id: 'abtests', label: 'A/B Testing Lab', icon: Layers },
-    { id: 'channels', label: 'Connected Platforms', icon: Globe },
+    { id: 'remodeler', label: 'El Rincón de Mamá', icon: Paintbrush },
   ];
 
-  const menuGroup3 = [
-    { id: 'remodeler', label: "Space Remodeler (Mamá's Corner)", icon: Paintbrush },
-  ];
-
-  const renderItem = (item: typeof menuGroup1[0]) => {
+  const renderItem = (item: { id: string; label: string; icon: any }) => {
     const Icon = item.icon;
     const isActive = activeTab === item.id;
     return (
@@ -134,7 +125,7 @@ export default function Sidebar({
         <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
           <div>
             <div className="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              Main Console
+              Mi Compañero de IA
             </div>
             <div className="space-y-1">
               {menuGroup1.map(renderItem)}
@@ -143,19 +134,10 @@ export default function Sidebar({
 
           <div>
             <div className="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              Business Intelligence
+              El Rincón de Mamá
             </div>
             <div className="space-y-1">
               {menuGroup2.map(renderItem)}
-            </div>
-          </div>
-
-          <div>
-            <div className="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              Experimental Playgrounds
-            </div>
-            <div className="space-y-1">
-              {menuGroup3.map(renderItem)}
             </div>
           </div>
         </nav>

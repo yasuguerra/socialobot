@@ -379,7 +379,7 @@ export default function ContentArsenal({
                       onClick={() => onSelectForPost(item)}
                       className="flex items-center justify-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-3 rounded-lg text-xs transition shadow-md shadow-indigo-600/10 active:scale-98"
                     >
-                      Crear Post
+                      Usar en Copiloto
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </button>
                     <button

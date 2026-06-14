@@ -202,7 +202,7 @@ interface AppProps {
 
 export default function App({ authUser }: AppProps) {
   const isDevAccount = authUser?.email === 'dev@seliabot.com';
-  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [activeTab, setActiveTab] = useState<string>('copilot');
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [brandProfile, setBrandProfile] = useState<BrandProfile | null>(null);
   const [ideas, setIdeas] = useState<ContentIdea[]>([]);
@@ -566,8 +566,21 @@ export default function App({ authUser }: AppProps) {
     // Autofill description as a draft caption with branding hashtag suggestions
     setCaptionDraft(`✨ ${asset.aiDescription}\n\n#branding #creativity #visuals`);
     
-    // Switch to predictive creator tab
-    setActiveTab('publisher');
+    const mockPost: SocialPost = {
+      id: `draft-${Date.now()}`,
+      platform: 'Instagram',
+      title: `Contenido del Arsenal: ${asset.fileName}`,
+      caption: `✨ ${asset.aiDescription}\n\n#branding #creativity #visuals`,
+      mediaType: asset.mimeType.startsWith('video/') ? 'video' : 'image',
+      mediaUrl: asset.url,
+      status: 'Draft',
+      viralScore: 85,
+      scheduledTime: new Date(Date.now() + 3*24*60*60*1000).toISOString()
+    };
+    setActiveCreatedPost(mockPost);
+    
+    // Switch to copilot tab
+    setActiveTab('copilot');
   };
 
   const handleSelectArsenalForStudio = (asset: ArsenalMediaAsset) => {
@@ -1153,6 +1166,21 @@ export default function App({ authUser }: AppProps) {
     }
   };
 
+  const handleCreateManualDraft = () => {
+    const newPost: SocialPost = {
+      id: `draft-${Date.now()}`,
+      platform: creatorPlatform || 'Instagram',
+      title: 'Nuevo Borrador',
+      caption: captionDraft || 'Escribe tu copy aquí...',
+      mediaType: 'image',
+      mediaUrl: referenceImageUrl || 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
+      status: 'Draft',
+      viralScore: 80,
+      scheduledTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+    };
+    setActiveCreatedPost(newPost);
+  };
+
   // Update post details (such as mediaUrl, caption, etc.)
   const handleUpdatePost = async (updatedPost: SocialPost) => {
     try {
@@ -1349,15 +1377,10 @@ export default function App({ authUser }: AppProps) {
             </button>
 
             <h1 className="text-xs sm:text-sm md:text-base font-bold text-slate-900 tracking-tight capitalize truncate">
-              {activeTab === 'dashboard' && 'Enterprise Dashboard'}
-              {activeTab === 'brand' && 'Brand DNA Context Engine'}
-              {activeTab === 'ideas' && 'AI Content Ideas Board'}
-              {activeTab === 'publisher' && 'Predictive Creator Studio'}
-              {activeTab === 'scheduler' && 'Autopilot Post Schedule'}
-              {activeTab === 'abtests' && 'Headline A/B Testing Workspace'}
-              {activeTab === 'channels' && 'Connected Platforms & Social Scanner'}
-              {activeTab === 'arsenal' && 'Multimodal Content Arsenal'}
-              {activeTab === 'remodeler' && "Space Remodeler (El Rincón de Mamá)"}
+              {activeTab === 'copilot' && 'Mi Copiloto de IA'}
+              {activeTab === 'arsenal' && 'Mi Biblioteca de Medios'}
+              {activeTab === 'scheduler' && 'Agenda de Contenido'}
+              {activeTab === 'remodeler' && "Remodelador de Espacio (El Rincón de Mamá)"}
             </h1>
             
             <div className="hidden sm:flex items-center gap-1.5 shrink-0">
@@ -1395,13 +1418,16 @@ export default function App({ authUser }: AppProps) {
               
               <button 
                 onClick={() => {
-                  setCreatorTitle('');
-                  setCreatorVisualPrompt('Aesthetic commercial workspace lay styled with plants');
-                  setActiveTab('publisher');
+                  setCreatorTitle('Nueva publicación');
+                  setCaptionDraft('');
+                  setReferenceImageUrl(null);
+                  setImagePreview(null);
+                  setActiveCreatedPost(null);
+                  setActiveTab('copilot');
                 }}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[11px] md:text-xs px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-lg transition-all duration-200 shadow-sm"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[11px] md:text-xs px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-lg transition-all duration-200 shadow-sm cursor-pointer"
               >
-                + Plan Campaign
+                + Nuevo Borrador
               </button>
             </div>
           </div>
@@ -1421,67 +1447,89 @@ export default function App({ authUser }: AppProps) {
         {/* Workspace core body with customized tabs */}
         <div className="flex-1 overflow-y-auto p-6 min-h-0 bg-slate-50/50">
           
-          {/* TAB 1: Dashboard */}
-          {activeTab === 'dashboard' && (
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6" id="dashboard-workspace-wrapper">
-              <div className="xl:col-span-8 space-y-6">
-                <Dashboard 
-                  analyticsData={analytics} 
-                  onRefresh={fetchAnalytics} 
-                  loading={loadingAnalytics} 
-                />
-              </div>
-              <div className="xl:col-span-4 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl p-5 flex flex-col h-[750px] relative" id="ai-strategist-panel">
-                {/* AI Strategist Panel Title */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-white text-md shadow-sm">
+          {/* TAB 1: Copiloto de IA */}
+          {activeTab === 'copilot' && (
+            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 h-[800px]" id="copilot-workspace-wrapper">
+              
+              {/* Columna Izquierda: Chat del Copiloto */}
+              <div className="xl:col-span-7 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-full relative" id="ai-copilot-chat-panel">
+                
+                {/* Cabecera del Copiloto */}
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100 shrink-0">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md shadow-indigo-600/10">
                       🤖
                     </div>
                     <div>
-                      <h3 className="font-bold text-sm text-slate-100">AI Social Strategist</h3>
-                      <p className="text-[10px] text-slate-400 font-mono">ADK Agentive CMO Active</p>
+                      <h3 className="font-bold text-sm text-slate-900">Tu Copiloto de Social Media</h3>
+                      <p className="text-[10px] text-slate-500 font-mono">Gemini 3.5 Flash Activo & Conectado</p>
                     </div>
                   </div>
-                  <span className="flex h-2.5 w-2.5 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="flex h-2 w-2 relative">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">En Línea</span>
+                  </div>
                 </div>
 
-                {/* Chat History View */}
-                <div className="flex-1 overflow-y-auto py-4 space-y-4 pr-1 scrollbar-thin" id="ai-chat-history">
+                {/* Acciones Rápidas en la parte superior del chat */}
+                <div className="py-3 border-b border-slate-100 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
+                  <button 
+                    onClick={() => handleSendSuggestedMsg("Sugiéreme un hilo de 3 historias de Instagram muy dinámicas e interesantes sobre mi empresa de hoy.")}
+                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+                  >
+                    📱 Sugerir Historias
+                  </button>
+                  <button 
+                    onClick={() => handleSendSuggestedMsg("Dame una idea viral para un Reel de Instagram con un buen gancho, descripción y recomendación visual.")}
+                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+                  >
+                    🎥 Sugerir un Reel
+                  </button>
+                  <button 
+                    onClick={() => handleSendSuggestedMsg("Crea una propuesta de carrusel educativo para mi cuenta sobre nuestros productos estrella.")}
+                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+                  >
+                    📊 Sugerir Carrusel
+                  </button>
+                  <button 
+                    onClick={() => handleSendSuggestedMsg("Escribe un post estándar con hashtags optimizados y una llamada a la acción irresistible.")}
+                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+                  >
+                    ✍️ Sugerir Post
+                  </button>
+                </div>
+
+                {/* Historial de Chat */}
+                <div className="flex-1 overflow-y-auto py-4 space-y-4 pr-1 scrollbar-thin" id="copilot-chat-history">
                   {agentMessages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center p-4 space-y-4">
-                      <div className="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-slate-400">
-                        <Sparkles className="w-6 h-6 text-indigo-400 animate-pulse" />
+                    <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
+                      <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center shadow-inner">
+                        <Sparkles className="w-7 h-7 text-indigo-650 animate-pulse" />
                       </div>
-                      <div className="space-y-1">
-                        <p className="text-xs font-bold text-slate-200">Welcome to your AI Strategy Chamber</p>
-                        <p className="text-[10.5px] text-slate-400 leading-normal max-w-[240px]">
-                          Ask Gemini Pro about viral hooks, optimal calendars, competitor analysis, or scheduling optimization.
+                      <div className="space-y-1.5 max-w-sm">
+                        <p className="text-sm font-bold text-slate-800">¡Hola! Soy tu asistente de redes sociales</p>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          Estoy aquí para facilitarte la gestión de tu cuenta de Instagram. Sube fotos y videos en la biblioteca de medios y pregúntame qué publicar en tus historias, reels o posts estándar.
                         </p>
                       </div>
                       
-                      {/* Starter suggestions */}
-                      <div className="pt-3 w-full space-y-2">
+                      {/* Sugerencias de Inicio */}
+                      <div className="pt-2 w-full space-y-2 max-w-md">
+                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ideas de sugerencias para empezar:</p>
                         <button 
-                          onClick={() => handleSendSuggestedMsg("Generate 3 content ideas for Skyride Panama")}
-                          className="w-full text-left p-2.5 bg-slate-800/60 hover:bg-slate-800 text-[10px] rounded-lg border border-slate-700/50 transition truncate block cursor-pointer"
+                          onClick={() => handleSendSuggestedMsg("Quiero subir algo hoy a mis historias. ¿Qué me sugieres según mi biblioteca de fotos?")}
+                          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-150 text-xs rounded-xl border border-slate-200/80 transition truncate block cursor-pointer text-slate-700"
                         >
-                          💡 "Generate 3 content ideas for Skyride Panama"
+                          💡 "Quiero subir algo hoy a mis historias. ¿Qué me sugieres?"
                         </button>
                         <button 
-                          onClick={() => handleSendSuggestedMsg("What is the optimal weekly posting schedule?")}
-                          className="w-full text-left p-2.5 bg-slate-800/60 hover:bg-slate-800 text-[10px] rounded-lg border border-slate-700/50 transition truncate block cursor-pointer"
+                          onClick={() => handleSendSuggestedMsg("Dame un guion rápido para un Reel corto de 15 segundos y sus hashtags correspondientes.")}
+                          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-150 text-xs rounded-xl border border-slate-200/80 transition truncate block cursor-pointer text-slate-700"
                         >
-                          📅 "What is the optimal weekly posting schedule?"
-                        </button>
-                        <button 
-                          onClick={() => handleSendSuggestedMsg("Recommend hashtags for an aerial Panama Canal tour")}
-                          className="w-full text-left p-2.5 bg-slate-800/60 hover:bg-slate-800 text-[10px] rounded-lg border border-slate-700/50 transition truncate block cursor-pointer"
-                        >
-                          🏷️ "Recommend hashtags for a Panama Canal tour"
+                          🎬 "Dame un guion rápido para un Reel corto de 15 segundos."
                         </button>
                       </div>
                     </div>
@@ -1492,31 +1540,60 @@ export default function App({ authUser }: AppProps) {
                         className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                       >
                         <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">
-                          {msg.sender === 'user' ? 'You' : 'Strategist'}
+                          {msg.sender === 'user' ? 'Tú' : 'Copiloto de IA'}
                         </span>
-                        <div className={`p-3 rounded-2xl text-xs leading-relaxed max-w-[90%] ${
+                        <div className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[90%] ${
                           msg.sender === 'user' 
                             ? 'bg-indigo-600 text-white rounded-tr-none' 
-                            : 'bg-slate-800 text-slate-200 rounded-tl-none border border-slate-700/40'
+                            : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200/60 shadow-xs'
                         }`}>
                           <p className="whitespace-pre-line">{msg.text}</p>
+                          
+                          {msg.sender === 'agent' && (
+                            <div className="mt-3 pt-2.5 border-t border-slate-200/50 flex gap-2 shrink-0">
+                              <button
+                                onClick={() => {
+                                  setCaptionDraft(msg.text);
+                                  if (!activeCreatedPost) {
+                                    const newPost: SocialPost = {
+                                      id: `draft-${Date.now()}`,
+                                      platform: 'Instagram',
+                                      title: 'Propuesta Copiloto',
+                                      caption: msg.text,
+                                      mediaType: 'image',
+                                      mediaUrl: referenceImageUrl || 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
+                                      status: 'Draft',
+                                      viralScore: 85,
+                                      scheduledTime: new Date(Date.now() + 24*60*60*1000).toISOString()
+                                    };
+                                    setActiveCreatedPost(newPost);
+                                  } else {
+                                    setActiveCreatedPost(prev => prev ? { ...prev, caption: msg.text } : null);
+                                  }
+                                }}
+                                className="bg-indigo-605 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
+                              >
+                                ✨ Usar como Borrador
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))
                   )}
                   {loadingAgent && (
                     <div className="flex flex-col items-start">
-                      <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">Strategist</span>
-                      <div className="p-3 bg-slate-800 text-slate-400 rounded-2xl rounded-tl-none border border-slate-700/40 flex items-center gap-2 text-xs">
-                        <RefreshCw className="animate-spin w-3.5 h-3.5 text-indigo-400" />
-                        <span>Strategist is calculating campaign coordinates...</span>
+                      <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">Copiloto</span>
+                      <div className="p-3 bg-slate-100 text-slate-500 rounded-2xl rounded-tl-none border border-slate-200/60 flex items-center gap-2 text-xs">
+                        <RefreshCw className="animate-spin w-3.5 h-3.5 text-indigo-600" />
+                        <span>El copiloto está pensando la mejor estrategia...</span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {/* Input form */}
-                <div className="pt-4 border-t border-slate-800 mt-auto">
+                {/* Formulario de Entrada */}
+                <div className="pt-3 border-t border-slate-100 mt-auto shrink-0">
                   <div className="flex gap-2">
                     <input
                       type="text"
@@ -1524,18 +1601,282 @@ export default function App({ authUser }: AppProps) {
                       onChange={(e) => setAgentInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSendAgentMsg()}
                       disabled={loadingAgent}
-                      placeholder="Type strategy message..."
-                      className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 outline-none focus:border-indigo-500 transition-colors"
+                      placeholder="Pregúntale a tu copiloto de IA (ej: 'Sugiéreme algo para historias hoy')..."
+                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-450 outline-none focus:bg-white focus:border-indigo-500 transition-all shadow-inner"
                     />
                     <button
                       onClick={handleSendAgentMsg}
                       disabled={loadingAgent || !agentInput.trim()}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-2 rounded-lg transition disabled:opacity-40 cursor-pointer"
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-indigo-600/10 hover:scale-[1.02]"
                     >
-                      <Send className="w-3.5 h-3.5" />
+                      <Send className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
+              </div>
+
+              {/* Columna Derecha: Borrador y Previsualización Activa */}
+              <div className="xl:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-full relative" id="active-draft-panel">
+                
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
+                  <h3 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
+                    <Sparkle className="w-4 h-4 text-indigo-600" />
+                    Borrador de Publicación Activa
+                  </h3>
+                  {activeCreatedPost && (
+                    <button 
+                      onClick={() => {
+                        setActiveCreatedPost(null);
+                        setCaptionDraft('');
+                        setReferenceImageUrl(null);
+                        setImagePreview(null);
+                      }}
+                      className="text-[10px] text-slate-400 hover:text-red-500 font-bold transition"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+
+                {activeCreatedPost || referenceImageUrl || imagePreview ? (
+                  <div className="flex-1 flex flex-col min-h-0 space-y-4 pt-4 overflow-y-auto pr-0.5 scrollbar-thin">
+                    
+                    {/* Previsualización de Imagen / Video */}
+                    <div className="bg-slate-50 aspect-square w-full relative flex items-center justify-center overflow-hidden border border-slate-200 rounded-xl shrink-0 shadow-sm">
+                      {referenceImageUrl || imagePreview ? (
+                        (referenceImageUrl || imagePreview)!.includes('.mp4') || creatorFormat === 'Video' ? (
+                          <video 
+                            src={referenceImageUrl || imagePreview || ''} 
+                            controls 
+                            loop 
+                            autoPlay 
+                            muted 
+                            className="w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <img 
+                            src={referenceImageUrl || imagePreview || ''} 
+                            className="w-full h-full object-cover" 
+                            alt="Visual de borrador" 
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                            }}
+                          />
+                        )
+                      ) : (
+                        <div className="text-center p-4 text-slate-400">
+                          <ImageIcon className="w-8 h-8 mx-auto mb-1 text-slate-300" />
+                          <p className="text-xs">Sin imagen o video cargado.</p>
+                        </div>
+                      )}
+                      
+                      <div className="absolute top-2.5 right-2.5 bg-slate-900/70 backdrop-blur-xs text-white px-2 py-0.5 rounded-full text-[9px] font-bold font-mono tracking-widest uppercase shadow-sm">
+                        {(activeCreatedPost?.platform || creatorPlatform).toUpperCase()}
+                      </div>
+                    </div>
+
+                    {/* Editor de Texto del Copy */}
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center mb-0.5">
+                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Texto de la Publicación (Copy)</span>
+                        <span className="text-[9px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md font-mono">{captionDraft.length} caracteres</span>
+                      </div>
+                      <textarea
+                        rows={5}
+                        value={captionDraft}
+                        onChange={(e) => {
+                          setCaptionDraft(e.target.value);
+                          if (activeCreatedPost) {
+                            setActiveCreatedPost(prev => prev ? { ...prev, caption: e.target.value } : null);
+                          }
+                        }}
+                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 font-sans outline-none leading-relaxed text-slate-800 focus:bg-white focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition"
+                        placeholder="Escribe el copy de tu publicación o cópialo de las sugerencias del chat de la izquierda..."
+                      />
+                    </div>
+
+                    {/* Selector de Plataforma */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">¿Dónde lo publicaremos?</span>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {(['Instagram', 'Facebook', 'TikTok', 'LinkedIn'] as const).map((plat) => {
+                          const isSelected = (activeCreatedPost?.platform || creatorPlatform) === plat;
+                          return (
+                            <button
+                              key={plat}
+                              type="button"
+                              onClick={() => {
+                                setCreatorPlatform(plat);
+                                if (activeCreatedPost) {
+                                  setActiveCreatedPost(prev => prev ? { ...prev, platform: plat } : null);
+                                }
+                              }}
+                              className={`text-[10px] font-bold py-1.5 rounded-lg border transition text-center shrink-0 cursor-pointer ${
+                                isSelected 
+                                  ? 'bg-indigo-50 border-indigo-300 text-indigo-700 shadow-sm' 
+                                  : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
+                              }`}
+                            >
+                              {plat}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Horario de Publicación */}
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">Hora Sugerida / Programación</span>
+                      <input
+                        type="text"
+                        value={scheduledDraftTime}
+                        onChange={(e) => setScheduledDraftTime(e.target.value)}
+                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-sans outline-none text-slate-850 focus:bg-white focus:border-indigo-450 transition"
+                        placeholder="ej: Hoy, 6:00 PM o Lunes, 9:00 AM"
+                      />
+                    </div>
+
+                    {/* Controles de Publicación o Guardado */}
+                    <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 pb-2 shrink-0">
+                      
+                      <button
+                        onClick={async () => {
+                          let finalPostId = activeCreatedPost?.id;
+                          
+                          setPublishingPostId(finalPostId || 'pending');
+                          try {
+                            if (!finalPostId || finalPostId.startsWith('draft-')) {
+                              // Create in DB
+                              const response = await apiFetch('/api/posts/generate', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  title: creatorTitle || "Publicación Copiloto",
+                                  platform: activeCreatedPost?.platform || creatorPlatform,
+                                  format: creatorFormat,
+                                  customPrompt: captionDraft,
+                                  themePrompt: captionDraft,
+                                  referenceMediaUploaded: referenceImageUrl || undefined
+                                })
+                              });
+                              if (response.ok) {
+                                const created = await response.json();
+                                finalPostId = created.id;
+                                setPosts(prev => [created, ...prev]);
+                              }
+                            }
+                            
+                            if (finalPostId) {
+                              await handlePublishPostNow(finalPostId);
+                              alert("¡Publicación enviada exitosamente a Instagram!");
+                            } else {
+                              alert("No se pudo iniciar el proceso de publicación.");
+                            }
+                          } catch (err: any) {
+                            console.error(err);
+                            alert("Fallo al publicar: " + err.message);
+                          } finally {
+                            setPublishingPostId(null);
+                          }
+                        }}
+                        disabled={publishingPostId !== null}
+                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-xl shadow-md shadow-indigo-600/10 transition flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.01]"
+                      >
+                        {publishingPostId !== null ? (
+                          <>
+                            <RefreshCw className="animate-spin w-4 h-4" />
+                            <span>Publicando en Instagram...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Globe className="w-4 h-4 text-emerald-300" />
+                            <span>Publicar en Instagram Ahora Mismo</span>
+                          </>
+                        )}
+                      </button>
+
+                      <div className="flex gap-2">
+                        <button
+                          onClick={async () => {
+                            let finalPostId = activeCreatedPost?.id;
+                            try {
+                              if (!finalPostId || finalPostId.startsWith('draft-')) {
+                                // Create in DB
+                                const response = await apiFetch('/api/posts/generate', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    title: creatorTitle || "Publicación Programada",
+                                    platform: activeCreatedPost?.platform || creatorPlatform,
+                                    format: creatorFormat,
+                                    customPrompt: captionDraft,
+                                    themePrompt: captionDraft,
+                                    referenceMediaUploaded: referenceImageUrl || undefined
+                                  })
+                                });
+                                if (response.ok) {
+                                  const created = await response.json();
+                                  finalPostId = created.id;
+                                  setPosts(prev => [created, ...prev]);
+                                }
+                              }
+                              
+                              if (finalPostId) {
+                                await handleSchedulePost(finalPostId, scheduledDraftTime);
+                                alert("¡Publicación programada exitosamente en la agenda!");
+                                setActiveTab('scheduler'); 
+                              } else {
+                                alert("No se pudo iniciar el borrador de programación.");
+                              }
+                            } catch (err: any) {
+                              console.error(err);
+                              alert("Fallo al programar: " + err.message);
+                            }
+                          }}
+                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold py-2 rounded-xl border border-slate-200/80 transition cursor-pointer text-center"
+                        >
+                          📅 Agendar en mi Calendario
+                        </button>
+                        
+                        <button
+                          onClick={() => {
+                            if (activeCreatedPost && activeCreatedPost.id) {
+                              handleDeletePost(activeCreatedPost.id);
+                            }
+                            setActiveCreatedPost(null);
+                            setCaptionDraft('');
+                            setReferenceImageUrl(null);
+                            setImagePreview(null);
+                          }}
+                          className="bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 p-2 rounded-xl border border-slate-200 transition cursor-pointer"
+                          title="Eliminar Borrador"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-4">
+                    <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-450 border border-slate-200/60 shadow-inner">
+                      <ImageIcon className="w-6 h-6 text-slate-350" />
+                    </div>
+                    <div className="space-y-1.5 max-w-xs">
+                      <h4 className="font-bold text-slate-800 text-xs">Sin Borrador Activo</h4>
+                      <p className="text-[11px] text-slate-500 leading-relaxed">
+                        Selecciona un recurso desde tu <strong>Biblioteca de Medios</strong> o pídele algo al <strong>Copiloto de IA</strong> para empezar a generar contenido increíble con un solo toque.
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleCreateManualDraft}
+                      className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-2 rounded-xl border border-indigo-150 transition cursor-pointer shadow-xs"
+                    >
+                      + Crear Borrador Vacío
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -2073,7 +2414,7 @@ export default function App({ authUser }: AppProps) {
               <div className="lg:col-span-5 h-full space-y-6">
                 
                 {/* Visual mockup of social draft */}
-                {activeCreatedPost ? (
+                {(activeCreatedPost || referenceImageUrl || imagePreview) ? (
                   <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                     {/* Channel header preview mockup */}
                     <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
@@ -2083,13 +2424,15 @@ export default function App({ authUser }: AppProps) {
                         </div>
                         <div>
                           <span className="font-bold text-slate-900 text-xs block leading-none">ecostyle_wear</span>
-                          <span className="text-[10px] text-indigo-600 font-mono font-bold">{activeCreatedPost.platform} Mock Sandbox Feed</span>
+                          <span className="text-[10px] text-indigo-600 font-mono font-bold">
+                            {(activeCreatedPost?.platform || creatorPlatform || 'Instagram')} Mock Sandbox Feed
+                          </span>
                         </div>
                       </div>
                       
                       <div className="flex items-center gap-1.5">
                         <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded uppercase">
-                          {activeCreatedPost.status}
+                          {(activeCreatedPost?.status || 'DRAFT')}
                         </span>
                       </div>
                     </div>
@@ -2113,11 +2456,32 @@ export default function App({ authUser }: AppProps) {
                             alt="AI generated visual reference" 
                             onError={(e) => {
                               e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80";
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
                             }}
                           />
                         )
-                      ) : activeCreatedPost.mediaUrl ? (
+                      ) : (referenceImageUrl || imagePreview) ? (
+                        (referenceImageUrl || imagePreview)!.includes('.mp4') || creatorFormat === 'Video' ? (
+                          <video 
+                            src={referenceImageUrl || imagePreview || ''} 
+                            controls 
+                            loop 
+                            autoPlay 
+                            muted 
+                            className="w-full h-full object-cover" 
+                          />
+                        ) : (
+                          <img 
+                            src={referenceImageUrl || imagePreview || ''} 
+                            className="w-full h-full object-cover" 
+                            alt="Selected reference visual" 
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
+                            }}
+                          />
+                        )
+                      ) : (activeCreatedPost && activeCreatedPost.mediaUrl) ? (
                         activeCreatedPost.mediaUrl.includes('.mp4') || activeCreatedPost.mediaUrl.includes('/veo/') || activeCreatedPost.mediaType === 'video' ? (
                           <video 
                             src={activeCreatedPost.mediaUrl} 
@@ -2134,7 +2498,7 @@ export default function App({ authUser }: AppProps) {
                             alt="Theme reference visual" 
                             onError={(e) => {
                               e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80";
+                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
                             }}
                           />
                         )
@@ -2163,40 +2527,46 @@ export default function App({ authUser }: AppProps) {
                       </div>
 
                       {/* Manual controls buttons to Publish or Schedule */}
-                      <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
-                        <button
-                          onClick={() => handlePublishPostNow(activeCreatedPost.id)}
-                          disabled={publishingPostId === activeCreatedPost.id}
-                          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg shadow-sm transition disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.01]"
-                        >
-                          {publishingPostId === activeCreatedPost.id ? (
-                            <>
-                              <RefreshCw className="animate-spin w-4.5 h-4.5" />
-                              <span>Deploying...</span>
-                            </>
-                          ) : (
-                            <>
-                              <Globe className="w-4 h-4 text-emerald-300" />
-                              <span>Auto-Deploy & Post Now</span>
-                            </>
-                          )}
-                        </button>
+                      {activeCreatedPost ? (
+                        <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
+                          <button
+                            onClick={() => handlePublishPostNow(activeCreatedPost.id)}
+                            disabled={publishingPostId === activeCreatedPost.id}
+                            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg shadow-sm transition disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.01]"
+                          >
+                            {publishingPostId === activeCreatedPost.id ? (
+                              <>
+                                <RefreshCw className="animate-spin w-4.5 h-4.5" />
+                                <span>Deploying...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Globe className="w-4 h-4 text-emerald-300" />
+                                <span>Auto-Deploy & Post Now</span>
+                              </>
+                            )}
+                          </button>
 
-                        <button
-                          onClick={() => handleSchedulePost(activeCreatedPost.id, scheduledDraftTime)}
-                          className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg border border-slate-200 transition cursor-pointer"
-                        >
-                          Lock Schedule Slot
-                        </button>
+                          <button
+                            onClick={() => handleSchedulePost(activeCreatedPost.id, scheduledDraftTime)}
+                            className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg border border-slate-200 transition cursor-pointer"
+                          >
+                            Lock Schedule Slot
+                          </button>
 
-                        <button
-                          onClick={() => handleDeletePost(activeCreatedPost.id)}
-                          className="text-slate-400 hover:text-red-500 p-2 rounded transition cursor-pointer"
-                          title="Delete draft"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                          <button
+                            onClick={() => handleDeletePost(activeCreatedPost.id)}
+                            className="text-slate-400 hover:text-red-500 p-2 rounded transition cursor-pointer"
+                            title="Delete draft"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="pt-2 border-t border-slate-100 text-center py-2 bg-slate-50 rounded-lg text-[10px] text-slate-500 font-medium">
+                          <span>Click the "Generate Autopilot Caption" button on the left to activate instant publication controls.</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
