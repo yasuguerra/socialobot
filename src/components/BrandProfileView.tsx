@@ -87,7 +87,14 @@ export default function BrandProfileView({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Advanced Settings Toggle */}
+          <details className="group border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
+            <summary className="p-3 text-[11px] font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 flex items-center justify-between select-none list-none [&::-webkit-details-marker]:hidden">
+              <span>⚙️ Advanced Brand Parameters</span>
+              <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div className="p-4 space-y-5 bg-white border-t border-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label className="text-[11px] font-bold text-slate-500 uppercase">Target Industry & Niche Products Category</label>
               <input
@@ -143,6 +150,8 @@ export default function BrandProfileView({
               className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition resize-none"
             />
           </div>
+            </div>
+          </details>
 
           <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
             <p className="text-[10px] text-slate-400 font-mono">

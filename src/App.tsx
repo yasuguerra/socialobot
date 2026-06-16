@@ -1767,7 +1767,7 @@ export default function App({ authUser }: AppProps) {
           )}
 
           {/* TAB 6: Headline A/B Testing & Campaigns */}
-          {activeTab === 'abtests' && (
+          {activeTab === 'campaigns' && (
             <ABTestsView 
               newAbName={newAbName}
               setNewAbName={setNewAbName}

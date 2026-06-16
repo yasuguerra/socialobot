@@ -1,193 +1,106 @@
 import React from 'react';
 import { 
   Building2, 
-  CalendarRange, 
-  LineChart, 
   Sparkles, 
-  FileText, 
-  Layers, 
-  Globe,
-  X,
   Palette,
-  FolderHeart,
-  Paintbrush
+  LineChart,
+  LogOut
 } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 interface SidebarProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
-  brandName: string;
   apiActive: boolean;
-  isOpen?: boolean;
-  onClose?: () => void;
-  userEmail?: string | null;
-  userDisplayName?: string | null;
+  onSignOut: () => void;
 }
 
-export default function Sidebar({ 
-  activeTab, 
-  setActiveTab, 
-  brandName, 
-  apiActive,
-  isOpen = false,
-  onClose,
-  userEmail,
-  userDisplayName
-}: SidebarProps) {
-  const getInitials = () => {
-    if (userDisplayName) {
-      const parts = userDisplayName.trim().split(/\s+/);
-      if (parts.length >= 2) {
-        return (parts[0][0] + parts[1][0]).toUpperCase();
-      }
-      return userDisplayName.substring(0, 2).toUpperCase();
-    }
-    if (userEmail) {
-      return userEmail.substring(0, 2).toUpperCase();
-    }
-    return "US";
-  };
-
-  const menuGroup1 = [
-    { id: 'copilot', label: 'Mi Copiloto de IA', icon: Sparkles },
-    { id: 'brand', label: 'DNA de Marca', icon: Building2 },
-    { id: 'ideas', label: 'Bóveda de Ideas', icon: LineChart },
-    { id: 'publisher', label: 'Creador & Publicador', icon: Layers },
-    { id: 'arsenal', label: 'Biblioteca de Medios', icon: FolderHeart },
-    { id: 'scheduler', label: 'Agenda de Contenido', icon: CalendarRange },
-    { id: 'abtests', label: 'Pruebas A/B', icon: FileText },
-    { id: 'channels', label: 'Canales Conectados', icon: Globe },
-    { id: 'studio', label: 'Estudio Creativo IA', icon: Palette },
-  ];
-
-  const menuGroup2 = [
-    { id: 'remodeler', label: 'Laboratorio de Pruebas', icon: Paintbrush },
-  ];
-
-  const renderItem = (item: { id: string; label: string; icon: any }) => {
-    const Icon = item.icon;
-    const isActive = activeTab === item.id;
-    return (
-      <button
-        id={`nav-tab-${item.id}`}
-        key={item.id}
-        onClick={() => {
-          setActiveTab(item.id);
-          if (onClose) onClose();
-        }}
-        className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all duration-150 ${
-          isActive 
-            ? 'bg-indigo-600 text-white font-semibold shadow-md shadow-indigo-600/20' 
-            : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-        }`}
-      >
-        <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400'}`} />
-        <span className="truncate">{item.label}</span>
-      </button>
-    );
-  };
+export default function Sidebar({ apiActive, onSignOut }: SidebarProps) {
+  const { activeTab, setActiveTab, brandProfile } = useApp();
+  const brandName = brandProfile?.companyName || "Mi Empresa";
 
   return (
-    <>
-      {/* Mobile Sidebar backdrop */}
-      {isOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden" 
-          onClick={onClose}
-          id="sidebar-backdrop"
-        />
-      )}
-
-      <aside 
-        className={`fixed inset-y-0 left-0 z-50 lg:relative lg:flex w-64 bg-slate-900 text-white flex flex-col font-sans select-none shrink-0 border-r border-slate-800 transition-transform duration-300 transform ${
-          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-        }`} 
-        id="app-sidebar"
-      >
-        {/* Brand Header */}
-        <div className="p-6 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-black text-white text-md shadow-sm shadow-indigo-500/20">
-              S
+    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0 h-screen sticky top-0 z-10 border-r border-slate-800">
+      <div>
+        {/* LOGO */}
+        <div className="p-6">
+          <div className="flex items-center space-x-2">
+            <div className="bg-blue-600 p-1.5 rounded-lg flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20">
+              <Sparkles className="h-6 w-6 text-white" />
             </div>
             <div>
-              <span className="font-bold text-md tracking-tight block text-white leading-tight">SOCIAL.FLOW</span>
-              <span className="text-[9px] text-slate-500 font-mono tracking-wider uppercase block">Autopilot Engine</span>
+              <span className="text-xl font-bold text-white tracking-tight leading-none block">Social.Flow</span>
+              <span className="text-xs text-blue-400 font-medium tracking-wider">AI AGENT STRATEGIST</span>
             </div>
           </div>
-
-          {onClose && (
-            <button 
-              onClick={onClose}
-              className="lg:hidden p-1 rounded-md text-slate-450 hover:text-white hover:bg-slate-800 transition"
-              aria-label="Close sidebar"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
         </div>
 
-        {/* Navigation Groups with High Density styles */}
-        <nav className="flex-1 p-4 space-y-4 overflow-y-auto">
-          <div>
-            <div className="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              Mi Compañero de IA
+        {/* TENANT BADGE */}
+        <div className="px-4 mb-6">
+          <div className="bg-slate-800/80 rounded-xl p-3 border border-slate-700/50 flex items-center shadow-inner">
+            <div className="bg-slate-700 h-8 w-8 rounded-lg flex items-center justify-center mr-3 shrink-0">
+              <Building2 className="h-4 w-4 text-slate-300" />
             </div>
-            <div className="space-y-1">
-              {menuGroup1.map(renderItem)}
+            <div className="overflow-hidden">
+              <p className="text-xs text-slate-400 font-medium mb-0.5">Operando como</p>
+              <p className="text-sm font-semibold text-slate-100 truncate">{brandName}</p>
             </div>
           </div>
+        </div>
 
-          <div>
-            <div className="px-3 py-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              El Rincón de Mamá
-            </div>
-            <div className="space-y-1">
-              {menuGroup2.map(renderItem)}
-            </div>
-          </div>
+        <nav className="px-3 space-y-1">
+          <p className="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 mt-4">Workspace Central</p>
+          
+          <button
+            onClick={() => setActiveTab('copilot')}
+            className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 group ${activeTab === 'copilot' ? 'bg-blue-600/10 text-blue-400' : 'hover:bg-slate-800 hover:text-slate-100'}`}
+          >
+            <Sparkles className={`mr-3 h-5 w-5 ${activeTab === 'copilot' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-300'}`} />
+            Copiloto IA
+          </button>
+
+          <button
+            onClick={() => setActiveTab('brand')}
+            className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 group ${activeTab === 'brand' ? 'bg-blue-600/10 text-blue-400' : 'hover:bg-slate-800 hover:text-slate-100'}`}
+          >
+            <Building2 className={`mr-3 h-5 w-5 ${activeTab === 'brand' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-300'}`} />
+            Identidad de Marca
+          </button>
+
+          <button
+            onClick={() => setActiveTab('studio')}
+            className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 group ${activeTab === 'studio' ? 'bg-blue-600/10 text-blue-400' : 'hover:bg-slate-800 hover:text-slate-100'}`}
+          >
+            <Palette className={`mr-3 h-5 w-5 ${activeTab === 'studio' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-300'}`} />
+            Creative Studio
+          </button>
+
+          <button
+            onClick={() => setActiveTab('campaigns')}
+            className={`w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors duration-150 group ${activeTab === 'campaigns' ? 'bg-blue-600/10 text-blue-400' : 'hover:bg-slate-800 hover:text-slate-100'}`}
+          >
+            <LineChart className={`mr-3 h-5 w-5 ${activeTab === 'campaigns' ? 'text-blue-500' : 'text-slate-400 group-hover:text-slate-300'}`} />
+            Campañas & Analítica
+          </button>
+
         </nav>
+      </div>
 
-        {/* Autopilot bottom status container */}
-        <div className="p-4 bg-slate-800/40 m-4 rounded-xl border border-slate-800/60">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] text-indigo-400 font-bold font-mono tracking-widest uppercase">AUTOPILOT ACTIVE</span>
-            <span className="flex h-2 w-2 relative">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-indigo-500"></span>
-            </span>
-          </div>
-          <div className="text-[10px] text-slate-400 truncate font-medium">Brand: {brandName || 'Not Configured'}</div>
-          <div className="text-[9px] text-slate-500 mt-1 flex items-center justify-between">
-            <span>Gemini Core:</span>
-            <span className={`font-mono px-1 rounded ${apiActive ? 'text-emerald-400 bg-emerald-950/40' : 'text-amber-400 bg-amber-950/40'}`}>
-              {apiActive ? 'AI Enabled' : 'Simulated'}
-            </span>
-          </div>
-          <div className="text-[9px] text-slate-500 mt-1 flex items-center justify-between">
-            <span>Firestore DB:</span>
-            <span className="font-mono px-1 rounded text-emerald-400 bg-emerald-950/40">
-              Connected
+      <div className="p-4 border-t border-slate-800">
+        <div className="flex items-center justify-between mb-4 px-2">
+          <div className="flex items-center">
+            <div className={`h-2 w-2 rounded-full mr-2 shadow-[0_0_8px_rgba(0,0,0,0.5)] ${apiActive ? 'bg-emerald-500 shadow-emerald-500/50' : 'bg-rose-500 shadow-rose-500/50'}`}></div>
+            <span className="text-xs font-medium text-slate-400">
+              {apiActive ? 'Vertex AI Conectado' : 'AI Offline'}
             </span>
           </div>
         </div>
-
-        {/* Connected Tenant Card */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 flex items-center justify-center font-extrabold text-sm shrink-0 shadow-inner">
-            {getInitials()}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-xs font-semibold text-slate-200 truncate" title={userDisplayName || userEmail || "Tenant"}>
-              {userDisplayName || userEmail || "yasuguerra@gmail.com"}
-            </div>
-            <div className="text-[10px] text-emerald-400 font-medium flex items-center gap-1 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Connected
-            </div>
-          </div>
-        </div>
-      </aside>
-    </>
+        <button
+          onClick={onSignOut}
+          className="w-full flex items-center justify-center px-4 py-2 border border-slate-700 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors group"
+        >
+          <LogOut className="h-4 w-4 mr-2 text-slate-400 group-hover:text-slate-300" />
+          Cerrar Sesión
+        </button>
+      </div>
+    </aside>
   );
 }

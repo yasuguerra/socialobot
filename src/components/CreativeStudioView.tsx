@@ -164,7 +164,14 @@ export default function CreativeStudioView({
             />
           </div>
 
-          {/* Aspect Ratio choice layout */}
+          {/* Advanced Settings Toggle */}
+          <details className="group border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
+            <summary className="p-3 text-[11px] font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 flex items-center justify-between select-none list-none [&::-webkit-details-marker]:hidden">
+              <span>⚙️ Advanced Composition Settings</span>
+              <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <div className="p-4 space-y-5 bg-white border-t border-slate-200">
+              {/* Aspect Ratio choice layout */}
           <div className="space-y-1.5">
             <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Target Crop Aspect Ratio</label>
             <div className="grid grid-cols-5 gap-2">
@@ -307,6 +314,8 @@ export default function CreativeStudioView({
             )}
 
           </div>
+          </div>
+          </details>
 
           {/* Submit buttons */}
           <div className="pt-4 border-t border-slate-150">
