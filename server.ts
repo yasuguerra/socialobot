@@ -823,35 +823,14 @@ Return strictly a JSON object conforming exactly to this structure:
 
     // Determine media type and beautiful targeted media URL
     const isVideoFormat = format === "Video";
-    const visualKeywords = (themePrompt || finalTitle || "aviation,helicopter").toLowerCase();
-    const isAviationContext = visualKeywords.includes("helicopter") || visualKeywords.includes("heli") || visualKeywords.includes("flight") || visualKeywords.includes("sky") || visualKeywords.includes("ride") || visualKeywords.includes("air") || visualKeywords.includes("tour") || visualKeywords.includes("panama") || visualKeywords.includes("clouds") || visualKeywords.includes("aviation") || visualKeywords.includes("travel") || visualKeywords.includes("luxury") || currentBrand.industry.toLowerCase().includes("aviation") || currentBrand.industry.toLowerCase().includes("helicopter");
+    const visualKeywords = (themePrompt || finalTitle || "lifestyle,aesthetic").toLowerCase();
     
     let mediaUrl = "";
     if (isVideoFormat) {
-      if (isAviationContext) {
-        // High-quality aviation / scenic landscape mock video list
-        const aviationVideos = [
-          "https://assets.mixkit.co/videos/preview/mixkit-helicopter-flying-over-ocean-sunset-10515-large.mp4",
-          "https://assets.mixkit.co/videos/preview/mixkit-view-of-a-helicopter-taking-off-from-a-helipad-43090-large.mp4",
-          "https://assets.mixkit.co/videos/preview/mixkit-flying-over-clouds-during-sunset-31580-large.mp4",
-          "https://assets.mixkit.co/videos/preview/mixkit-coastal-cliffs-and-emerald-sea-from-above-43083-large.mp4"
-        ];
-        mediaUrl = aviationVideos[Math.floor(Math.random() * aviationVideos.length)];
-      } else {
-        mediaUrl = "https://assets.mixkit.co/videos/preview/mixkit-sustainable-fashion-designer-working-44169-large.mp4";
-      }
+      mediaUrl = "https://assets.mixkit.co/videos/preview/mixkit-sustainable-fashion-designer-working-44169-large.mp4";
     } else {
-      if (isAviationContext) {
-        const aviationImages = [
-          "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?auto=format&fit=crop&w=800&q=80"
-        ];
-        mediaUrl = aviationImages[Math.floor(Math.random() * aviationImages.length)];
-      } else {
-        const terms = encodeURIComponent(visualKeywords.split(' ').slice(0, 3).join(','));
-        mediaUrl = `https://images.unsplash.com/featured/?${terms || "premium,aesthetic"}`;
-      }
+      const terms = encodeURIComponent(visualKeywords.split(' ').slice(0, 3).join(','));
+      mediaUrl = `https://images.unsplash.com/featured/?${terms || "premium,aesthetic"}`;
     }
 
     let finalMediaUrl = referenceMediaUploaded || mediaUrl;
@@ -914,19 +893,6 @@ app.post("/api/posts/generate-ai-image", validateBody(AiImageSchema), async (req
 
   if (!ai) {
     // Mock image generation by returning unsplash query matching terms
-    const lower = prompt.toLowerCase();
-    const isAviation = lower.includes("helicopter") || lower.includes("heli") || lower.includes("flight") || lower.includes("sky") || lower.includes("ride") || lower.includes("air") || lower.includes("tour") || lower.includes("panama") || lower.includes("clouds") || lower.includes("aviation") || lower.includes("travel") || lower.includes("luxury");
-    
-    if (isAviation) {
-      const aviationImages = [
-        "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517479149777-5f3b1511d5ad?auto=format&fit=crop&w=800&q=80"
-      ];
-      const url = aviationImages[Math.floor(Math.random() * aviationImages.length)];
-      return res.json({ imageUrl: url, isMock: true });
-    }
-
     const term = encodeURIComponent(prompt.split(' ').slice(0, 3).join(','));
     const url = `https://images.unsplash.com/featured/?${term || "modern,sustainable"}`;
     return res.json({ imageUrl: url, isMock: true });
