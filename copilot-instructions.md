@@ -1,8 +1,8 @@
 # Visual Studio Code Copilot Custom Workspace Instructions
 
 This workspace operates under a dual-harness governance structure designed to maintain maximum architectural integrity, quality, and business alignment:
-1. **Engineering Harness (v3.0)**: Located in [.harness/](.harness/).
-2. **Product Harness (v1.0)**: Located in [.harness/product/](.harness/product/).
+1. **Engineering Harness (v3.0)**: Located in [.harness/engineering_harness/](.harness/engineering_harness/).
+2. **Product Harness (v1.0)**: Located in [.harness/product_harness/](.harness/product_harness/).
 
 ---
 
@@ -13,24 +13,24 @@ To preserve the context window, this file serves as the INDEX. Full roles live i
 ### 🛠️ 1. Engineering Harness (v3.0)
 
 Only load the active engineering role file alongside the project context:
-* **Index**: [.harness/AGENTS.md](.harness/AGENTS.md)
-* **Project Context**: [.harness/project_context.md](.harness/project_context.md)
-* **Conflict Resolution**: [.harness/conflict_resolution.md](.harness/conflict_resolution.md)
+* **Index**: [.harness/engineering_harness/AGENTS.md](.harness/engineering_harness/AGENTS.md)
+* **Project Context**: [.harness/engineering_harness/project_context.md](.harness/engineering_harness/project_context.md)
+* **Conflict Resolution**: [.harness/engineering_harness/conflict_resolution.md](.harness/engineering_harness/conflict_resolution.md)
 
 **Active Roles**:
-- Strategy / Vision: [.harness/roles/cto.md](.harness/roles/cto.md)
-- Planning / Architecture: [.harness/roles/chief_architect.md](.harness/roles/chief_architect.md)
-- Security Gatekeeper: [.harness/roles/security_architect.md](.harness/roles/security_architect.md)
-- Coding / Implementation: [.harness/roles/principal_engineer.md](.harness/roles/principal_engineer.md)
-- Verification & Testing: [.harness/roles/qa_engineer.md](.harness/roles/qa_engineer.md)
-- Complexity Auditor: [.harness/roles/entropy_auditor.md](.harness/roles/entropy_auditor.md)
-- Release Director: [.harness/roles/release_governor.md](.harness/roles/release_governor.md)
+- Strategy / Vision: [.harness/engineering_harness/roles/cto.md](.harness/engineering_harness/roles/cto.md)
+- Planning / Architecture: [.harness/engineering_harness/roles/chief_architect.md](.harness/engineering_harness/roles/chief_architect.md)
+- Security Gatekeeper: [.harness/engineering_harness/roles/security_architect.md](.harness/engineering_harness/roles/security_architect.md)
+- Coding / Implementation: [.harness/engineering_harness/roles/principal_engineer.md](.harness/engineering_harness/roles/principal_engineer.md)
+- Verification & Testing: [.harness/engineering_harness/roles/qa_engineer.md](.harness/engineering_harness/roles/qa_engineer.md)
+- Complexity Auditor: [.harness/engineering_harness/roles/entropy_auditor.md](.harness/engineering_harness/roles/entropy_auditor.md)
+- Release Director: [.harness/engineering_harness/roles/release_governor.md](.harness/engineering_harness/roles/release_governor.md)
 
 ### 🧭 2. Product Harness (v1.0)
 
 To perform functional analysis, roadmap scoring, and usability checks, use the dedicated `@product` agent or consult:
-* **Product Entry Point**: [.harness/product/README.md](.harness/product/README.md)
-* **Active Roles**: [.harness/product/CPO.md](.harness/product/CPO.md), [.harness/product/PM.md](.harness/product/PM.md), [.harness/product/UIUX.md](.harness/product/UIUX.md), [.harness/product/PRODUCT_QA.md](.harness/product/PRODUCT_QA.md)
+* **Product Entry Point**: [.harness/product_harness/README.md](.harness/product_harness/README.md)
+* **Active Roles**: [.harness/product_harness/CPO.md](.harness/product_harness/CPO.md), [.harness/product_harness/PM.md](.harness/product_harness/PM.md), [.harness/product_harness/UIUX.md](.harness/product_harness/UIUX.md), [.harness/product_harness/PRODUCT_QA.md](.harness/product_harness/PRODUCT_QA.md)
 
 ---
 

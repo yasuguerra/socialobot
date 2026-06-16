@@ -1,4 +1,4 @@
-le# PRODUCT BRIEF: REMODELER REPOSITIONING & SIMULATED CHANNELS CLARITY
+# PRODUCT BRIEF: REMODELER REPOSITIONING & SIMULATED CHANNELS CLARITY
 
 **Venture**: Social.Flow (socialobot)  
 **Handoff Date**: June 12, 2026  
@@ -23,7 +23,7 @@ This brief outlines clear, precise, and easily achievable instructions for the E
 | Document | File | Status |
 |---|---|---|
 | Complete PRD | [docs/PRD.md](docs/PRD.md) | ✅ Approved by CPO |
-| Product Usability Audit | [.harness/audits/product_audit_report.md](.harness/audits/product_audit_report.md) | ✅ Completed |
+| Product Usability Audit | [.harness/engineering_harness/audits/product_audit_report.md](.harness/engineering_harness/audits/product_audit_report.md) | ✅ Completed |
 
 ---
 
