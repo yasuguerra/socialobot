@@ -769,6 +769,18 @@ app.post("/api/posts/generate", validateBody(PostsGenerateSchema), async (req, r
   }
 
   try {
+    // Fetch and filter Organic Arsenal
+    const isVideoFormat = format === "Video";
+    const requestedMediaType = isVideoFormat ? "video" : "image";
+    const rawArsenal = await getArsenalMedia(uid);
+    // Filter out items that don't match the requested format to preserve UI grid consistency
+    const availableArsenal = rawArsenal.filter(m => m.mimeType && m.mimeType.startsWith(requestedMediaType));
+    
+    // Prepare stringified arsenal context for Gemini
+    const arsenalContext = availableArsenal.length > 0
+      ? availableArsenal.map(m => `ID: ${m.id} | Desc: ${m.aiDescription || 'None'} | Prompt: ${m.visualPrompt || 'None'}`).join('\n')
+      : "No organic arsenal media available. Generate generic caption.";
+
     const prompt = `
 You are an expert copywriter and influencer growth hacking specialist.
 Brand Profile:
@@ -784,6 +796,17 @@ Title/Idea: "${finalTitle}"
 Visual style concept input: "${themePrompt || 'Clean botanical aesthetic'}"
 Additional requirements or reference: "${customPrompt || ''}"
 
+*** ORGANIC MEDIA ARSENAL AWARENESS ***
+You have access to the user's uploaded/generated media assets.
+Available Media:
+${arsenalContext}
+
+INSTRUCTIONS:
+1. Review the Available Media above.
+2. Select the single best Media ID that matches the Title/Idea and Visual style concept. If NONE match, leave the selectedArsenalMediaId as null.
+3. If you select a media item, you MUST write the caption specifically describing the exact visual contents of that specific media item (using its Desc/Prompt as truth). 
+4. If no media is available or selected, write a standard high-converting caption based on the Title/Idea.
+
 Generate a complete social post. It MUST include a comprehensive viral scorecard out of 100 assessing the post components:
 - Headline/hook rate
 - Hot viral trend alignment 
@@ -793,12 +816,13 @@ Generate a complete social post. It MUST include a comprehensive viral scorecard
 
 CRITICAL JSON ESCAPING INSTRUCTIONS:
 - You MUST return a strictly valid, parsable CJS JSON object.
-- You MUST ensure any double quotes (") inside the "caption" or "viralFeedback" string values are properly escaped as (\").
-- You MUST ensure all actual raw newline carriage returns within the "caption" or "viralFeedback" string are properly written as escaped escape-sequences (\n) rather than unescaped raw line breaks.
+- You MUST ensure any double quotes (") inside strings are properly escaped as (\\").
+- You MUST ensure all actual raw newline carriage returns are escaped as (\\n).
 
 Return strictly a JSON object conforming exactly to this structure:
 {
   "caption": "The complete post body/caption including emojis, line spaces (use \\n for line breaks!), and hashtags optimized for the channel",
+  "selectedArsenalMediaId": "ID of the best matching media from the arsenal, or null if none fit",
   "viralScore": 92,
   "viralMetrics": {
     "hook": 95,
@@ -822,15 +846,26 @@ Return strictly a JSON object conforming exactly to this structure:
     const outputObj = safeParseJson(response.text || "{}");
 
     // Determine media type and beautiful targeted media URL
-    const isVideoFormat = format === "Video";
     const visualKeywords = (themePrompt || finalTitle || "lifestyle,aesthetic").toLowerCase();
     
     let mediaUrl = "";
-    if (isVideoFormat) {
-      mediaUrl = "https://assets.mixkit.co/videos/preview/mixkit-sustainable-fashion-designer-working-44169-large.mp4";
+    
+    // RAG: If Gemini selected an arsenal media ID, use it!
+    const selectedArsenalMedia = outputObj.selectedArsenalMediaId 
+      ? availableArsenal.find(m => m.id === outputObj.selectedArsenalMediaId)
+      : null;
+
+    if (selectedArsenalMedia) {
+      console.log(`-> Gemini selected Arsenal Media ID: ${selectedArsenalMedia.id}`);
+      mediaUrl = selectedArsenalMedia.url;
     } else {
-      const terms = encodeURIComponent(visualKeywords.split(' ').slice(0, 3).join(','));
-      mediaUrl = `https://images.unsplash.com/featured/?${terms || "premium,aesthetic"}`;
+      // Fallback to Unsplash / Mixkit
+      if (isVideoFormat) {
+        mediaUrl = "https://assets.mixkit.co/videos/preview/mixkit-sustainable-fashion-designer-working-44169-large.mp4";
+      } else {
+        const terms = encodeURIComponent(visualKeywords.split(' ').slice(0, 3).join(','));
+        mediaUrl = `https://images.unsplash.com/featured/?${terms || "premium,aesthetic"}`;
+      }
     }
 
     let finalMediaUrl = referenceMediaUploaded || mediaUrl;
