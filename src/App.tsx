@@ -33,6 +33,14 @@ import {
   Palette,
   Search
 } from 'lucide-react';
+import AICopilotView from './components/AICopilotView';
+import BrandProfileView from './components/BrandProfileView';
+import IdeasVaultView from './components/IdeasVaultView';
+import PublisherView from './components/PublisherView';
+import ABTestsView from './components/ABTestsView';
+import CreativeStudioView from './components/CreativeStudioView';
+
+import { useApp } from './context/AppContext';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import CalendarView from './components/CalendarView';
@@ -202,11 +210,24 @@ interface AppProps {
 
 export default function App({ authUser }: AppProps) {
   const isDevAccount = authUser?.email === 'dev@seliabot.com';
-  const [activeTab, setActiveTab] = useState<string>('copilot');
+  const {
+    activeTab, setActiveTab,
+    posts, setPosts,
+    brandProfile, setBrandProfile,
+    chatHistory, setChatHistory,
+    loadingAgent, setLoadingAgent,
+    agentInput, setAgentInput,
+    activeCreatedPost, setActiveCreatedPost,
+    captionDraft, setCaptionDraft,
+    referenceImageUrl, setReferenceImageUrl,
+    imagePreview, setImagePreview,
+    creatorFormat, setCreatorFormat,
+    creatorPlatform, setCreatorPlatform,
+    creatorTitle, setCreatorTitle,
+    apiConfig, setApiConfig
+  } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [brandProfile, setBrandProfile] = useState<BrandProfile | null>(null);
   const [ideas, setIdeas] = useState<ContentIdea[]>([]);
-  const [posts, setPosts] = useState<SocialPost[]>([]);
   const [campaigns, setCampaigns] = useState<ABCampaign[]>([]);
   const [analytics, setAnalytics] = useState<any>(null);
   const [arsenalMedia, setArsenalMedia] = useState<ArsenalMediaAsset[]>([]);
@@ -235,13 +256,9 @@ export default function App({ authUser }: AppProps) {
   // Idea generation inputs
   const [referenceText, setReferenceText] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
 
   // Creator workspace state
-  const [creatorPlatform, setCreatorPlatform] = useState<'Instagram' | 'Facebook' | 'TikTok' | 'LinkedIn'>('Instagram');
-  const [creatorFormat, setCreatorFormat] = useState<'Image' | 'Video' | 'Text' | 'Carousel'>('Image');
-  const [creatorTitle, setCreatorTitle] = useState('');
   const [creatorVisualPrompt, setCreatorVisualPrompt] = useState('Clean flat lay commercial shot with warm studio lighting');
   const [creatorCustomPrompt, setCreatorCustomPrompt] = useState('');
   const [activeActiveIdeaId, setActiveActiveIdeaId] = useState<string | undefined>(undefined);
@@ -252,15 +269,12 @@ export default function App({ authUser }: AppProps) {
   const [aiGeneratedUrl, setAiGeneratedUrl] = useState<string | null>(null);
 
   // Creator editing custom draft states
-  const [captionDraft, setCaptionDraft] = useState('');
   const [scheduledDraftTime, setScheduledDraftTime] = useState('Next Thursday, 4:00 PM');
-  const [activeCreatedPost, setActiveCreatedPost] = useState<SocialPost | null>(null);
 
   // Instagram feed clone states
   const [igRecentMedia, setIgRecentMedia] = useState<any[]>([]);
   const [loadingIgMedia, setLoadingIgMedia] = useState(false);
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
-  const [referenceImageUrl, setReferenceImageUrl] = useState<string | null>(null);
 
   // New A/B test draft details
   const [newAbName, setNewAbName] = useState('');
@@ -276,9 +290,7 @@ export default function App({ authUser }: AppProps) {
 
   // Agent Chat states
   const [agentMessages, setAgentMessages] = useState<any[]>([]);
-  const [agentInput, setAgentInput] = useState('');
   const [agentSessionId, setAgentSessionId] = useState<string | null>(null);
-  const [loadingAgent, setLoadingAgent] = useState(false);
 
   const handleSendAgentMsg = async () => {
     if (!agentInput.trim() || loadingAgent) return;
@@ -1447,1207 +1459,112 @@ export default function App({ authUser }: AppProps) {
         {/* Workspace core body with customized tabs */}
         <div className="flex-1 overflow-y-auto p-6 min-h-0 bg-slate-50/50">
           
-          {/* TAB 1: Copiloto de IA */}
+          {/* TAB 1: AI Copilot Assistant */}
           {activeTab === 'copilot' && (
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 h-[800px]" id="copilot-workspace-wrapper">
-              
-              {/* Columna Izquierda: Chat del Copiloto */}
-              <div className="xl:col-span-7 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-full relative" id="ai-copilot-chat-panel">
-                
-                {/* Cabecera del Copiloto */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-100 shrink-0">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white text-xl shadow-md shadow-indigo-600/10">
-                      🤖
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-sm text-slate-900">Tu Copiloto de Social Media</h3>
-                      <p className="text-[10px] text-slate-500 font-mono">Gemini 3.5 Flash Activo & Conectado</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="flex h-2 w-2 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">En Línea</span>
-                  </div>
-                </div>
-
-                {/* Acciones Rápidas en la parte superior del chat */}
-                <div className="py-3 border-b border-slate-100 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
-                  <button 
-                    onClick={() => handleSendSuggestedMsg("Sugiéreme un hilo de 3 historias de Instagram muy dinámicas e interesantes sobre mi empresa de hoy.")}
-                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
-                  >
-                    📱 Sugerir Historias
-                  </button>
-                  <button 
-                    onClick={() => handleSendSuggestedMsg("Dame una idea viral para un Reel de Instagram con un buen gancho, descripción y recomendación visual.")}
-                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
-                  >
-                    🎥 Sugerir un Reel
-                  </button>
-                  <button 
-                    onClick={() => handleSendSuggestedMsg("Crea una propuesta de carrusel educativo para mi cuenta sobre nuestros productos estrella.")}
-                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
-                  >
-                    📊 Sugerir Carrusel
-                  </button>
-                  <button 
-                    onClick={() => handleSendSuggestedMsg("Escribe un post estándar con hashtags optimizados y una llamada a la acción irresistible.")}
-                    className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
-                  >
-                    ✍️ Sugerir Post
-                  </button>
-                </div>
-
-                {/* Historial de Chat */}
-                <div className="flex-1 overflow-y-auto py-4 space-y-4 pr-1 scrollbar-thin" id="copilot-chat-history">
-                  {agentMessages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4">
-                      <div className="w-14 h-14 bg-indigo-50 rounded-full flex items-center justify-center shadow-inner">
-                        <Sparkles className="w-7 h-7 text-indigo-650 animate-pulse" />
-                      </div>
-                      <div className="space-y-1.5 max-w-sm">
-                        <p className="text-sm font-bold text-slate-800">¡Hola! Soy tu asistente de redes sociales</p>
-                        <p className="text-xs text-slate-500 leading-relaxed">
-                          Estoy aquí para facilitarte la gestión de tu cuenta de Instagram. Sube fotos y videos en la biblioteca de medios y pregúntame qué publicar en tus historias, reels o posts estándar.
-                        </p>
-                      </div>
-                      
-                      {/* Sugerencias de Inicio */}
-                      <div className="pt-2 w-full space-y-2 max-w-md">
-                        <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ideas de sugerencias para empezar:</p>
-                        <button 
-                          onClick={() => handleSendSuggestedMsg("Quiero subir algo hoy a mis historias. ¿Qué me sugieres según mi biblioteca de fotos?")}
-                          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-150 text-xs rounded-xl border border-slate-200/80 transition truncate block cursor-pointer text-slate-700"
-                        >
-                          💡 "Quiero subir algo hoy a mis historias. ¿Qué me sugieres?"
-                        </button>
-                        <button 
-                          onClick={() => handleSendSuggestedMsg("Dame un guion rápido para un Reel corto de 15 segundos y sus hashtags correspondientes.")}
-                          className="w-full text-left p-3 bg-slate-50 hover:bg-slate-150 text-xs rounded-xl border border-slate-200/80 transition truncate block cursor-pointer text-slate-700"
-                        >
-                          🎬 "Dame un guion rápido para un Reel corto de 15 segundos."
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    agentMessages.map((msg, idx) => (
-                      <div 
-                        key={idx} 
-                        className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-                      >
-                        <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">
-                          {msg.sender === 'user' ? 'Tú' : 'Copiloto de IA'}
-                        </span>
-                        <div className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[90%] ${
-                          msg.sender === 'user' 
-                            ? 'bg-indigo-600 text-white rounded-tr-none' 
-                            : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200/60 shadow-xs'
-                        }`}>
-                          <p className="whitespace-pre-line">{msg.text}</p>
-                          
-                          {msg.sender === 'agent' && (
-                            <div className="mt-3 pt-2.5 border-t border-slate-200/50 flex gap-2 shrink-0">
-                              <button
-                                onClick={() => {
-                                  setCaptionDraft(msg.text);
-                                  if (!activeCreatedPost) {
-                                    const newPost: SocialPost = {
-                                      id: `draft-${Date.now()}`,
-                                      platform: 'Instagram',
-                                      title: 'Propuesta Copiloto',
-                                      caption: msg.text,
-                                      mediaType: 'image',
-                                      mediaUrl: referenceImageUrl || 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80',
-                                      status: 'Draft',
-                                      viralScore: 85,
-                                      scheduledTime: new Date(Date.now() + 24*60*60*1000).toISOString()
-                                    };
-                                    setActiveCreatedPost(newPost);
-                                  } else {
-                                    setActiveCreatedPost(prev => prev ? { ...prev, caption: msg.text } : null);
-                                  }
-                                }}
-                                className="bg-indigo-605 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
-                              >
-                                ✨ Usar como Borrador
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                  {loadingAgent && (
-                    <div className="flex flex-col items-start">
-                      <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">Copiloto</span>
-                      <div className="p-3 bg-slate-100 text-slate-500 rounded-2xl rounded-tl-none border border-slate-200/60 flex items-center gap-2 text-xs">
-                        <RefreshCw className="animate-spin w-3.5 h-3.5 text-indigo-600" />
-                        <span>El copiloto está pensando la mejor estrategia...</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Formulario de Entrada */}
-                <div className="pt-3 border-t border-slate-100 mt-auto shrink-0">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={agentInput}
-                      onChange={(e) => setAgentInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSendAgentMsg()}
-                      disabled={loadingAgent}
-                      placeholder="Pregúntale a tu copiloto de IA (ej: 'Sugiéreme algo para historias hoy')..."
-                      className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-450 outline-none focus:bg-white focus:border-indigo-500 transition-all shadow-inner"
-                    />
-                    <button
-                      onClick={handleSendAgentMsg}
-                      disabled={loadingAgent || !agentInput.trim()}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition disabled:opacity-40 flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-indigo-600/10 hover:scale-[1.02]"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Columna Derecha: Borrador y Previsualización Activa */}
-              <div className="xl:col-span-5 bg-white border border-slate-200 rounded-2xl shadow-sm p-5 flex flex-col h-full relative" id="active-draft-panel">
-                
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
-                  <h3 className="font-bold text-slate-900 text-xs flex items-center gap-1.5">
-                    <Sparkle className="w-4 h-4 text-indigo-600" />
-                    Borrador de Publicación Activa
-                  </h3>
-                  {activeCreatedPost && (
-                    <button 
-                      onClick={() => {
-                        setActiveCreatedPost(null);
-                        setCaptionDraft('');
-                        setReferenceImageUrl(null);
-                        setImagePreview(null);
-                      }}
-                      className="text-[10px] text-slate-400 hover:text-red-500 font-bold transition"
-                    >
-                      Limpiar
-                    </button>
-                  )}
-                </div>
-
-                {activeCreatedPost || referenceImageUrl || imagePreview ? (
-                  <div className="flex-1 flex flex-col min-h-0 space-y-4 pt-4 overflow-y-auto pr-0.5 scrollbar-thin">
-                    
-                    {/* Previsualización de Imagen / Video */}
-                    <div className="bg-slate-50 aspect-square w-full relative flex items-center justify-center overflow-hidden border border-slate-200 rounded-xl shrink-0 shadow-sm">
-                      {referenceImageUrl || imagePreview ? (
-                        (referenceImageUrl || imagePreview)!.includes('.mp4') || creatorFormat === 'Video' ? (
-                          <video 
-                            src={referenceImageUrl || imagePreview || ''} 
-                            controls 
-                            loop 
-                            autoPlay 
-                            muted 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <img 
-                            src={referenceImageUrl || imagePreview || ''} 
-                            className="w-full h-full object-cover" 
-                            alt="Visual de borrador" 
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
-                            }}
-                          />
-                        )
-                      ) : (
-                        <div className="text-center p-4 text-slate-400">
-                          <ImageIcon className="w-8 h-8 mx-auto mb-1 text-slate-300" />
-                          <p className="text-xs">Sin imagen o video cargado.</p>
-                        </div>
-                      )}
-                      
-                      <div className="absolute top-2.5 right-2.5 bg-slate-900/70 backdrop-blur-xs text-white px-2 py-0.5 rounded-full text-[9px] font-bold font-mono tracking-widest uppercase shadow-sm">
-                        {(activeCreatedPost?.platform || creatorPlatform).toUpperCase()}
-                      </div>
-                    </div>
-
-                    {/* Editor de Texto del Copy */}
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center mb-0.5">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Texto de la Publicación (Copy)</span>
-                        <span className="text-[9px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md font-mono">{captionDraft.length} caracteres</span>
-                      </div>
-                      <textarea
-                        rows={5}
-                        value={captionDraft}
-                        onChange={(e) => {
-                          setCaptionDraft(e.target.value);
-                          if (activeCreatedPost) {
-                            setActiveCreatedPost(prev => prev ? { ...prev, caption: e.target.value } : null);
-                          }
-                        }}
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 font-sans outline-none leading-relaxed text-slate-800 focus:bg-white focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 transition"
-                        placeholder="Escribe el copy de tu publicación o cópialo de las sugerencias del chat de la izquierda..."
-                      />
-                    </div>
-
-                    {/* Selector de Plataforma */}
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">¿Dónde lo publicaremos?</span>
-                      <div className="grid grid-cols-4 gap-1.5">
-                        {(['Instagram', 'Facebook', 'TikTok', 'LinkedIn'] as const).map((plat) => {
-                          const isSelected = (activeCreatedPost?.platform || creatorPlatform) === plat;
-                          return (
-                            <button
-                              key={plat}
-                              type="button"
-                              onClick={() => {
-                                setCreatorPlatform(plat);
-                                if (activeCreatedPost) {
-                                  setActiveCreatedPost(prev => prev ? { ...prev, platform: plat } : null);
-                                }
-                              }}
-                              className={`text-[10px] font-bold py-1.5 rounded-lg border transition text-center shrink-0 cursor-pointer ${
-                                isSelected 
-                                  ? 'bg-indigo-50 border-indigo-300 text-indigo-700 shadow-sm' 
-                                  : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
-                              }`}
-                            >
-                              {plat}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Horario de Publicación */}
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">Hora Sugerida / Programación</span>
-                      <input
-                        type="text"
-                        value={scheduledDraftTime}
-                        onChange={(e) => setScheduledDraftTime(e.target.value)}
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-sans outline-none text-slate-850 focus:bg-white focus:border-indigo-450 transition"
-                        placeholder="ej: Hoy, 6:00 PM o Lunes, 9:00 AM"
-                      />
-                    </div>
-
-                    {/* Controles de Publicación o Guardado */}
-                    <div className="pt-3 border-t border-slate-100 flex flex-col gap-2 pb-2 shrink-0">
-                      
-                      <button
-                        onClick={async () => {
-                          let finalPostId = activeCreatedPost?.id;
-                          
-                          setPublishingPostId(finalPostId || 'pending');
-                          try {
-                            if (!finalPostId || finalPostId.startsWith('draft-')) {
-                              // Create in DB
-                              const response = await apiFetch('/api/posts/generate', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({
-                                  title: creatorTitle || "Publicación Copiloto",
-                                  platform: activeCreatedPost?.platform || creatorPlatform,
-                                  format: creatorFormat,
-                                  customPrompt: captionDraft,
-                                  themePrompt: captionDraft,
-                                  referenceMediaUploaded: referenceImageUrl || undefined
-                                })
-                              });
-                              if (response.ok) {
-                                const created = await response.json();
-                                finalPostId = created.id;
-                                setPosts(prev => [created, ...prev]);
-                              }
-                            }
-                            
-                            if (finalPostId) {
-                              await handlePublishPostNow(finalPostId);
-                              alert("¡Publicación enviada exitosamente a Instagram!");
-                            } else {
-                              alert("No se pudo iniciar el proceso de publicación.");
-                            }
-                          } catch (err: any) {
-                            console.error(err);
-                            alert("Fallo al publicar: " + err.message);
-                          } finally {
-                            setPublishingPostId(null);
-                          }
-                        }}
-                        disabled={publishingPostId !== null}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 rounded-xl shadow-md shadow-indigo-600/10 transition flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.01]"
-                      >
-                        {publishingPostId !== null ? (
-                          <>
-                            <RefreshCw className="animate-spin w-4 h-4" />
-                            <span>Publicando en Instagram...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Globe className="w-4 h-4 text-emerald-300" />
-                            <span>Publicar en Instagram Ahora Mismo</span>
-                          </>
-                        )}
-                      </button>
-
-                      <div className="flex gap-2">
-                        <button
-                          onClick={async () => {
-                            let finalPostId = activeCreatedPost?.id;
-                            try {
-                              if (!finalPostId || finalPostId.startsWith('draft-')) {
-                                // Create in DB
-                                const response = await apiFetch('/api/posts/generate', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    title: creatorTitle || "Publicación Programada",
-                                    platform: activeCreatedPost?.platform || creatorPlatform,
-                                    format: creatorFormat,
-                                    customPrompt: captionDraft,
-                                    themePrompt: captionDraft,
-                                    referenceMediaUploaded: referenceImageUrl || undefined
-                                  })
-                                });
-                                if (response.ok) {
-                                  const created = await response.json();
-                                  finalPostId = created.id;
-                                  setPosts(prev => [created, ...prev]);
-                                }
-                              }
-                              
-                              if (finalPostId) {
-                                await handleSchedulePost(finalPostId, scheduledDraftTime);
-                                alert("¡Publicación programada exitosamente en la agenda!");
-                                setActiveTab('scheduler'); 
-                              } else {
-                                alert("No se pudo iniciar el borrador de programación.");
-                              }
-                            } catch (err: any) {
-                              console.error(err);
-                              alert("Fallo al programar: " + err.message);
-                            }
-                          }}
-                          className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold py-2 rounded-xl border border-slate-200/80 transition cursor-pointer text-center"
-                        >
-                          📅 Agendar en mi Calendario
-                        </button>
-                        
-                        <button
-                          onClick={() => {
-                            if (activeCreatedPost && activeCreatedPost.id) {
-                              handleDeletePost(activeCreatedPost.id);
-                            }
-                            setActiveCreatedPost(null);
-                            setCaptionDraft('');
-                            setReferenceImageUrl(null);
-                            setImagePreview(null);
-                          }}
-                          className="bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 p-2 rounded-xl border border-slate-200 transition cursor-pointer"
-                          title="Eliminar Borrador"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-4">
-                    <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center text-slate-450 border border-slate-200/60 shadow-inner">
-                      <ImageIcon className="w-6 h-6 text-slate-350" />
-                    </div>
-                    <div className="space-y-1.5 max-w-xs">
-                      <h4 className="font-bold text-slate-800 text-xs">Sin Borrador Activo</h4>
-                      <p className="text-[11px] text-slate-500 leading-relaxed">
-                        Selecciona un recurso desde tu <strong>Biblioteca de Medios</strong> o pídele algo al <strong>Copiloto de IA</strong> para empezar a generar contenido increíble con un solo toque.
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleCreateManualDraft}
-                      className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-2 rounded-xl border border-indigo-150 transition cursor-pointer shadow-xs"
-                    >
-                      + Crear Borrador Vacío
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
+            <AICopilotView 
+              chatHistory={chatHistory}
+              chatHistoryRef={chatHistoryRef}
+              loadingAgent={loadingAgent}
+              agentInput={agentInput}
+              setAgentInput={setAgentInput}
+              handleSendAgentMsg={handleSendAgentMsg}
+              setCaptionDraft={setCaptionDraft}
+              activeCreatedPost={activeCreatedPost}
+              setActiveCreatedPost={setActiveCreatedPost}
+              referenceImageUrl={referenceImageUrl}
+              setReferenceImageUrl={setReferenceImageUrl}
+              imagePreview={imagePreview}
+              setImagePreview={setImagePreview}
+              creatorFormat={creatorFormat}
+              setCreatorPlatform={setCreatorPlatform}
+              creatorPlatform={creatorPlatform}
+              scheduledDraftTime={scheduledDraftTime}
+              setScheduledDraftTime={setScheduledDraftTime}
+              publishingPostId={publishingPostId}
+              setPublishingPostId={setPublishingPostId}
+              creatorTitle={creatorTitle}
+              handlePublishPostNow={handlePublishPostNow}
+              setPosts={setPosts}
+              handleSchedulePost={handleSchedulePost}
+              setActiveTab={setActiveTab}
+              handleDeletePost={handleDeletePost}
+              handleCreateManualDraft={handleCreateManualDraft}
+            />
           )}
 
           {/* TAB 2: Brand Profile Context Engine */}
           {activeTab === 'brand' && (
-            <div className="space-y-6 max-w-4xl" id="brand-tab">
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                <div className="bg-slate-900 p-5 text-white flex justify-between items-center">
-                  <div>
-                    <h2 className="text-md font-bold tracking-tight">Active Brand DNA & Context</h2>
-                    <p className="text-slate-400 text-xs">This data coordinates with the Gemini API to write captions targeted directly to buyers.</p>
-                  </div>
-                  <span className="text-[10px] uppercase font-mono font-bold bg-indigo-500 px-2 py-0.5 rounded text-white tracking-widest animate-pulse">
-                    Autopilot Core
-                  </span>
-                </div>
-
-                <form onSubmit={handleUpdateBrand} className="p-6 space-y-5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Website Domain Scan */}
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-500 uppercase">Website URL / Core Source Domain</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="url"
-                          required
-                          value={websiteInput}
-                          onChange={(e) => setWebsiteInput(e.target.value)}
-                          placeholder="e.g. https://myorganicbrand.com"
-                          className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition"
-                        />
-                        <button
-                          type="submit"
-                          disabled={loadingBrand}
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3.5 py-2 rounded-lg transition disabled:opacity-50"
-                        >
-                          {loadingBrand ? 'Extracting...' : 'Scan Context'}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Brand Name */}
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-500 uppercase">Company Name</label>
-                      <input
-                        type="text"
-                        required
-                        value={brandNameInput}
-                        onChange={(e) => setBrandNameInput(e.target.value)}
-                        placeholder="e.g. My Brand Name"
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Industry Niche */}
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-500 uppercase">Target Industry & Niche Products Category</label>
-                      <input
-                        type="text"
-                        value={brandIndustryInput}
-                        onChange={(e) => setBrandIndustryInput(e.target.value)}
-                        placeholder="Sustainable fashion design apparel"
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition"
-                      />
-                    </div>
-
-                    {/* Tone of Voice */}
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-bold text-slate-500 uppercase">Social Voice & Persona Tone</label>
-                      <input
-                        type="text"
-                        value={brandToneInput}
-                        onChange={(e) => setBrandToneInput(e.target.value)}
-                        placeholder="Witty, earthy, bright, professional with dynamic humor"
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Target Buyers profile */}
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase">Target Buyer Personas (Ages, Frustrations, Wants)</label>
-                    <textarea
-                      rows={2}
-                      value={brandBuyersInput}
-                      onChange={(e) => setBrandBuyersInput(e.target.value)}
-                      placeholder="Millennial and Gen Z buyers look to swap standard plastic garments for comfortable carbon-neutral linen outfits..."
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition resize-none"
-                    />
-                  </div>
-
-                  {/* Flagship Product Offerings */}
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase">Flagship Products or Core Offerings</label>
-                    <input
-                      type="text"
-                      value={brandProductsInput}
-                      onChange={(e) => setBrandProductsInput(e.target.value)}
-                      placeholder="1. Organic Everyday Tee, 2. Biodegradable Sunglasses, 3. Recycled Linen Jumpsuit"
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition"
-                    />
-                  </div>
-
-                  {/* Environment Mission raw context */}
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-500 uppercase">Brand Environmental Mission & Ecosystem parameters</label>
-                    <textarea
-                      rows={2}
-                      value={brandContextInput}
-                      onChange={(e) => setBrandContextInput(e.target.value)}
-                      placeholder="We plant 2 trees for every item sold to reduce deforestation. We operate circular supply..."
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 outline-none font-medium text-slate-800 focus:border-slate-400 transition resize-none"
-                    />
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <p className="text-[10px] text-slate-400 font-mono">
-                      Last synced: Just now • Context engine online.
-                    </p>
-                    <button
-                      type="submit"
-                      disabled={loadingBrand}
-                      className="bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-2.5 rounded-lg transition"
-                    >
-                      {loadingBrand ? 'Saving Context...' : 'Update & Lock Brand Parameters'}
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              {/* Quick instructions panel */}
-              <div className="bg-slate-100 border border-slate-200 p-4 rounded-xl flex items-start gap-3">
-                <HelpCircle className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
-                <div className="text-xs text-slate-600 space-y-1">
-                  <h4 className="font-bold text-slate-900">How does Brand DNA extraction work?</h4>
-                  <p>
-                    By typing your brand website or handles, our core server utilizes Gemini models to extract appropriate themes, tonal matrices, and high-converting marketing segments. When you generate content later, it targets the exact personas highlighted in this console.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <BrandProfileView 
+              websiteInput={websiteInput}
+              setWebsiteInput={setWebsiteInput}
+              brandNameInput={brandNameInput}
+              setBrandNameInput={setBrandNameInput}
+              brandIndustryInput={brandIndustryInput}
+              setBrandIndustryInput={setBrandIndustryInput}
+              brandToneInput={brandToneInput}
+              setBrandToneInput={setBrandToneInput}
+              brandBuyersInput={brandBuyersInput}
+              setBrandBuyersInput={setBrandBuyersInput}
+              brandProductsInput={brandProductsInput}
+              setBrandProductsInput={setBrandProductsInput}
+              brandContextInput={brandContextInput}
+              setBrandContextInput={setBrandContextInput}
+              loadingBrand={loadingBrand}
+              handleUpdateBrand={handleUpdateBrand}
+            />
           )}
 
           {/* TAB 3: AI Content Idea Vault */}
           {activeTab === 'ideas' && (
-            <div className="space-y-6" id="ideas-tab">
-              {/* Top generator input */}
-              <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-                <div>
-                  <h2 className="text-sm font-bold text-slate-900">AI Social Auto-Scanner</h2>
-                  <p className="text-slate-500 text-xs">Upload sample social media screenshots or paste existing posts text to let the AI learn your style and target buyers.</p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {/* Style match input text box */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase block">Reference Caption or Competitor Content Style</label>
-                    <textarea
-                      rows={3}
-                      value={referenceText}
-                      onChange={(e) => setReferenceText(e.target.value)}
-                      placeholder="Paste text of a post you liked so the AI can mimic its flow, structure, and hashtag count..."
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-3 outline-none font-medium text-slate-800 focus:border-slate-400 transition resize-none"
-                    />
-                  </div>
-
-                  {/* Photo or video reference upload */}
-                  <div className="space-y-1.5 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Upload Reference Image asset</span>
-                      <div className="border-2 border-dashed border-slate-200 hover:border-slate-350 rounded-lg p-4 transition text-center relative cursor-pointer group bg-slate-50">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        />
-                        {imagePreview ? (
-                          <div className="flex items-center justify-center gap-3">
-                            <img src={imagePreview} className="w-12 h-12 object-cover rounded-md border border-slate-300" alt="uploaded reference" />
-                            <div className="text-left">
-                              <p className="text-xs font-bold text-slate-700 truncate max-w-xs">{imageFile?.name}</p>
-                              <p className="text-[10px] text-slate-400 font-mono">Reference Locked. Style analyser active.</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="space-y-1">
-                            <Upload className="w-4 h-4 text-slate-400 mx-auto group-hover:text-slate-600 transition" />
-                            <p className="text-xs font-semibold text-slate-600">Drag & drop photo / video or browse files</p>
-                            <p className="text-[9px] text-slate-400">Supports JPG, PNG (AI matches the visual tone of the content)</p>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={handleGenerateIdeas}
-                      disabled={loadingIdeas}
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition disabled:opacity-50 mt-2 flex items-center justify-center gap-1.5"
-                    >
-                      {loadingIdeas ? (
-                        <>
-                          <RefreshCw className="animate-spin w-3.5 h-3.5" />
-                          <span>Extracting social style & context parameters...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>Generate Tailored Campaign Content Ideas with AI</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Ideas Grid list */}
-              <div>
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="font-bold text-slate-900 text-sm">Targeted Concept Library</h3>
-                  <span className="text-[11px] text-slate-400 font-mono">
-                    {ideas.length} custom directions available
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {ideas.map((idea) => {
-                    const isTikTok = idea.recommendedPlatform === 'TikTok';
-                    const isInstagram = idea.recommendedPlatform === 'Instagram';
-                    const isLinkedIn = idea.recommendedPlatform === 'LinkedIn';
-                    const isFacebook = idea.recommendedPlatform === 'Facebook';
-
-                    let platBg = 'bg-blue-50 text-blue-700 border-blue-200';
-                    if (isTikTok) platBg = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-                    else if (isInstagram) platBg = 'bg-rose-50 text-rose-700 border-rose-200';
-                    else if (isLinkedIn) platBg = 'bg-sky-50 text-sky-700 border-sky-300';
-
-                    return (
-                      <div 
-                        key={idea.id} 
-                        id={`content-idea-card-${idea.id}`}
-                        className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-md transition duration-200"
-                      >
-                        <div>
-                          <div className="flex justify-between items-center mb-2.5">
-                            <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold border ${platBg}`}>
-                              {idea.recommendedPlatform}
-                            </span>
-                            <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono font-semibold">
-                              <Clock className="w-3" />
-                              <span>{idea.recommendedTime}</span>
-                            </div>
-                          </div>
-
-                          <h4 className="font-bold text-slate-900 text-sm mb-1 leading-snug">{idea.title}</h4>
-                          
-                          {/* Ideal hook styling */}
-                          <div className="bg-slate-50 border-l-2 border-indigo-500 p-2 my-2 rounded-r-lg font-mono text-[10.5px]">
-                            <span className="text-slate-400 text-[9px] uppercase font-bold tracking-wider block leading-none mb-0.5">Viral Hook Target</span>
-                            <span className="text-slate-700 font-medium italic">"{idea.hook}"</span>
-                          </div>
-
-                          <p className="text-slate-600 text-xs line-clamp-3 mb-3 leading-relaxed">
-                            {idea.description}
-                          </p>
-
-                          <div className="border-t border-slate-100 pt-2.5 mt-3 space-y-1">
-                            <div className="flex justify-between text-[10px]">
-                              <span className="text-slate-400 font-medium">Format:</span>
-                              <span className="font-bold text-slate-700">{idea.format}</span>
-                            </div>
-                            <div className="flex justify-between text-[10px]">
-                              <span className="text-slate-400 font-medium">Target Segment:</span>
-                              <span className="font-bold text-slate-700 truncate max-w-[120px]">{idea.audienceSegment}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="pt-4 mt-2">
-                          <button
-                            onClick={() => handleSelectIdeaToCreate(idea)}
-                            className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs py-1.5 rounded-lg transition flex items-center justify-center gap-1 cursor-pointer"
-                          >
-                            <span>Push and Generate Post Draft</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+            <IdeasVaultView 
+              referenceText={referenceText}
+              setReferenceText={setReferenceText}
+              imagePreview={imagePreview}
+              imageFile={imageFile}
+              handleImageChange={handleImageChange}
+              handleGenerateIdeas={handleGenerateIdeas}
+              loadingIdeas={loadingIdeas}
+              ideas={ideas}
+              handleSelectIdeaToCreate={handleSelectIdeaToCreate}
+            />
           )}
 
           {/* TAB 4: Predictive Creator Studio */}
           {activeTab === 'publisher' && (
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6" id="creator-studio-tab">
-              
-              {/* Left Column: Creator inputs */}
-              <div className="lg:col-span-7 space-y-5 bg-white border border-slate-200 p-5 rounded-xl shadow-sm h-fit">
-                <div>
-                  <h2 className="text-sm font-bold text-slate-900">Configure Auto-Posting Settings</h2>
-                  <p className="text-slate-500 text-xs">The predictive engine writes and schedules similar high-converting social layouts with one key click.</p>
-                </div>
-
-                {/* ✨ NEW FEATURE: Clone & Recreate Live Instagram Posts */}
-                <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black tracking-wider uppercase text-indigo-700 flex items-center gap-1.5 font-mono">
-                      <Sparkle className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
-                      <span>Clone & Recreate from Live Instagram Feed</span>
-                    </span>
-                    <button
-                      onClick={fetchIgRecentMedia}
-                      className="text-[9px] font-bold text-indigo-600 hover:underline flex items-center gap-1"
-                      disabled={loadingIgMedia}
-                    >
-                      <RefreshCw className={`w-3 ${loadingIgMedia ? 'animate-spin' : ''}`} />
-                      <span>Sync Feed</span>
-                    </button>
-                  </div>
-
-                  {loadingIgMedia ? (
-                    <div className="text-center py-4 text-xs text-indigo-600 font-medium">
-                      <RefreshCw className="animate-spin w-4 h-4 mx-auto mb-1" />
-                      <span>Retrieving live @skyridepa timeline items...</span>
-                    </div>
-                  ) : igRecentMedia.length > 0 ? (
-                    <div className="space-y-2">
-                      <p className="text-[11px] text-slate-500 leading-snug">Select one of your recent Instagram posts. Seliabot's AI model will read the image, analyze the caption DNA, and rewrite a similar, optimized copy for you:</p>
-                      
-                      <div className="grid grid-cols-3 gap-2 overflow-x-auto pb-1">
-                        {igRecentMedia.map((item) => {
-                          const isSelected = selectedMediaId === item.id;
-                          const displayUrl = item.thumbnail_url || item.media_url;
-                          const isVideo = item.media_type === 'VIDEO' || item.media_url?.includes('.mp4');
-
-                          return (
-                            <div
-                              key={item.id}
-                              onClick={() => {
-                                setSelectedMediaId(item.id);
-                                setReferenceImageUrl(item.media_url);
-                                setCreatorPlatform('Instagram');
-                                setCreatorFormat('Image');
-                                setCreatorTitle(`Variant upgrade of post #${item.id.slice(-4)}`);
-                                setCreatorCustomPrompt(
-                                  `Analyze and recreate a highly engaging, fresh alternative to this previous Instagram caption:\n\n"${item.caption}"\n\nEnsure it aligns perfectly with the brand DNA of ${brandProfile?.name || 'Sky Ride'}. Maintain the style and structure but write it completely fresh and add relevant hashtags.`
-                                );
-                              }}
-                              className={`group relative aspect-square rounded-lg overflow-hidden border cursor-pointer transition duration-150 ${
-                                isSelected 
-                                  ? 'border-indigo-600 ring-2 ring-indigo-500/30 shadow-md' 
-                                  : 'border-slate-200 hover:border-indigo-400'
-                              }`}
-                            >
-                              <img 
-                                src={displayUrl} 
-                                className="w-full h-full object-cover group-hover:scale-105 transition duration-200" 
-                                alt="instagram media" 
-                              />
-                              {isVideo && (
-                                <div className="absolute top-1 left-1 bg-slate-900/70 text-white p-1 rounded text-[8px] font-black tracking-wider uppercase font-mono leading-none">
-                                  REEL 🎥
-                                </div>
-                              )}
-                              <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition duration-150 flex items-end p-1">
-                                <span className="text-[8px] text-white font-bold truncate block w-full bg-slate-900/65 px-1 py-0.5 rounded leading-none">
-                                  {item.caption ? item.caption.slice(0, 15) + '...' : 'Photo'}
-                                </span>
-                              </div>
-                              {isSelected && (
-                                <div className="absolute top-1 right-1 bg-indigo-600 text-white p-0.5 rounded-full shadow-md">
-                                  <Check className="w-3 h-3" />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {selectedMediaId && (
-                        <div className="bg-white border border-indigo-100 p-2 rounded-lg text-[10px] text-slate-600 flex justify-between items-center animate-fade-in">
-                          <span className="font-semibold text-indigo-700">✓ Reference selected. Ready to recreate similar variants.</span>
-                          <button
-                            onClick={() => {
-                              setSelectedMediaId(null);
-                              setReferenceImageUrl(null);
-                              setCreatorTitle('');
-                              setCreatorCustomPrompt('');
-                            }}
-                            className="text-rose-500 hover:underline font-bold"
-                          >
-                            Clear Selection
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-slate-400 text-xs py-3 border border-dashed border-slate-200 rounded-lg text-center bg-slate-50/50">
-                      Connect your Instagram business profile under the <strong>Connected Platforms</strong> tab to pull your live timeline feed here and use AI to create similar content!
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Select target platform */}
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase block">Target Social Channel</label>
-                    <select
-                      value={creatorPlatform}
-                      onChange={(e) => setCreatorPlatform(e.target.value as any)}
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700"
-                    >
-                      <option value="Instagram">Instagram (Visual Feed / Stories)</option>
-                      <option value="TikTok">TikTok (Viral Video Script)</option>
-                      <option value="LinkedIn">LinkedIn (Executive Post)</option>
-                      <option value="Facebook">Facebook (Organic Social)</option>
-                    </select>
-                  </div>
-
-                  {/* Format type */}
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase block">Format Style</label>
-                    <select
-                      value={creatorFormat}
-                      onChange={(e) => setCreatorFormat(e.target.value as any)}
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700"
-                    >
-                      <option value="Image">Single Image with Caption</option>
-                      <option value="Video">Video Concept & Script</option>
-                      <option value="Carousel">Swipable Carousel Album</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Campaign Topic Label */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase block">Campaign Topic or Title</label>
-                  <input
-                    type="text"
-                    value={creatorTitle}
-                    onChange={(e) => setCreatorTitle(e.target.value)}
-                    placeholder="e.g. Summer organic cotton drop"
-                    className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                  />
-                </div>
-
-                {/* Visual conceptual prompt for AI Image / Asset */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase block">Visual Conceptual Prompt for AI Graphic Asset</label>
-                  <div className="flex gap-2">
-                    <textarea
-                      rows={2}
-                      value={creatorVisualPrompt}
-                      onChange={(e) => setCreatorVisualPrompt(e.target.value)}
-                      placeholder="e.g. Minimalist layout of green plants, sustainable glass bottle, soft daylight shadows, cream paper background"
-                      className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800 focus:border-indigo-400 transition resize-none"
-                    />
-                    <button
-                      onClick={handleGenerateAIImage}
-                      disabled={generatingAIImage || !creatorVisualPrompt}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-fit my-auto text-xs px-3.5 py-3 rounded-lg transition disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer"
-                    >
-                      {generatingAIImage ? (
-                        <>
-                          <RefreshCw className="animate-spin w-3.5 h-3.5" />
-                          <span>Drawing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkle className="w-3.5 h-3.5 text-yellow-300" />
-                          <span>Render AI Image</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Optional references custom instructions */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase block">Target Segment & Sales Copy Adjustments</label>
-                  <textarea
-                    rows={2}
-                    value={creatorCustomPrompt}
-                    onChange={(e) => setCreatorCustomPrompt(e.target.value)}
-                    placeholder="e.g. Keep style casual and humor-centric. Urge the reader to buy today and mention our tree plantation program."
-                    className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800 resize-none"
-                  />
-                </div>
-
-                {/* Schedule Draft slot time */}
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase">Optimal posting time preset</label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={scheduledDraftTime}
-                      onChange={(e) => setScheduledDraftTime(e.target.value)}
-                      className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                    />
-                    <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-1 rounded border border-emerald-100">
-                      Top Engagement Spot
-                    </span>
-                  </div>
-                </div>
-
-                {/* Generate caption & draft button */}
-                <div className="pt-4 border-t border-slate-100">
-                  <button
-                    onClick={handleGeneratePostCapAndScore}
-                    disabled={loadingPosts}
-                    className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg text-xs shadow-sm transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    {loadingPosts ? (
-                      <>
-                        <RefreshCw className="animate-spin w-4 h-4" />
-                        <span>Applying Social DNA & formatting targeted caption words...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 text-teal-300 animate-pulse" />
-                        <span>Generate Autopilot Caption & Viral Scorecard with AI</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Interactive Simulator Preview and scorecards */}
-              <div className="lg:col-span-5 h-full space-y-6">
-                
-                {/* Visual mockup of social draft */}
-                {(activeCreatedPost || referenceImageUrl || imagePreview) ? (
-                  <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                    {/* Channel header preview mockup */}
-                    <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-xs">
-                          E
-                        </div>
-                        <div>
-                          <span className="font-bold text-slate-900 text-xs block leading-none">ecostyle_wear</span>
-                          <span className="text-[10px] text-indigo-600 font-mono font-bold">
-                            {(activeCreatedPost?.platform || creatorPlatform || 'Instagram')} Mock Sandbox Feed
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded uppercase">
-                          {(activeCreatedPost?.status || 'DRAFT')}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Image/Video space mock */}
-                    <div className="bg-slate-100 aspect-square w-full relative flex items-center justify-center overflow-hidden border-b border-slate-100">
-                      {aiGeneratedUrl ? (
-                        aiGeneratedUrl.includes('.mp4') || aiGeneratedUrl.includes('/veo/') || creatorFormat === 'Video' ? (
-                          <video 
-                            src={aiGeneratedUrl} 
-                            controls 
-                            loop 
-                            autoPlay 
-                            muted 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <img 
-                            src={aiGeneratedUrl} 
-                            className="w-full h-full object-cover" 
-                            alt="AI generated visual reference" 
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
-                            }}
-                          />
-                        )
-                      ) : (referenceImageUrl || imagePreview) ? (
-                        (referenceImageUrl || imagePreview)!.includes('.mp4') || creatorFormat === 'Video' ? (
-                          <video 
-                            src={referenceImageUrl || imagePreview || ''} 
-                            controls 
-                            loop 
-                            autoPlay 
-                            muted 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <img 
-                            src={referenceImageUrl || imagePreview || ''} 
-                            className="w-full h-full object-cover" 
-                            alt="Selected reference visual" 
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
-                            }}
-                          />
-                        )
-                      ) : (activeCreatedPost && activeCreatedPost.mediaUrl) ? (
-                        activeCreatedPost.mediaUrl.includes('.mp4') || activeCreatedPost.mediaUrl.includes('/veo/') || activeCreatedPost.mediaType === 'video' ? (
-                          <video 
-                            src={activeCreatedPost.mediaUrl} 
-                            controls 
-                            loop 
-                            autoPlay 
-                            muted 
-                            className="w-full h-full object-cover" 
-                          />
-                        ) : (
-                          <img 
-                            src={activeCreatedPost.mediaUrl} 
-                            className="w-full h-full object-cover" 
-                            alt="Theme reference visual" 
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=80";
-                            }}
-                          />
-                        )
-                      ) : (
-                        <div className="text-center p-4 text-slate-400">
-                          <ImageIcon className="w-8 h-8 mx-auto mb-1 text-slate-300" />
-                          <p className="text-xs">No media rendered yet. Click "Render AI Image" or "Update reference" to load.</p>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Previews, text and hashtags */}
-                    <div className="p-4 space-y-3">
-                      <div>
-                        {/* Interactive edit of text */}
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase">Live Caption Draft editor</span>
-                          <span className="text-[10px] text-slate-400">Word count: {captionDraft.length}</span>
-                        </div>
-                        <textarea
-                          rows={6}
-                          value={captionDraft}
-                          onChange={(e) => setCaptionDraft(e.target.value)}
-                          className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2.5 font-sans outline-none leading-relaxed text-slate-800 focus:bg-white focus:border-slate-400 transition"
-                        />
-                      </div>
-
-                      {/* Manual controls buttons to Publish or Schedule */}
-                      {activeCreatedPost ? (
-                        <div className="pt-2 border-t border-slate-100 flex items-center gap-2">
-                          <button
-                            onClick={() => handlePublishPostNow(activeCreatedPost.id)}
-                            disabled={publishingPostId === activeCreatedPost.id}
-                            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 rounded-lg shadow-sm transition disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.01]"
-                          >
-                            {publishingPostId === activeCreatedPost.id ? (
-                              <>
-                                <RefreshCw className="animate-spin w-4.5 h-4.5" />
-                                <span>Deploying...</span>
-                              </>
-                            ) : (
-                              <>
-                                <Globe className="w-4 h-4 text-emerald-300" />
-                                <span>Auto-Deploy & Post Now</span>
-                              </>
-                            )}
-                          </button>
-
-                          <button
-                            onClick={() => handleSchedulePost(activeCreatedPost.id, scheduledDraftTime)}
-                            className="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2 px-3 rounded-lg border border-slate-200 transition cursor-pointer"
-                          >
-                            Lock Schedule Slot
-                          </button>
-
-                          <button
-                            onClick={() => handleDeletePost(activeCreatedPost.id)}
-                            className="text-slate-400 hover:text-red-500 p-2 rounded transition cursor-pointer"
-                            title="Delete draft"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="pt-2 border-t border-slate-100 text-center py-2 bg-slate-50 rounded-lg text-[10px] text-slate-500 font-medium">
-                          <span>Click the "Generate Autopilot Caption" button on the left to activate instant publication controls.</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-400 shadow-sm">
-                    <Sparkles className="w-8 h-8 mx-auto mb-2 text-indigo-500 animate-pulse" />
-                    <h3 className="font-bold text-slate-800 mb-1 text-sm">Visual Live Sandbox Sandbox</h3>
-                    <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
-                      Configure your campaign and click "Generate Autopilot Caption" to build optimized captions alongside your custom A/B target segments.
-                    </p>
-                  </div>
-                )}
-
-                {/* Viral Scorecard */}
-                {activeCreatedPost && activeCreatedPost.viralMetrics && (
-                  <div className="bg-indigo-950 text-white rounded-xl p-4 shadow-md space-y-4 font-sans">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest block font-mono">AUTOPILOT FORECAST</span>
-                        <h3 className="text-sm font-bold text-white mt-0.5">Composite Viral Score</h3>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-3xl font-black italic block leading-none text-indigo-300">
-                          {activeCreatedPost.viralScore}<span className="text-sm font-light uppercase tracking-normal">/100</span>
-                        </span>
-                        <span className="text-[9px] bg-indigo-500/30 text-indigo-200 px-1.5 py-0.5 rounded font-mono mt-1 inline-block">
-                          High Probability
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      {/* Metric bars representing high density parameters */}
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-300 font-medium">Headline / Hook Rating</span>
-                          <span className="font-bold text-indigo-300">{activeCreatedPost.viralMetrics.hook}%</span>
-                        </div>
-                        <div className="w-full bg-indigo-900/40 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-indigo-400 h-full rounded-full" style={{ width: `${activeCreatedPost.viralMetrics.hook}%` }}></div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-300 font-medium">Viral Trend Alignment</span>
-                          <span className="font-bold text-indigo-300">{activeCreatedPost.viralMetrics.trend}%</span>
-                        </div>
-                        <div className="w-full bg-indigo-900/40 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-indigo-400 h-full rounded-full" style={{ width: `${activeCreatedPost.viralMetrics.trend}%` }}></div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-300 font-medium">Viral Shareability Score</span>
-                          <span className="font-bold text-indigo-300">{activeCreatedPost.viralMetrics.shareability}%</span>
-                        </div>
-                        <div className="w-full bg-indigo-900/40 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-indigo-400 h-full rounded-full" style={{ width: `${activeCreatedPost.viralMetrics.shareability}%` }}></div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-300 font-medium">Visual Impact Potential</span>
-                          <span className="font-bold text-indigo-300">{activeCreatedPost.viralMetrics.visualImpact}%</span>
-                        </div>
-                        <div className="w-full bg-indigo-900/40 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-indigo-400 h-full rounded-full" style={{ width: `${activeCreatedPost.viralMetrics.visualImpact}%` }}></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-indigo-900/40 border border-indigo-800/60 rounded-lg p-3 text-[11px] text-indigo-200 italic leading-relaxed">
-                      💡 <strong>AI Recommendations:</strong> {activeCreatedPost.viralFeedback}
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            </div>
+            <PublisherView 
+              fetchIgRecentMedia={fetchIgRecentMedia}
+              loadingIgMedia={loadingIgMedia}
+              igRecentMedia={igRecentMedia}
+              selectedMediaId={selectedMediaId}
+              setSelectedMediaId={setSelectedMediaId}
+              setReferenceImageUrl={setReferenceImageUrl}
+              creatorPlatform={creatorPlatform}
+              setCreatorPlatform={setCreatorPlatform}
+              creatorFormat={creatorFormat}
+              setCreatorFormat={setCreatorFormat}
+              creatorTitle={creatorTitle}
+              setCreatorTitle={setCreatorTitle}
+              creatorCustomPrompt={creatorCustomPrompt}
+              setCreatorCustomPrompt={setCreatorCustomPrompt}
+              creatorVisualPrompt={creatorVisualPrompt}
+              setCreatorVisualPrompt={setCreatorVisualPrompt}
+              creatorThemePrompt={creatorThemePrompt}
+              setCreatorThemePrompt={setCreatorThemePrompt}
+              imagePreview={imagePreview}
+              imageFile={imageFile}
+              handleImageChange={handleImageChange}
+              creatorGenerating={creatorGenerating}
+              handleGenerateDraft={handleGenerateDraft}
+              creatorAiSuggestions={creatorAiSuggestions}
+              setCreatorAiSuggestions={setCreatorAiSuggestions}
+              aiGeneratedUrl={aiGeneratedUrl}
+              setAiGeneratedUrl={setAiGeneratedUrl}
+              aiImageStatus={aiImageStatus}
+              handleGenerateAiImage={handleGenerateAiImage}
+              setActiveCreatedPost={setActiveCreatedPost}
+              setCaptionDraft={setCaptionDraft}
+              brandProfile={brandProfile}
+            />
           )}
 
           {/* TAB 5: Automated Schedule & Calendar */}
@@ -2851,206 +1768,25 @@ export default function App({ authUser }: AppProps) {
 
           {/* TAB 6: Headline A/B Testing & Campaigns */}
           {activeTab === 'abtests' && (
-            <div className="space-y-6" id="abtests-tab">
-              
-              {/* Grid with testing targets */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                {/* Contrast creation form */}
-                <div className="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-5 shadow-sm h-fit">
-                  <div>
-                    <h2 className="text-sm font-bold text-slate-900">Initiate A/B Testing Matrix</h2>
-                    <p className="text-slate-500 text-xs">Deploy segment-targeted comparison matrices to see which hook secures superior conversions.</p>
-                  </div>
-
-                  <form onSubmit={handleCreateAbCampaign} className="space-y-4 mt-4">
-                    
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-bold text-slate-505 text-slate-500 uppercase block">Campaign Variant Name</label>
-                      <input
-                        type="text"
-                        required
-                        value={newAbName}
-                        onChange={(e) => setNewAbName(e.target.value)}
-                        placeholder="e.g. Recycled Linen Jumpsuit Launch"
-                        className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase block">Target Product Item</label>
-                        <input
-                          type="text"
-                          required
-                          value={newAbProduct}
-                          onChange={(e) => setNewAbProduct(e.target.value)}
-                          placeholder="Everyday Linen tee"
-                          className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                        />
-                      </div>
-
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase block">Audience Segment</label>
-                        <input
-                          type="text"
-                          required
-                          value={newAbSegment}
-                          onChange={(e) => setNewAbSegment(e.target.value)}
-                          placeholder="Conscious Fashion Buyers"
-                          className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1 pt-2 border-t border-slate-100">
-                      <span className="text-[10px] font-bold text-indigo-600 uppercase block tracking-wider">Strategy A Variant Setup</span>
-                      <div className="grid grid-cols-1 gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={newAbStrategyA}
-                          onChange={(e) => setNewAbStrategyA(e.target.value)}
-                          placeholder="e.g. Humor Angle: Stop wearing nylon sweating bags"
-                          className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                        />
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-400">Tone preset:</span>
-                          <input 
-                            type="text" 
-                            className="text-right text-slate-600 outline-none w-28 bg-transparent" 
-                            value={newAbToneA} 
-                            onChange={(e) => setNewAbToneA(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1 pt-2 border-t border-slate-100">
-                      <span className="text-[10px] font-bold text-indigo-600 uppercase block tracking-wider">Strategy B Variant Setup</span>
-                      <div className="grid grid-cols-1 gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={newAbStrategyB}
-                          onChange={(e) => setNewAbStrategyB(e.target.value)}
-                          placeholder="e.g. Eco Fact Angle: 1 Shirt = plants 2 real trees"
-                          className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-medium text-slate-800"
-                        />
-                        <div className="flex justify-between items-center text-[10px]">
-                          <span className="text-slate-400">Tone preset:</span>
-                          <input 
-                            type="text" 
-                            className="text-right text-slate-600 outline-none w-28 bg-transparent" 
-                            value={newAbToneB} 
-                            onChange={(e) => setNewAbToneB(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loadingCampaigns}
-                      className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2 rounded-lg text-xs shadow-sm transition disabled:opacity-50 mt-2"
-                    >
-                      {loadingCampaigns ? 'Spinning active channels...' : 'Deploy Split-Variant Test Campaign'}
-                    </button>
-                  </form>
-                </div>
-
-                {/* Campaigns testing list status */}
-                <div className="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-                  <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-400">Live Headline Performance Diagnostics</h3>
-
-                  <div className="space-y-4">
-                    {campaigns.map((camp) => (
-                      <div key={camp.id} className="border border-slate-100 p-4 rounded-xl space-y-3.5 bg-slate-50/50" id={`ab-campaign-card-${camp.id}`}>
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs font-bold text-slate-900 block leading-none">{camp.name}</span>
-                              <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase ${
-                                camp.status === 'Active' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-slate-50 text-slate-500 border border-slate-200'
-                              }`}>
-                                {camp.status}
-                              </span>
-                              <span className="px-1.5 py-0.5 rounded text-[8px] font-mono font-medium uppercase bg-amber-50 text-amber-700 border border-amber-200">
-                                Simulated Campaign (Demo Mode)
-                              </span>
-                            </div>
-                            <span className="text-[10px] text-slate-400 mt-1 block">
-                              Target Product: <strong className="text-slate-600">{camp.targetProduct}</strong> • Segment: <strong className="text-indigo-600">{camp.segment}</strong>
-                            </span>
-                          </div>
-
-                          {camp.metricCaptured && camp.metricCaptured.winner !== 'Pending' && (
-                            <span className="bg-emerald-50 text-emerald-800 text-[10px] font-black px-2 py-1 rounded border border-emerald-100">
-                              🏆 Variet {camp.metricCaptured.winner} Winner
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Side by side stats comparison */}
-                        <div className="grid grid-cols-2 gap-4">
-                          {/* Variant A card */}
-                          <div className="bg-white border border-slate-100 rounded-lg p-3 space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-black text-slate-800">Variant A</span>
-                              <span className="text-[9px] bg-slate-100 text-slate-600 font-mono px-1 rounded uppercase tracking-wider font-semibold">
-                                {camp.strategyA.tone}
-                              </span>
-                            </div>
-                            <p className="text-[10px] font-medium text-slate-550 leading-relaxed truncate group hover:text-indigo-900" title={camp.strategyA.name}>
-                              "{camp.strategyA.name}"
-                            </p>
-                            {camp.metricCaptured && (
-                              <div className="flex justify-between pt-1 border-t border-slate-50 text-[11px]">
-                                <span className="text-slate-400">Engagement:</span>
-                                <span className={`font-bold ${camp.metricCaptured.winner === 'A' ? 'text-emerald-600' : 'text-slate-700'}`}>
-                                  {camp.metricCaptured.engagementA}%
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Variant B card */}
-                          <div className="bg-white border border-slate-100 rounded-lg p-3 space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-[10px] font-black text-slate-800">Variant B</span>
-                              <span className="text-[9px] bg-slate-100 text-slate-600 font-mono px-1 rounded uppercase tracking-wider font-semibold">
-                                {camp.strategyB.tone}
-                              </span>
-                            </div>
-                            <p className="text-[10px] font-medium text-slate-550 leading-relaxed truncate" title={camp.strategyB.name}>
-                              "{camp.strategyB.name}"
-                            </p>
-                            {camp.metricCaptured && (
-                              <div className="flex justify-between pt-1 border-t border-slate-50 text-[11px]">
-                                <span className="text-slate-400">Engagement:</span>
-                                <span className={`font-bold ${camp.metricCaptured.winner === 'B' ? 'text-emerald-600' : 'text-slate-700'}`}>
-                                  {camp.metricCaptured.engagementB}%
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        {camp.metricCaptured && (
-                          <div className="text-[10.5px] italic text-slate-500 pt-2 border-t border-slate-100 flex items-center justify-between">
-                            <span>Statistical confidence level verified. Strategy has updated corresponding automated queues.</span>
-                            <span className="font-mono font-bold text-slate-700">98.2% Confidence</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
+            <ABTestsView 
+              newAbName={newAbName}
+              setNewAbName={setNewAbName}
+              newAbProduct={newAbProduct}
+              setNewAbProduct={setNewAbProduct}
+              newAbSegment={newAbSegment}
+              setNewAbSegment={setNewAbSegment}
+              newAbStrategyA={newAbStrategyA}
+              setNewAbStrategyA={setNewAbStrategyA}
+              newAbToneA={newAbToneA}
+              setNewAbToneA={setNewAbToneA}
+              newAbStrategyB={newAbStrategyB}
+              setNewAbStrategyB={setNewAbStrategyB}
+              newAbToneB={newAbToneB}
+              setNewAbToneB={setNewAbToneB}
+              loadingCampaigns={loadingCampaigns}
+              handleCreateAbCampaign={handleCreateAbCampaign}
+              campaigns={campaigns}
+            />
           )}
 
           {/* TAB 7: Connected Channels & Social Scanner */}
@@ -3076,487 +1812,43 @@ export default function App({ authUser }: AppProps) {
 
           {/* TAB 9: AI Creative Studio (Google Veo 3.1 & Nano Banana 2) */}
           {activeTab === 'studio' && (
-            <div className="space-y-6 animate-fadeIn" id="ai-studio-tab">
-              {/* Premium Top Bar announcement */}
-              <div className="bg-slate-900 text-white rounded-2xl p-6 relative overflow-hidden border border-slate-800 shadow-sm">
-                <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none transform translate-x-12 -translate-y-6">
-                  <Palette className="w-64 h-64 text-indigo-50" />
-                </div>
-                <div className="max-w-2xl relative z-10 space-y-2">
-                  <span className="text-[10px] uppercase font-black tracking-widest text-indigo-450 bg-indigo-950/60 px-2.5 py-1 rounded border border-indigo-900/60 inline-block">
-                    Google GenAI Visual Engine Suite
-                  </span>
-                  <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">AI Creative Studio Workshop</h1>
-                  <p className="text-slate-300 text-xs leading-relaxed">
-                    Sculpt elite cinematic videos with <span className="text-emerald-400 font-bold">Google Veo 3.1</span>, and synthesize absolute masterpiece commercials with <span className="text-indigo-400 font-bold">Nano Banana 2</span> image generation. Perfect for manual creative drops when bypassing API scheduling approvals.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                {/* Left Controls column */}
-                <div className="lg:col-span-6 space-y-6 bg-white border border-slate-200 p-5 rounded-2xl shadow-sm">
-                  <div>
-                    <h2 className="text-sm font-bold text-slate-900">Configure Composition Workspace</h2>
-                    <p className="text-slate-500 text-xs">Tune advanced neural network parameters to tailor your visual concept.</p>
-                  </div>
-
-                  {/* Model Choice list */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Visual Blueprint Model Type</label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => {
-                          setStudioFormat('image');
-                          setStudioAspectRatio('1:1');
-                        }}
-                        className={`p-3.5 border rounded-xl text-left transition flex items-center gap-3 cursor-pointer ${
-                          studioFormat === 'image'
-                            ? 'border-indigo-600 bg-indigo-50/20 shadow-xs'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${studioFormat === 'image' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                          <ImageIcon className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-slate-900 leading-tight">Nano Banana 2</div>
-                          <div className="text-[10px] text-slate-500 font-medium">High-Res Masterpiece (3.1 Image)</div>
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setStudioFormat('video');
-                          setStudioAspectRatio('16:9');
-                        }}
-                        className={`p-3.5 border rounded-xl text-left transition flex items-center gap-3 cursor-pointer ${
-                          studioFormat === 'video'
-                            ? 'border-indigo-600 bg-indigo-50/20 shadow-xs'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className={`p-2 rounded-lg ${studioFormat === 'video' ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                          <VideoIcon className="w-4 h-4" />
-                        </div>
-                        <div>
-                          <div className="text-xs font-bold text-slate-900 leading-tight">Google Veo 3.1</div>
-                          <div className="text-[10px] text-slate-500 font-medium">Cinematic Short Length Video</div>
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Prompts input */}
-                  <div className="space-y-1">
-                    <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                      <span>Detailed Conceptual Prompt</span>
-                      <span className="text-slate-300">Minimum 5 words recommended</span>
-                    </div>
-                    <textarea
-                      rows={3}
-                      value={studioPrompt}
-                      onChange={(e) => setStudioPrompt(e.target.value)}
-                      placeholder="e.g. Cinematic flat lay product shot of sustainable bamboo water bottle next to sand ripples, soft studio lighting..."
-                      className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none font-medium text-slate-800 focus:border-indigo-400 focus:bg-white transition resize-none"
-                    />
-                  </div>
-
-                  {/* Aspect Ratio choice layout */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Target Crop Aspect Ratio</label>
-                    <div className="grid grid-cols-5 gap-2">
-                      {['1:1', '16:9', '9:16', '4:3', '3:4'].map(ratio => {
-                        const isSelected = studioAspectRatio === ratio;
-                        return (
-                          <button
-                            key={ratio}
-                            onClick={() => setStudioAspectRatio(ratio)}
-                            className={`p-2.5 border rounded-lg text-center transition flex flex-col items-center gap-1.5 cursor-pointer ${
-                              isSelected
-                                ? 'border-indigo-600 bg-indigo-50/20'
-                                : 'border-slate-200 hover:border-slate-300'
-                            }`}
-                          >
-                            <div className={`border border-slate-400 rounded-sm bg-slate-100 shrink-0 ${
-                              ratio === '1:1' ? 'w-4 h-4' :
-                              ratio === '16:9' ? 'w-5 h-3' :
-                              ratio === '9:16' ? 'w-3 h-5' :
-                              ratio === '4:3' ? 'w-4.5 h-3.5' :
-                              'w-3.5 h-4.5'
-                            }`} />
-                            <span className="text-[10px] font-bold text-slate-705 leading-none">{ratio}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Context Upload & Advanced parameters */}
-                  <div className="border-t border-slate-150 pt-5 space-y-4">
-                    
-                    {/* Conditional parameters */}
-                    {studioFormat === 'image' ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Size parameter */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Production Quality Resolution</label>
-                          <select
-                            value={studioSize}
-                            onChange={(e) => setStudioSize(e.target.value)}
-                            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700 focus:border-indigo-400 transition"
-                          >
-                            <option value="512px">512px Draft Preview</option>
-                            <option value="1K">1K High Quality standard</option>
-                            <option value="2K">2K Professional Resolution</option>
-                            <option value="4K">4K Utmost Grade</option>
-                          </select>
-                        </div>
-
-                        {/* Grounding toggle */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Web Grounding Search (Nano Banana Exclusive)</label>
-                          <div className="flex items-center gap-2 pt-1.5">
-                            <input
-                              type="checkbox"
-                              id="enableGrounding"
-                              checked={studioEnableGrounding}
-                              onChange={(e) => setStudioEnableGrounding(e.target.checked)}
-                              className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
-                            />
-                            <label htmlFor="enableGrounding" className="text-xs text-slate-605 font-semibold select-none cursor-pointer flex items-center gap-1 leading-none">
-                              <Search className="w-3.5 h-3.5 text-indigo-500" />
-                              <span>Embed live Google Search contexts</span>
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Video Engine Model */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Google Veo Engine Model</label>
-                          <select
-                            value={studioVideoModel}
-                            onChange={(e) => setStudioVideoModel(e.target.value)}
-                            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700 focus:border-indigo-400 transition"
-                          >
-                            <option value="veo-3.1-lite-generate-preview">Veo 3.1 Lite (Fast & Efficient)</option>
-                            <option value="veo-3.1-generate-preview">Veo 3.1 Pro (Cinematic High-Fidelity)</option>
-                          </select>
-                        </div>
-
-                        {/* Video Resolution */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Video Engine Resolution</label>
-                          <select
-                            value={studioVideoResolution}
-                            onChange={(e) => setStudioVideoResolution(e.target.value)}
-                            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700 focus:border-indigo-400 transition"
-                          >
-                            <option value="720p">720p Cinematic Standard</option>
-                            <option value="1080p">1080p Full High Definition (HD)</option>
-                          </select>
-                        </div>
-
-                        {/* Video Duration */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Target Video Duration</label>
-                          <select
-                            value={studioVideoDuration}
-                            onChange={(e) => setStudioVideoDuration(Number(e.target.value))}
-                            className="w-full text-xs bg-slate-50 border border-slate-200 rounded-lg p-2 outline-none font-semibold text-slate-700 focus:border-indigo-400 transition"
-                          >
-                            <option value="5">Short Snap (5 seconds)</option>
-                            <option value="10">Ad Clip (10 seconds)</option>
-                            <option value="30">Cinematic Story (30 seconds)</option>
-                            <option value="60">Extended Feature (60 seconds / 1 minute)</option>
-                            <option value="120">Deep Gen-AI Film (120 seconds / 2 minutes)</option>
-                          </select>
-                        </div>
-
-                        {/* Starting image seed */}
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Seed / Context Starter Image (Optional)</label>
-                          <div className="flex items-center gap-2">
-                            <label className="flex-1 border border-dashed border-slate-300 rounded-lg p-1.5 px-3 flex items-center justify-center gap-1.5 cursor-pointer hover:border-indigo-400 hover:bg-slate-50 transition">
-                              <Upload className="w-3.5 h-3.5 text-slate-400" />
-                              <span className="text-[10px] font-bold text-slate-600 truncate">
-                                {studioStarterImage ? "Image seed uploaded" : "Upload starting png/jpg"}
-                              </span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleStudioStarterImageChange}
-                                className="hidden"
-                              />
-                            </label>
-                            {studioStarterImage && (
-                              <button
-                                onClick={() => setStudioStarterImage(null)}
-                                className="text-[9px] bg-red-50 text-red-600 font-bold px-2 py-2 rounded-lg border border-red-100"
-                              >
-                                Clear Seed
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                  </div>
-
-                  {/* Submit buttons */}
-                  <div className="pt-4 border-t border-slate-150">
-                    <button
-                      onClick={handleSynthesizeCreative}
-                      disabled={studioGenerating || !studioPrompt.trim()}
-                      className="w-full bg-slate-950 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl text-xs shadow-md transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      {studioGenerating ? (
-                        <>
-                          <RefreshCw className="animate-spin w-4 h-4 text-emerald-400" />
-                          <span>{studioStatusText || 'Structuring complex design coordinates...'}</span>
-                        </>
-                      ) : (
-                        <>
-                          <Palette className="w-4 h-4 text-emerald-400 animate-pulse" />
-                          <span>Create With Google {studioFormat === 'image' ? 'Nano Banana 2' : 'Veo 3.1 Pro'}</span>
-                        </>
-                      )}
-                    </button>
-                    <p className="text-center text-[10px] text-slate-400 mt-2 font-mono">
-                      Powered natively by Google Cloud Vertex GenAI backend integrations
-                    </p>
-                  </div>
-                </div>
-
-                {/* Right Interactive Player / Viewer column */}
-                <div className="lg:col-span-6 space-y-6">
-                  
-                  {/* Generated asset preview container */}
-                  <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between h-[450px]">
-                    <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-                      <div className="flex items-center gap-1.5">
-                        <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span className="text-xs font-bold text-slate-800 uppercase tracking-widest font-mono">LIVE STUDIO DRAWING BOARD</span>
-                      </div>
-                      {studioGeneratedUrl && (
-                        <span className="text-[9px] font-bold text-slate-500 font-mono bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded uppercase">
-                          {studioFormat === 'image' ? '3.1 Image' : 'Veo 3.1 MP4'}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Viewport block */}
-                    <div className="flex-1 bg-slate-950 flex items-center justify-center p-4 relative">
-                      {studioGenerating ? (
-                        <div className="text-center space-y-4 max-w-sm">
-                          <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-20 text-indigo-500"></span>
-                            <div className="animate-spin w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full" />
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-xs font-black text-white italic animate-pulse">
-                              "{studioStatusText}"
-                            </p>
-                            <p className="text-[10px] text-slate-400">
-                              Please remain here. The premium neural generators are assembling visual blocks.
-                            </p>
-                          </div>
-                        </div>
-                      ) : studioGeneratedUrl ? (
-                        <div className="w-full h-full flex items-center justify-center overflow-hidden rounded-lg">
-                          {studioFormat === 'image' ? (
-                            <img
-                              src={studioGeneratedUrl}
-                              alt="Generated Masterpiece"
-                              referrerPolicy="no-referrer"
-                              className="max-w-full max-h-full object-contain shadow-2xl rounded"
-                            />
-                          ) : (
-                            <video
-                              src={studioGeneratedUrl}
-                              controls
-                              className="max-w-full max-h-full object-contain rounded shadow-2xl"
-                            />
-                          )}
-                        </div>
-                      ) : (
-                        <div className="text-center space-y-2 max-w-xs">
-                          <Palette className="w-10 h-10 text-slate-700 mx-auto stroke-1" />
-                          <p className="text-xs font-bold text-slate-400">Viewport is currently empty</p>
-                          <p className="text-[10px] text-slate-500 text-center">
-                            Configure some beautiful parameters on the left and synthesize your next visual sales trigger.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Video Extension block */}
-                    {studioGeneratedUrl && studioFormat === 'video' && studioLastOperationName && !studioGenerating && (
-                      <div className="p-4 border-t border-slate-100 bg-emerald-50/40 space-y-2">
-                        <div className="flex items-center gap-1.5">
-                          <Sparkles className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
-                          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider">
-                            Google Veo 3.1 Video Extension (+7 seconds)
-                          </span>
-                        </div>
-                        <p className="text-[10px] text-slate-500">
-                          Extend this video's narrative timeline by 7 seconds. You can extend it progressively up to 148 seconds (2.5 minutes).
-                        </p>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={studioExtensionPrompt}
-                            onChange={(e) => setStudioExtensionPrompt(e.target.value)}
-                            placeholder="Describe what happens next in the scene (e.g. 'A close-up shot of the designer smiling...')"
-                            className="flex-1 text-xs bg-white border border-slate-200 rounded-xl px-3 outline-none focus:border-emerald-400 transition placeholder:text-slate-400"
-                          />
-                          <button
-                            onClick={handleExtendCreative}
-                            disabled={!studioExtensionPrompt.trim()}
-                            className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                          >
-                            <Sparkles className="w-3.5 h-3.5 text-emerald-200" />
-                            <span>Extend Video (+7s)</span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Asset actions footer */}
-                    {studioGeneratedUrl && !studioGenerating && (
-                      <div className="p-4 border-t border-slate-100 bg-slate-50 flex flex-col sm:flex-row gap-3">
-                        <button
-                          onClick={() => {
-                            // Apply to social draft inside Autopilot CreatorStudio (publisher) tab
-                            setAiGeneratedUrl(studioGeneratedUrl);
-                            setCreatorFormat(studioFormat === 'image' ? 'Image' : 'Video');
-                            if (studioPrompt) {
-                              setCreatorVisualPrompt(studioPrompt);
-                            }
-                            setActiveTab('publisher');
-                          }}
-                          className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs"
-                        >
-                          <ArrowRight className="w-4 h-4 text-indigo-200" />
-                          <span>Push Media to Post Draft</span>
-                        </button>
-
-                        <div className="flex gap-2">
-                          <a
-                            href={studioGeneratedUrl}
-                            download={`socialflow-${studioFormat === 'image' ? 'image.png' : 'video.mp4'}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 p-2.5 rounded-xl text-xs transition flex items-center justify-center font-bold gap-1 cursor-pointer"
-                          >
-                            <Download className="w-4 h-4" />
-                            <span className="sm:inline hidden">HD Save</span>
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                </div>
-
-              </div>
-
-              {/* SAVED MASTERPIECES SHOWCASE */}
-              {studioSavedMedia.length > 0 && (
-                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
-                  <div className="flex items-center gap-2">
-                    <History className="w-4 h-4 text-emerald-500" />
-                    <h3 className="text-xs font-black text-slate-1500 tracking-wider uppercase">AI Creative Asset Repository</h3>
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {studioSavedMedia.map((media) => (
-                      <div key={media.id} className="group relative border border-slate-100 rounded-xl overflow-hidden bg-slate-950 flex flex-col justify-between h-44 shadow-xs">
-                        
-                        {/* Header badge */}
-                        <div className="absolute top-2 left-2 z-20">
-                          <span className={`text-[8px] font-bold uppercase px-1.5 py-0.5 rounded text-white font-mono ${
-                            media.type === 'image' ? 'bg-indigo-600/80' : 'bg-emerald-600/80'
-                          }`}>
-                            {media.type}
-                          </span>
-                        </div>
-
-                        {/* Preview */}
-                        <div className="flex-1 overflow-hidden flex items-center justify-center relative">
-                          {media.type === 'image' ? (
-                            <img
-                              src={media.url}
-                              alt="Thumbnail"
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-slate-900 text-white relative">
-                              <video src={media.url} muted className="w-full h-full object-cover" />
-                              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                                <VideoIcon className="w-4 h-4 text-white opacity-80" />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Overlay text detail or action bar */}
-                        <div className="p-2 bg-white flex items-center justify-between border-t border-slate-100 z-10">
-                          <div className="truncate pr-2 cursor-pointer flex-1" onClick={() => {
-                            setStudioGeneratedUrl(media.url);
-                            setStudioFormat(media.type);
-                            setStudioPrompt(media.prompt);
-                            setStudioAspectRatio(media.aspectRatio || '1:1');
-                            setStudioLastOperationName(media.operationName || null);
-                          }} title="Reload into Creative Studio Viewport">
-                            <span className="text-[9px] font-bold text-slate-700 block truncate">
-                              {media.prompt}
-                            </span>
-                            <span className="text-[8px] text-slate-400 font-mono block">{media.timestamp}</span>
-                          </div>
-                          
-                          <button
-                            onClick={() => {
-                              // Load this media instantly to draft
-                              setAiGeneratedUrl(media.url);
-                              setCreatorFormat(media.type === 'image' ? 'Image' : 'Video');
-                              setCreatorVisualPrompt(media.prompt);
-                              setActiveTab('publisher');
-                            }}
-                            className="bg-slate-100 hover:bg-slate-200 p-1 rounded-md text-slate-700 transition"
-                            title="Apply to active creative draft post layout"
-                          >
-                            <ArrowRight className="w-3 h-3" />
-                          </button>
-                        </div>
-
-                        {/* Top corner hover delete */}
-                        <button
-                          onClick={() => {
-                            if (confirm("Delete visual asset from local repository cache?")) {
-                              const updated = studioSavedMedia.filter(m => m.id !== media.id);
-                              setStudioSavedMedia(updated);
-                              localStorage.setItem('social_flow_studio_media', JSON.stringify(updated));
-                            }
-                          }}
-                          className="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-red-650 rounded-md text-white transition duration-150 transform scale-0 group-hover:scale-100 z-35"
-                          title="Remove media"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-            </div>
+            <CreativeStudioView 
+              studioFormat={studioFormat}
+              setStudioFormat={setStudioFormat}
+              studioAspectRatio={studioAspectRatio}
+              setStudioAspectRatio={setStudioAspectRatio}
+              studioPrompt={studioPrompt}
+              setStudioPrompt={setStudioPrompt}
+              studioSize={studioSize}
+              setStudioSize={setStudioSize}
+              studioEnableGrounding={studioEnableGrounding}
+              setStudioEnableGrounding={setStudioEnableGrounding}
+              studioVideoModel={studioVideoModel}
+              setStudioVideoModel={setStudioVideoModel}
+              studioVideoResolution={studioVideoResolution}
+              setStudioVideoResolution={setStudioVideoResolution}
+              studioVideoDuration={studioVideoDuration}
+              setStudioVideoDuration={setStudioVideoDuration}
+              studioStarterImage={studioStarterImage}
+              setStudioStarterImage={setStudioStarterImage}
+              handleStudioStarterImageChange={handleStudioStarterImageChange}
+              handleSynthesizeCreative={handleSynthesizeCreative}
+              studioGenerating={studioGenerating}
+              studioStatusText={studioStatusText}
+              studioGeneratedUrl={studioGeneratedUrl}
+              setStudioGeneratedUrl={setStudioGeneratedUrl}
+              studioLastOperationName={studioLastOperationName}
+              setStudioLastOperationName={setStudioLastOperationName}
+              studioExtensionPrompt={studioExtensionPrompt}
+              setStudioExtensionPrompt={setStudioExtensionPrompt}
+              handleExtendCreative={handleExtendCreative}
+              studioSavedMedia={studioSavedMedia}
+              setStudioSavedMedia={setStudioSavedMedia}
+              setAiGeneratedUrl={setAiGeneratedUrl}
+              setCreatorFormat={setCreatorFormat}
+              setCreatorVisualPrompt={setCreatorVisualPrompt}
+              setActiveTab={setActiveTab}
+            />
           )}
 
           {/* TAB 10: Remodelar mi espacio (El Rincón de Mamá) */}

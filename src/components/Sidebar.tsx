@@ -50,12 +50,18 @@ export default function Sidebar({
 
   const menuGroup1 = [
     { id: 'copilot', label: 'Mi Copiloto de IA', icon: Sparkles },
+    { id: 'brand', label: 'DNA de Marca', icon: Building2 },
+    { id: 'ideas', label: 'Bóveda de Ideas', icon: LineChart },
+    { id: 'publisher', label: 'Creador & Publicador', icon: Layers },
     { id: 'arsenal', label: 'Biblioteca de Medios', icon: FolderHeart },
     { id: 'scheduler', label: 'Agenda de Contenido', icon: CalendarRange },
+    { id: 'abtests', label: 'Pruebas A/B', icon: FileText },
+    { id: 'channels', label: 'Canales Conectados', icon: Globe },
+    { id: 'studio', label: 'Estudio Creativo IA', icon: Palette },
   ];
 
   const menuGroup2 = [
-    { id: 'remodeler', label: 'El Rincón de Mamá', icon: Paintbrush },
+    { id: 'remodeler', label: 'Laboratorio de Pruebas', icon: Paintbrush },
   ];
 
   const renderItem = (item: { id: string; label: string; icon: any }) => {

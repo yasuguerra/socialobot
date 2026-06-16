@@ -109,3 +109,18 @@ graph TD
 
 ### 4.5 Agentic AI Strategist
 *   `POST /api/agent/run` — Executes a chat turn on `@google/adk` LlmAgent.
+
+---
+
+## 5. Frontend UI Refactor (Phase 1 & 2)
+The application has recently undergone a major refactor to eliminate the `App.tsx` monolith (which exceeded 3,500 lines).
+
+### Key Architectural Shifts:
+1. **Component Isolation:** 
+   Features such as `AICopilotView`, `BrandProfileView`, `IdeasVaultView`, `PublisherView`, `CreativeStudioView`, and `ABTestsView` are now separated into individual components under `src/components/`.
+2. **State Management (Context API):** 
+   To avoid prop-drilling dozens of hooks down the component tree, `AppContext.tsx` acts as the global state provider, injecting `brandProfile`, `activeTab`, `posts`, and `creatorPlatform` directly into the leaf nodes.
+3. **Best Practices for New Modules:**
+   - **DO NOT** use inline UI blocks in `App.tsx`.
+   - **DO NOT** use local `useState` in `App.tsx` for shared states.
+   - Utilize `useApp()` to consume data.
