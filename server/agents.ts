@@ -1,5 +1,5 @@
-/**
- * Google ADK Agent setup for Social.Flow
+﻿/**
+ * Google ADK Agent setup for SOCIALOBOT
  *
  * Creates a multi-tool LlmAgent backed by Vertex AI (using Application
  * Default Credentials) or the Gemini API key as fallback.
@@ -68,7 +68,7 @@ const generateContentIdeasTool = new FunctionTool<Schema>({
     required: ["brandName", "industry", "platform"],
   },
   execute: async (params: Record<string, unknown>) => {
-    // This tool body is intentionally lightweight — the LLM generates the
+    // This tool body is intentionally lightweight â€” the LLM generates the
     // ideas itself using its knowledge; this gives the agent a structured
     // function-call path to surface structured output.
     return {
@@ -193,7 +193,7 @@ const browseContentArsenalTool = new FunctionTool<Schema>({
 // Agent definition
 // ---------------------------------------------------------------------------
 
-const AGENT_INSTRUCTION = `You are Social.Flow's expert AI social media strategist agent.
+const AGENT_INSTRUCTION = `You are SOCIALOBOT's expert AI social media strategist agent.
 You help users grow their brand on social media using data-driven insights and viral content strategies.
 
 Your capabilities:
@@ -274,7 +274,7 @@ export async function runAgentTurn(
     arsenalContext = "\n\n[CONTEXTO DE TU ARSENAL DE CONTENIDO DISPONIBLE]\n" +
       "Tienes los siguientes recursos multimedia en tu biblioteca privada. Puedes sugerir usarlos en publicaciones o inspirarte en ellos:\n" +
       arsenal.map((item, idx) => {
-        return `- Recurso #${idx + 1}: Filename: "${item.fileName}" | Tipo: ${item.mimeType} | ID: ${item.id}\n  Descripción visual: ${item.aiDescription}\n  Prompt de inspiración: ${item.visualPrompt}`;
+        return `- Recurso #${idx + 1}: Filename: "${item.fileName}" | Tipo: ${item.mimeType} | ID: ${item.id}\n  DescripciÃ³n visual: ${item.aiDescription}\n  Prompt de inspiraciÃ³n: ${item.visualPrompt}`;
       }).join("\n") +
       "\n[FIN CONTEXTO ARSENAL]";
   }
@@ -315,3 +315,4 @@ export async function runAgentTurn(
 
   return { text: finalText, events };
 }
+

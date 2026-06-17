@@ -1,6 +1,6 @@
-"use strict";
+﻿"use strict";
 /**
- * Cloud Functions for SOCIAL.FLOW
+ * Cloud Functions for SOCIALOBOT
  *
  * - publishDuePosts: every 5 minutes, publishes any `social_posts` that are
  *   scheduled and whose `scheduledTime` has passed. Real publishing is

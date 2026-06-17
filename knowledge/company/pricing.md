@@ -1,4 +1,4 @@
-# Social.Flow (socialobot) — Pricing Model
+﻿# SOCIALOBOT (socialobot) â€” Pricing Model
 
 ## SaaS Tiers
 
@@ -30,3 +30,4 @@
     *   10 Veo 3.1 cinematic video generations + progressive extensions.
     *   A/B Campaign Testing suite.
     *   Real Instagram Publishing (multi-account connection).
+

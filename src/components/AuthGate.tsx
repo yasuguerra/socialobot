@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -94,7 +94,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-300">
-        <span className="animate-pulse">Loading session…</span>
+        <span className="animate-pulse">Loading sessionâ€¦</span>
       </div>
     );
   }
@@ -103,7 +103,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 px-4">
         <div className="w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-2xl">
-          <h1 className="text-2xl font-semibold mb-1">SOCIAL.FLOW</h1>
+          <h1 className="text-2xl font-semibold mb-1">SOCIALOBOT</h1>
           <p className="text-sm text-slate-500 mb-6">
             {mode === 'signin' ? 'Sign in to your workspace.' : 'Create a new workspace.'}
           </p>
@@ -133,7 +133,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
               disabled={submitting}
               className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 font-medium"
             >
-              {submitting ? 'Working…' : mode === 'signin' ? 'Sign in' : 'Create account'}
+              {submitting ? 'Workingâ€¦' : mode === 'signin' ? 'Sign in' : 'Create account'}
             </button>
           </form>
 
@@ -166,7 +166,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
             onClick={handleBypass}
             className="w-full mt-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-medium border border-amber-700 shadow-lg"
           >
-            Bypass with Dev Account 🛠️
+            Bypass with Dev Account ðŸ› ï¸
           </button>
 
           {error && <p className="mt-4 text-sm text-rose-400">{error}</p>}
@@ -210,3 +210,4 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
 };
 
 export default AuthGate;
+

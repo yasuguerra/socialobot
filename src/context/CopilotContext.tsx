@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+﻿import React, { createContext, useContext, useState } from 'react';
 
 interface CopilotContextType {
   chatHistory: any[];
@@ -17,7 +17,7 @@ interface CopilotContextType {
 const CopilotContext = createContext<CopilotContextType | undefined>(undefined);
 
 export function CopilotProvider({ children }: { children: React.ReactNode }) {
-  const [chatHistory, setChatHistory] = useState<any[]>([{ id: 'welcome', sender: 'agent', text: '¡Hola! Soy tu Copiloto de IA de Social.Flow. ¿Qué tipo de publicación te gustaría crear hoy para tu marca?' }]);
+  const [chatHistory, setChatHistory] = useState<any[]>([{ id: 'welcome', sender: 'agent', text: 'Â¡Hola! Soy tu Copiloto de IA de SOCIALOBOT. Â¿QuÃ© tipo de publicaciÃ³n te gustarÃ­a crear hoy para tu marca?' }]);
   const [loadingAgent, setLoadingAgent] = useState(false);
   const [agentInput, setAgentInput] = useState('');
   const [agentMessages, setAgentMessages] = useState<any[]>([]);
@@ -48,7 +48,7 @@ export function CopilotProvider({ children }: { children: React.ReactNode }) {
       console.error("Agent chat failed:", err);
       setAgentMessages(prev => [...prev, { 
         sender: 'agent', 
-        text: "La conexión con el Agente falló. Por favor, revisa tu conexión o intenta de nuevo.", 
+        text: "La conexiÃ³n con el Agente fallÃ³. Por favor, revisa tu conexiÃ³n o intenta de nuevo.", 
         isError: true,
         failedPrompt: userMsg
       }]);
@@ -78,3 +78,4 @@ export function useCopilot() {
   }
   return context;
 }
+

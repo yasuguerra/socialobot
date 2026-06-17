@@ -1,4 +1,4 @@
-# Social.Flow (socialobot) — Objectives and Key Results (OKRs)
+﻿# SOCIALOBOT (socialobot) â€” Objectives and Key Results (OKRs)
 
 ## Objective 1: Accelerate Content Generation Velocity
 *   **KR 1.1**: Reduce the average time needed to create, audit, and schedule a post from 45 minutes to under 2 minutes.
@@ -11,3 +11,4 @@
 ## Objective 3: Drive High Product Engagement
 *   **KR 3.1**: Increase monthly active engagement of the Agentic AI Strategist (`LlmAgent`) chat panel.
 *   **KR 3.2**: Boost retention rates by providing clear indicators and simulators for non-connected channels (TikTok, Facebook, LinkedIn).
+

@@ -1,6 +1,6 @@
-# TECHNICAL SPECIFICATIONS (TECH SPECS)
+﻿# TECHNICAL SPECIFICATIONS (TECH SPECS)
 
-**Project Name**: Social.Flow (socialobot)  
+**Project Name**: SOCIALOBOT (socialobot)  
 **Document Version**: 2.1.0  
 **Author**: Chief Architect (Fowler/Booch) & Principal Engineer (Karpathy)  
 **Status**: APPROVED & IMPLEMENTED  
@@ -10,7 +10,7 @@
 
 ## 1. System Topology & Component Architecture
 
-Social.Flow operates on a decoupled Client-Server architecture designed to run on containerized cloud infrastructure, integrated with Google Cloud Platform (GCP) resources and Firebase Backend-as-a-Service (BaaS).
+SOCIALOBOT operates on a decoupled Client-Server architecture designed to run on containerized cloud infrastructure, integrated with Google Cloud Platform (GCP) resources and Firebase Backend-as-a-Service (BaaS).
 
 ```mermaid
 graph TD
@@ -253,3 +253,4 @@ The AI Strategist chatbot executes inside a stateless environment, calling regis
   `esbuild server.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/server.cjs`
 - **Containerization**: Handled by custom multi-stage `Dockerfile`. 
 - **Cloud Delivery**: Cloud Build triggers automatically via `cloudbuild.yaml`, building the server image and deploying to **Google Cloud Run** in `us-central1` under the host domain.
+

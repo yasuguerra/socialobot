@@ -1,6 +1,6 @@
-# PRODUCT BRIEF: REMODELER REPOSITIONING & SIMULATED CHANNELS CLARITY
+﻿# PRODUCT BRIEF: REMODELER REPOSITIONING & SIMULATED CHANNELS CLARITY
 
-**Venture**: Social.Flow (socialobot)  
+**Venture**: SOCIALOBOT (socialobot)  
 **Handoff Date**: June 12, 2026  
 **PM**: Senior Product Manager (Product Harness Team)  
 **Recipient (Engineering)**: Chief Architect & CTO (Engineering Harness Team)  
@@ -11,7 +11,7 @@
 ## 1. Executive Summary
 
 Based on our recent comprehensive Product and Usability Audit, we identified two critical consistency and alignment gaps that create user friction:
-1.  **Product Drift / Alignment**: "El Rincón de Mamá" (Space Remodeler) is currently treated as a primary business tab in the sidebar. This confuses B2B agency users (Lucas) who expect pure social marketing utilities.
+1.  **Product Drift / Alignment**: "El RincÃ³n de MamÃ¡" (Space Remodeler) is currently treated as a primary business tab in the sidebar. This confuses B2B agency users (Lucas) who expect pure social marketing utilities.
 2.  **User Expectations**: Non-Instagram platforms (Facebook, TikTok, LinkedIn) use simulated metrics and publishing endpoints, but are styled identically to the real Instagram connection. This can lead users to mistakenly believe they are publishing real-world content on those channels.
 
 This brief outlines clear, precise, and easily achievable instructions for the Engineering team to plan, implement, and verify the necessary UI changes.
@@ -22,8 +22,8 @@ This brief outlines clear, precise, and easily achievable instructions for the E
 
 | Document | File | Status |
 |---|---|---|
-| Complete PRD | [docs/PRD.md](docs/PRD.md) | ✅ Approved by CPO |
-| Product Usability Audit | [.harness/engineering_harness/audits/product_audit_report.md](.harness/engineering_harness/audits/product_audit_report.md) | ✅ Completed |
+| Complete PRD | [docs/PRD.md](docs/PRD.md) | âœ… Approved by CPO |
+| Product Usability Audit | [.harness/engineering_harness/audits/product_audit_report.md](.harness/engineering_harness/audits/product_audit_report.md) | âœ… Completed |
 
 ---
 
@@ -57,8 +57,8 @@ so that I don't accidentally schedule important campaigns on non-connected platf
 ### Requirement 1: Sidebar Group Restructuring
 - **Action**: In `src/components/Sidebar.tsx`, move the "Remodelar mi espacio" (Space Remodeler) nav item out of the "Main Console" navigation group.
 - **Action**: Create a new navigation group in the Sidebar called **"Experimental Labs"** or **"Creative Playgrounds"**.
-- **Action**: Rename the tab display label from `"Remodelar mi espacio"` to `"Space Remodeler (Mamá's Corner)"` (with the `Paintbrush` icon) to preserve bilingual friendliness and state explicitly that it is a dedicated creative space.
-- **Action**: Adjust the app rendering in `src/App.tsx` so that when the active tab is `'remodeler'`, the main header title reads `"Space Remodeler (El Rincón de Mamá)"` or `"Remodelar mi espacio"`.
+- **Action**: Rename the tab display label from `"Remodelar mi espacio"` to `"Space Remodeler (MamÃ¡'s Corner)"` (with the `Paintbrush` icon) to preserve bilingual friendliness and state explicitly that it is a dedicated creative space.
+- **Action**: Adjust the app rendering in `src/App.tsx` so that when the active tab is `'remodeler'`, the main header title reads `"Space Remodeler (El RincÃ³n de MamÃ¡)"` or `"Remodelar mi espacio"`.
 
 ### Requirement 2: Simulated Platform Indicators
 - **Action**: In `src/components/ConnectedPlatforms.tsx`, update the channel card rendering. For any platform that is *not* `Instagram` (i.e. `TikTok`, `LinkedIn`, `Facebook`), add a clear, prominent, and stylized badge next to the platform name showing `[Simulated]` or `[Demo Channel]` (using warning/amber theme or slate-gray).
@@ -81,12 +81,12 @@ so that I don't accidentally schedule important campaigns on non-connected platf
 
 ---
 
-## 6. UX Writing — Exact Required Copies
+## 6. UX Writing â€” Exact Required Copies
 
 | Element / View | Target Component | Exact Required Copy |
 |---|---|---|
 | Sidebar Group Header | `Sidebar.tsx` | `"Experimental Playgrounds"` |
-| Sidebar Tab Label | `Sidebar.tsx` | `"Space Remodeler (Mamá's Corner)"` |
+| Sidebar Tab Label | `Sidebar.tsx` | `"Space Remodeler (MamÃ¡'s Corner)"` |
 | Connected Platform Badge | `ConnectedPlatforms.tsx` | `"Simulated"` (styled inside an amber badge: `text-amber-600 bg-amber-50 border border-amber-200`) |
 | Calendar View Legend | `CalendarView.tsx` | `"TikTok (6:30 PM - Simulated)"`, `"LinkedIn (8:45 AM - Simulated)"`, `"Facebook (3:00 PM - Simulated)"` |
 | A/B Testing Card | `App.tsx` | `"Simulated Campaign (Demo Mode)"` |
@@ -97,7 +97,7 @@ so that I don't accidentally schedule important campaigns on non-connected platf
 
 Product QA will verify:
 1.  **Visual Segmentation**: Space Remodeler is separated under "Experimental Playgrounds" section in Sidebar.
-2.  **No Core Broken Flow**: Clicking "Space Remodeler (Mamá's Corner)" still loads the same fully functional, senior-friendly photo upload and Imagen 3 generation flow.
+2.  **No Core Broken Flow**: Clicking "Space Remodeler (MamÃ¡'s Corner)" still loads the same fully functional, senior-friendly photo upload and Imagen 3 generation flow.
 3.  **Simulation Warning**: Any mock platform (TikTok, Facebook, LinkedIn) shows a visible label so B2B users are not misled.
 
 ---
@@ -105,3 +105,4 @@ Product QA will verify:
 *Handoff approved and authorized by the Product Harness.*  
 **PM Sign-off**: Senior Product Manager (June 12, 2026)  
 **CPO Validation**: Approved for technical planning & immediate execution (June 12, 2026)  
+

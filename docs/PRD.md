@@ -1,6 +1,6 @@
-# PRODUCT REQUIREMENT DOCUMENT (PRD)
+﻿# PRODUCT REQUIREMENT DOCUMENT (PRD)
 
-**Project Name**: Social.Flow (socialobot)  
+**Project Name**: SOCIALOBOT (socialobot)  
 **Document Version**: 2.1.0  
 **Author**: Senior Product Manager (Experienced Product Manager)  
 **Status**: APPROVED & IMPLEMENTED  
@@ -10,9 +10,9 @@
 
 ## 1. Executive Summary
 
-Social.Flow is an enterprise-grade, AI-driven social media management and visual content generation platform. The system bridges the gap between marketing strategy and creative execution by using state-of-the-art Google GenAI models. 
+SOCIALOBOT is an enterprise-grade, AI-driven social media management and visual content generation platform. The system bridges the gap between marketing strategy and creative execution by using state-of-the-art Google GenAI models. 
 
-Unlike traditional scheduling tools that act as simple database queues (e.g., Buffer, Hootsuite), Social.Flow operates as a **full-lifecycle, autonomous content partner**. It ingests raw brand profiles (from website scraping), ideates viral content, generates high-fidelity visual and video assets (via Google Imagen 3 and Veo 3.1), analyzes them for viral potential, executes real-world multi-platform publishing (Instagram), conducts automated A/B test experiments, and hosts an interactive AI social strategist chat to orchestrate the entire workflow.
+Unlike traditional scheduling tools that act as simple database queues (e.g., Buffer, Hootsuite), SOCIALOBOT operates as a **full-lifecycle, autonomous content partner**. It ingests raw brand profiles (from website scraping), ideates viral content, generates high-fidelity visual and video assets (via Google Imagen 3 and Veo 3.1), analyzes them for viral potential, executes real-world multi-platform publishing (Instagram), conducts automated A/B test experiments, and hosts an interactive AI social strategist chat to orchestrate the entire workflow.
 
 ---
 
@@ -122,11 +122,11 @@ Unlike traditional scheduling tools that act as simple database queues (e.g., Bu
     - `research_hashtags` (hashtag optimization).
     - `browse_content_arsenal` (visual library awareness).
 
-### Epic 10: Experimental Playgrounds (El Rincón de Mamá / Space Remodeler)
+### Epic 10: Experimental Playgrounds (El RincÃ³n de MamÃ¡ / Space Remodeler)
 - **Requirement**: A high-delight, elder-friendly household design sandbox.
 - **System Action**:
   - **Visual Isolation**: Positioned under a separate, clearly defined "Experimental Playgrounds" sidebar section to maintain the B2B console's professional marketing focus.
-  - **Coherent Labeling**: Named "Space Remodeler (Mamá's Corner)" to unify global English terminology with the senior-accessible Spanish residential styling presets and emotional loading states.
+  - **Coherent Labeling**: Named "Space Remodeler (MamÃ¡'s Corner)" to unify global English terminology with the senior-accessible Spanish residential styling presets and emotional loading states.
   - **Multimodal Synthesis**: Coordinated via `/api/remodel-space` using Gemini 3.5 Flash for room layout analysis and stable Imagen 3 for beautiful redesign outputs.
 
 ---
@@ -179,3 +179,4 @@ graph TD
 - **Phase 1 (Done)**: Stable Google GenAI migration (`gemini-3.5-flash`), Imagen 3, Veo 3.1 Pro engine integrations, progressive video extension, and multimodal Content Arsenal.
 - **Phase 2 (Upcoming)**: Support for real-world automated publishing to TikTok and LinkedIn (OAuth and publishing handlers).
 - **Phase 3 (Long-term)**: Advanced computer vision auditing of uploaded graphics, comparing brand asset alignment against strict visual style guides.
+

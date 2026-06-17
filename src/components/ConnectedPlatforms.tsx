@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { 
   Globe, 
   CheckCircle2, 
@@ -286,7 +286,7 @@ export default function ConnectedPlatforms({
       return;
     }
 
-    // Other platforms aren't wired to real OAuth yet — surface this clearly
+    // Other platforms aren't wired to real OAuth yet â€” surface this clearly
     // instead of fabricating connection state.
     setModalConnecting(true);
     try {
@@ -675,7 +675,7 @@ export default function ConnectedPlatforms({
                   <Compass className="w-6 h-6 animate-pulse" />
                 </div>
                 <h3 className="font-bold text-slate-800 text-sm">Synchronize {modalPlatform} API</h3>
-                <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">Authorize Social.Flow Autopilot Engine to publish content and query feedback analytics on your behalf.</p>
+                <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">Authorize SOCIALOBOT Autopilot Engine to publish content and query feedback analytics on your behalf.</p>
               </div>
 
               {connectionSuccess ? (
@@ -702,9 +702,9 @@ export default function ConnectedPlatforms({
                       <span>Security Audit Permissions</span>
                       <span className="text-indigo-600">Verified</span>
                     </div>
-                    <div>🟢 read_user_profile</div>
-                    <div>🟢 publish_post_caption</div>
-                    <div>🟢 read_post_metrics</div>
+                    <div>ðŸŸ¢ read_user_profile</div>
+                    <div>ðŸŸ¢ publish_post_caption</div>
+                    <div>ðŸŸ¢ read_post_metrics</div>
                   </div>
 
                   <button
@@ -733,3 +733,4 @@ export default function ConnectedPlatforms({
     </div>
   );
 }
+
