@@ -30,12 +30,12 @@ export default function IdeasVaultView({
       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
         <div>
           <h2 className="text-sm font-bold text-slate-900">AI Social Auto-Scanner</h2>
-          <p className="text-slate-500 text-xs">Upload sample social media screenshots or paste existing posts text to let the AI learn your style and target buyers.</p>
+          <p className="text-slate-600 text-xs">Upload sample social media screenshots or paste existing posts text to let the AI learn your style and target buyers.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-[10px] font-bold text-slate-500 uppercase block">Reference Caption or Competitor Content Style</label>
+            <label className="text-xs font-bold text-slate-600 uppercase block">Reference Caption or Competitor Content Style</label>
             <textarea
               rows={3}
               value={referenceText}
@@ -47,7 +47,7 @@ export default function IdeasVaultView({
 
           <div className="space-y-1.5 flex flex-col justify-between">
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">Upload Reference Image asset</span>
+              <span className="text-xs font-bold text-slate-600 uppercase block mb-1">Upload Reference Image asset</span>
               <div className="border-2 border-dashed border-slate-200 hover:border-slate-350 rounded-lg p-4 transition text-center relative cursor-pointer group bg-slate-50">
                 <input
                   type="file"
@@ -60,14 +60,14 @@ export default function IdeasVaultView({
                     <img src={imagePreview} className="w-12 h-12 object-cover rounded-md border border-slate-300" alt="uploaded reference" />
                     <div className="text-left">
                       <p className="text-xs font-bold text-slate-700 truncate max-w-xs">{imageFile?.name}</p>
-                      <p className="text-[10px] text-slate-400 font-mono">Reference Locked. Style analyser active.</p>
+                      <p className="text-xs text-slate-500 font-mono">Reference Locked. Style analyser active.</p>
                     </div>
                   </div>
                 ) : (
                   <div className="space-y-1">
-                    <Upload className="w-4 h-4 text-slate-400 mx-auto group-hover:text-slate-600 transition" />
+                    <Upload className="w-4 h-4 text-slate-500 mx-auto group-hover:text-slate-600 transition" />
                     <p className="text-xs font-semibold text-slate-600">Drag & drop photo / video or browse files</p>
-                    <p className="text-[9px] text-slate-400">Supports JPG, PNG (AI matches the visual tone of the content)</p>
+                    <p className="text-[9px] text-slate-500">Supports JPG, PNG (AI matches the visual tone of the content)</p>
                   </div>
                 )}
               </div>
@@ -97,7 +97,7 @@ export default function IdeasVaultView({
       <div>
         <div className="flex justify-between items-center mb-3">
           <h3 className="font-bold text-slate-900 text-sm">Targeted Concept Library</h3>
-          <span className="text-[11px] text-slate-400 font-mono">
+          <span className="text-sm text-slate-500 font-mono">
             {ideas.length} custom directions available
           </span>
         </div>
@@ -122,10 +122,10 @@ export default function IdeasVaultView({
               >
                 <div>
                   <div className="flex justify-between items-center mb-2.5">
-                    <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold border ${platBg}`}>
+                    <span className={`px-2 py-0.5 rounded text-xs uppercase font-bold border ${platBg}`}>
                       {idea.recommendedPlatform}
                     </span>
-                    <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono font-semibold">
+                    <div className="flex items-center gap-1 text-xs text-slate-500 font-mono font-semibold">
                       <Clock className="w-3" />
                       <span>{idea.recommendedTime}</span>
                     </div>
@@ -134,7 +134,7 @@ export default function IdeasVaultView({
                   <h4 className="font-bold text-slate-900 text-sm mb-1 leading-snug">{idea.title}</h4>
                   
                   <div className="bg-slate-50 border-l-2 border-indigo-500 p-2 my-2 rounded-r-lg font-mono text-[10.5px]">
-                    <span className="text-slate-400 text-[9px] uppercase font-bold tracking-wider block leading-none mb-0.5">Viral Hook Target</span>
+                    <span className="text-slate-500 text-[9px] uppercase font-bold tracking-wider block leading-none mb-0.5">Viral Hook Target</span>
                     <span className="text-slate-700 font-medium italic">"{idea.hook}"</span>
                   </div>
 
@@ -143,12 +143,12 @@ export default function IdeasVaultView({
                   </p>
 
                   <div className="border-t border-slate-100 pt-2.5 mt-3 space-y-1">
-                    <div className="flex justify-between text-[10px]">
-                      <span className="text-slate-400 font-medium">Format:</span>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-500 font-medium">Format:</span>
                       <span className="font-bold text-slate-700">{idea.format}</span>
                     </div>
-                    <div className="flex justify-between text-[10px]">
-                      <span className="text-slate-400 font-medium">Target Segment:</span>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-slate-500 font-medium">Target Segment:</span>
                       <span className="font-bold text-slate-700 truncate max-w-[120px]">{idea.audienceSegment}</span>
                     </div>
                   </div>

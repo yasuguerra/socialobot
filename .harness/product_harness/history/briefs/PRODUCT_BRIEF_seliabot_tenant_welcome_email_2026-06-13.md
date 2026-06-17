@@ -4,7 +4,7 @@
 
 ```text
 Feature: Correo de Bienvenida Localizado y Registro de Idioma
-Venture: Seliabot
+Venture: Socialobot
 Handoff Date: 2026-06-13
 PM: PM (Product Manager)
 Recipient (Engineering): Chief Architect (Martin Fowler) & CTO (Demis Hassabis)
@@ -14,7 +14,7 @@ Target Sprint / Cycle: Ciclo de Onboarding Premium
 ---
 
 ## 1. RESUMEN EJECUTIVO
-Este desarrollo mejora drásticamente la primera impresión que tienen los nuevos tenants de Seliabot al registrarse. Traducimos, localizamos y rediseñamos el flujo de bienvenida para soportar español e inglés (por defecto español). El correo de bienvenida y verificación pasa de ser un texto plano rústico en inglés a una plantilla HTML moderna y bilingüe con una guía de onboarding clara para dar confianza e impulsar el éxito del tenant. Además, el agente del tenant se configurará automáticamente con su idioma preferido al crearse.
+Este desarrollo mejora drásticamente la primera impresión que tienen los nuevos tenants de Socialobot al registrarse. Traducimos, localizamos y rediseñamos el flujo de bienvenida para soportar español e inglés (por defecto español). El correo de bienvenida y verificación pasa de ser un texto plano rústico en inglés a una plantilla HTML moderna y bilingüe con una guía de onboarding clara para dar confianza e impulsar el éxito del tenant. Además, el agente del tenant se configurará automáticamente con su idioma preferido al crearse.
 
 ---
 
@@ -22,7 +22,7 @@ Este desarrollo mejora drásticamente la primera impresión que tienen los nuevo
 
 | Documento | Ubicación del Archivo | Estado |
 |---|---|---|
-| Complete PRD | [PRD_seliabot_tenant_welcome_email_2026-06-13.md](PRD_seliabot_tenant_welcome_email_2026-06-13.md) | ✅ Approved by CPO |
+| Complete PRD | [PRD_socialobot_tenant_welcome_email_2026-06-13.md](PRD_socialobot_tenant_welcome_email_2026-06-13.md) | ✅ Approved by CPO |
 | Guía de Configuración SMTP | [docs/SMTP_OUTLOOK_SETUP.md](docs/SMTP_OUTLOOK_SETUP.md) | ✅ Reference guide |
 
 ---
@@ -73,7 +73,7 @@ Para verificar mi cuenta con confianza y entender de inmediato los siguientes pa
 ## 7. UX WRITING — Copias Requeridas
 
 ### A. Versión en Español (Default)
-* **Asunto**: `¡Te damos la bienvenida a Seliabot! 👋 Confirma tu correo`
+* **Asunto**: `¡Te damos la bienvenida a Socialobot! 👋 Confirma tu correo`
 * **Título**: `¡Hola, {name}! 👋`
 * **Subtítulo/Cuerpo**: 
   * `Tu cuenta para la empresa **{businessName}** está casi lista.`
@@ -86,7 +86,7 @@ Para verificar mi cuenta con confianza y entender de inmediato los siguientes pa
 * **Pie de página**: `Si tienes alguna duda o necesitas ayuda para conectar tu WhatsApp, escríbenos directamente por nuestro WhatsApp de Soporte haciendo clic aquí.`
 
 ### B. Versión en Inglés
-* **Asunto**: `Welcome to Seliabot! 👋 Verify your email`
+* **Asunto**: `Welcome to Socialobot! 👋 Verify your email`
 * **Título**: `Welcome, {name}! 👋`
 * **Subtítulo/Cuerpo**:
   * `Your account for **{businessName}** is almost ready.`

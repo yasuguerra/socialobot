@@ -1,13 +1,13 @@
-# Feature Contract: Seliabot Brand Logo Integration
+# Feature Contract: Socialobot Brand Logo Integration
 
-This contract defines the deliverables, design specifications, and verification metrics required to upgrade Seliabot's brand assets to a professional-grade, high-fidelity SVG brand identity.
+This contract defines the deliverables, design specifications, and verification metrics required to upgrade Socialobot's brand assets to a professional-grade, high-fidelity SVG brand identity.
 
 ---
 
 ## 1. Scope & Deliverables
 
 ### 1.1. Vector Brand Assets
-- **Asset [landing-page/favicon.svg](landing-page/favicon.svg)**: Create a new custom high-fidelity SVG. It must feature Seliabot's distinctive brand gradient (from `#6C5CE7` to `#00D2FF`) with a futuristic, clean geometric "S" logo that scales perfectly down to a 16x16 browser icon.
+- **Asset [landing-page/favicon.svg](landing-page/favicon.svg)**: Create a new custom high-fidelity SVG. It must feature Socialobot's distinctive brand gradient (from `#6C5CE7` to `#00D2FF`) with a futuristic, clean geometric "S" logo that scales perfectly down to a 16x16 browser icon.
 - **Asset [platform-dashboard/public/favicon.svg](platform-dashboard/public/favicon.svg)**: Deploy the exact same design to the Dashboard's public folder to ensure brand synchronization.
 
 ### 1.2. Landing Page Navigation Branding

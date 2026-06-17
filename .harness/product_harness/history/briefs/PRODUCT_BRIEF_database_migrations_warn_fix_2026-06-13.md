@@ -4,7 +4,7 @@
 
 ```text
 Feature: Database Migration Directory Missing in Production (Audit Fix)
-Venture: Seliabot
+Venture: Socialobot
 Handoff Date: 2026-06-13
 PM: PM (Product Manager)
 Recipient (Engineering): Chief Architect (Martin Fowler) & CTO (Demis Hassabis)

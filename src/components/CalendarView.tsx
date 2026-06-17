@@ -202,7 +202,7 @@ export default function CalendarView({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
         <div>
           <h2 className="text-sm font-bold text-slate-900">Autopilot Social Content Calendar</h2>
-          <p className="text-slate-500 text-xs">Visualize, queue, and coordinate split-seconds engagement. Drag card panels directly across grid cells to reschedule slots.</p>
+          <p className="text-slate-600 text-xs">Visualize, queue, and coordinate split-seconds engagement. Drag card panels directly across grid cells to reschedule slots.</p>
         </div>
         
         <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export default function CalendarView({
               title="Previous month"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
-              <span className="text-[10px]">Prev</span>
+              <span className="text-xs">Prev</span>
             </button>
             <div className="px-3.5 text-xs text-slate-800 font-bold min-w-[110px] text-center font-sans tracking-wide">
               {monthName}
@@ -224,7 +224,7 @@ export default function CalendarView({
               className="p-1 px-2.5 rounded-md text-xs font-semibold hover:bg-white text-slate-700 hover:shadow-xs transition duration-150 flex items-center gap-1"
               title="Next month"
             >
-              <span className="text-[10px]">Next</span>
+              <span className="text-xs">Next</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -247,12 +247,12 @@ export default function CalendarView({
               <Layers className="w-4 h-4 text-indigo-500" />
               <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Posts Library Queue</h3>
             </div>
-            <span className="px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-500 font-mono text-[9px] rounded font-bold">
+            <span className="px-2 py-0.5 bg-slate-100 border border-slate-200 text-slate-600 font-mono text-[9px] rounded font-bold">
               {posts.length} Total
             </span>
           </div>
 
-          <p className="text-[11px] text-slate-400 font-sans leading-normal">
+          <p className="text-sm text-slate-500 font-sans leading-normal">
             Drag any card here onto a calendar grid checkmark slot to schedule it. Or grab from scheduled dates and drop elsewhere to shift.
           </p>
 
@@ -283,11 +283,11 @@ export default function CalendarView({
                     {post.title}
                   </h4>
 
-                  <p className="text-[10px] text-slate-500 line-clamp-2 italic mb-2 pt-0.5">
+                  <p className="text-xs text-slate-600 line-clamp-2 italic mb-2 pt-0.5">
                     "{post.caption || 'No caption'}"
                   </p>
 
-                  <div className="flex items-center justify-between text-[9px] text-slate-400 font-mono border-t border-slate-100/60 pt-2">
+                  <div className="flex items-center justify-between text-[9px] text-slate-500 font-mono border-t border-slate-100/60 pt-2">
                     <span className="flex items-center gap-1 truncate max-w-[120px]">
                       <Clock className="w-3" />
                       <span className="truncate">
@@ -325,9 +325,9 @@ export default function CalendarView({
             })}
 
             {posts.length === 0 && (
-              <div className="text-center py-10 border border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-400">
+              <div className="text-center py-10 border border-dashed border-slate-200 rounded-xl bg-slate-50 text-slate-500">
                 <p className="text-xs">Posts stack is empty.</p>
-                <p className="text-[10px] text-slate-400 mt-1">Please configure active campaigns.</p>
+                <p className="text-xs text-slate-500 mt-1">Please configure active campaigns.</p>
               </div>
             )}
           </div>
@@ -338,7 +338,7 @@ export default function CalendarView({
           {/* Days of the week header block */}
           <div className="grid grid-cols-7 gap-1.5 text-center">
             {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
-              <div key={day} className="py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono bg-slate-50 border border-slate-100 rounded-md">
+              <div key={day} className="py-2 text-xs font-bold uppercase tracking-wider text-slate-500 font-mono bg-slate-50 border border-slate-100 rounded-md">
                 <span className="hidden sm:inline">{day}</span>
                 <span className="sm:hidden">{day.slice(0, 3)}</span>
               </div>
@@ -382,10 +382,10 @@ export default function CalendarView({
                 >
                   {/* Top cell details indicator */}
                   <div className="flex justify-between items-center mb-1">
-                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                    <span className={`text-xs font-mono font-bold px-1.5 py-0.5 rounded ${
                       isToday 
                         ? 'bg-indigo-600 text-white font-serif' 
-                        : 'text-slate-500 bg-slate-100'
+                        : 'text-slate-600 bg-slate-100'
                     }`}>
                       {day}
                     </span>
@@ -443,7 +443,7 @@ export default function CalendarView({
           {/* Quick interactive parameters guide legend */}
           <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3 text-xs pt-3 text-slate-600">
             <div className="flex items-center gap-4 flex-wrap">
-              <span className="font-bold text-slate-700 uppercase font-mono text-[10px]">Platforms:</span>
+              <span className="font-bold text-slate-700 uppercase font-mono text-xs">Platforms:</span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-500" />
                 <span>Instagram (11:00 AM)</span>
@@ -462,7 +462,7 @@ export default function CalendarView({
               </span>
             </div>
             
-            <div className="font-mono text-[10px] text-indigo-600 flex items-center gap-1 animate-pulse">
+            <div className="font-mono text-xs text-indigo-600 flex items-center gap-1 animate-pulse">
               <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
               <span>Smart Hour optimizer applied</span>
             </div>
@@ -480,7 +480,7 @@ export default function CalendarView({
               activePreviewPost.platform === 'LinkedIn' ? 'bg-indigo-800' : 'bg-blue-600'
             }`}>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] bg-white/20 border border-white/20 px-2 py-0.5 rounded-full font-bold uppercase font-mono tracking-widest text-white">
+                <span className="text-xs bg-white/20 border border-white/20 px-2 py-0.5 rounded-full font-bold uppercase font-mono tracking-widest text-white">
                   {activePreviewPost.platform} {activePreviewPost.platform !== 'Instagram' && '(Simulated)'}
                 </span>
                 <span className="text-xs text-white/80 font-mono">
@@ -495,12 +495,12 @@ export default function CalendarView({
 
             <div className="p-6 space-y-4 overflow-y-auto max-h-[500px]">
               <div>
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono">Post Title</h4>
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest block font-mono">Post Title</h4>
                 <div className="font-bold text-slate-800 text-sm">{activePreviewPost.title}</div>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono">Scheduled Time</h4>
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest block font-mono">Scheduled Time</h4>
                 <div className="text-xs text-indigo-600 font-bold flex items-center gap-1 mt-0.5 font-mono">
                   <Clock className="w-3.5 h-3.5" />
                   <span>{activePreviewPost.scheduledTime}</span>
@@ -509,7 +509,7 @@ export default function CalendarView({
 
               {activePreviewPost.mediaUrl && (
                 <div className="space-y-2">
-                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono mb-1">Visual Asset Preview</h4>
+                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest block font-mono mb-1">Visual Asset Preview</h4>
                   
                   {/* Media Viewport */}
                   <div className="w-full h-52 rounded-xl overflow-hidden border border-slate-200 relative group bg-slate-50 flex items-center justify-center shadow-inner">
@@ -544,13 +544,13 @@ export default function CalendarView({
                     <button
                       onClick={() => setShowPromptInput(!showPromptInput)}
                       disabled={isRegenerating || isUploading}
-                      className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-[11px] font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200"
+                      className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-sm font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                       <span>{showPromptInput ? "Ocultar Prompt" : "Regenerar con IA"}</span>
                     </button>
 
-                    <label className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-[11px] font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer text-center">
+                    <label className="flex-1 min-w-[120px] bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-800 text-sm font-bold px-3 py-2 rounded-lg transition flex items-center justify-center gap-1.5 border border-slate-200 cursor-pointer text-center">
                       <Upload className="w-3.5 h-3.5 text-indigo-500" />
                       <span>Subir Propia Imagen</span>
                       <input 
@@ -581,7 +581,7 @@ export default function CalendarView({
                   {showPromptInput && (
                     <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 mt-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">Escribe tu idea visual</span>
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest font-mono">Escribe tu idea visual</span>
                         <span className="text-[9px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded-sm font-semibold uppercase">Imagen 3.0</span>
                       </div>
                       <textarea
@@ -593,7 +593,7 @@ export default function CalendarView({
                       <div className="flex justify-end gap-1.5">
                         <button
                           onClick={() => setShowPromptInput(false)}
-                          className="bg-white hover:bg-slate-100 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-md border border-slate-200 transition"
+                          className="bg-white hover:bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200 transition"
                         >
                           Cancelar
                         </button>
@@ -608,7 +608,7 @@ export default function CalendarView({
                             }
                             setIsRegenerating(false);
                           }}
-                          className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1 rounded-md transition flex items-center gap-1 shadow-xs"
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1 rounded-md transition flex items-center gap-1 shadow-xs"
                         >
                           <RefreshCw className="w-3 h-3 animate-spin-slow" />
                           <span>Generar Nueva Imagen</span>
@@ -620,14 +620,14 @@ export default function CalendarView({
               )}
 
               <div>
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono mb-1">Interactive Caption Output</h4>
+                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest block font-mono mb-1">Interactive Caption Output</h4>
                 <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs leading-relaxed text-slate-700 font-sans whitespace-pre-wrap select-text">
                   {activePreviewPost.caption || 'No caption text.'}
                 </div>
               </div>
 
               {activePreviewPost.viralFeedback && (
-                <div className="bg-indigo-50 border border-indigo-150 rounded-xl p-3 text-[11px] text-indigo-900 italic">
+                <div className="bg-indigo-50 border border-indigo-150 rounded-xl p-3 text-sm text-indigo-900 italic">
                   <strong>AI Audit Insight:</strong> {activePreviewPost.viralFeedback}
                 </div>
               )}

@@ -223,7 +223,7 @@ export default function SpaceRemodeler() {
           <Home className="w-64 h-64 text-indigo-50" />
         </div>
         <div className="relative z-10 space-y-3">
-          <span className="text-[10px] uppercase font-black tracking-widest text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-full border border-emerald-900/60 inline-flex items-center gap-1.5">
+          <span className="text-xs uppercase font-black tracking-widest text-emerald-400 bg-emerald-950/60 px-3 py-1.5 rounded-full border border-emerald-900/60 inline-flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
             El Rincón de Diseño de Mamá
           </span>
@@ -236,19 +236,19 @@ export default function SpaceRemodeler() {
 
       {/* Elder-friendly visually descriptive step progress track */}
       {step !== 3 && (
-        <div className="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center text-xs font-bold text-slate-400 shadow-sm overflow-x-auto gap-4">
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 1 ? 'bg-indigo-100 text-indigo-800' : 'text-slate-500'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${step === 1 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}>1</span>
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 flex justify-between items-center text-xs font-bold text-slate-500 shadow-sm overflow-x-auto gap-4">
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 1 ? 'bg-indigo-100 text-indigo-800' : 'text-slate-600'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}>1</span>
             <span>Subir Foto original</span>
           </div>
           <div className="h-0.5 bg-slate-200 flex-1 min-w-[20px] hidden sm:block" />
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 2 ? 'bg-indigo-100 text-indigo-800' : 'text-slate-500'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${step === 2 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}>2</span>
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 2 ? 'bg-indigo-100 text-indigo-800' : 'text-slate-600'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${step === 2 ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600'}`}>2</span>
             <span>Elegir mi deseo mágico</span>
           </div>
           <div className="h-0.5 bg-slate-200 flex-1 min-w-[20px] hidden sm:block" />
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 4 ? 'bg-emerald-100 text-emerald-800' : 'text-slate-500'}`}>
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${step === 4 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'}`}>3</span>
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg shrink-0 ${step === 4 ? 'bg-emerald-100 text-emerald-800' : 'text-slate-600'}`}>
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold ${step === 4 ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-600'}`}>3</span>
             <span>¡Ver mi espacio nuevo!</span>
           </div>
         </div>
@@ -269,7 +269,7 @@ export default function SpaceRemodeler() {
             </div>
             <div className="space-y-2">
               <h2 className="text-lg sm:text-xl font-black text-slate-900">Paso 1: Sube la foto de tu cuarto</h2>
-              <p className="text-slate-500 text-xs sm:text-sm">
+              <p className="text-slate-600 text-xs sm:text-sm">
                 Puedes tomarle una foto directamente con tu celular o elegir una que ya tengas guardada de tu casa.
               </p>
             </div>
@@ -280,7 +280,7 @@ export default function SpaceRemodeler() {
             <span className="text-sm font-black text-indigo-700 bg-white border border-indigo-200 px-6 py-3 rounded-2xl shadow-sm block group-hover:bg-indigo-600 group-hover:text-white transition">
               Presiona aquí para elegir o tomar foto
             </span>
-            <span className="text-[10px] text-slate-400 font-bold font-mono">Archivos aceptados: PNG, JPG, JPEG</span>
+            <span className="text-xs text-slate-500 font-bold font-mono">Archivos aceptados: PNG, JPG, JPEG</span>
             <input 
               type="file" 
               accept="image/*" 
@@ -298,10 +298,10 @@ export default function SpaceRemodeler() {
           {/* Left Column: Image Preview */}
           <div className="md:col-span-5 space-y-4 bg-white border border-slate-200 p-5 rounded-3xl shadow-sm">
             <div className="flex justify-between items-center">
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-wider">Tu foto original</h3>
+              <h3 className="text-xs font-black text-slate-500 uppercase tracking-wider">Tu foto original</h3>
               <button 
                 onClick={handleReset}
-                className="text-[10px] bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 cursor-pointer transition"
+                className="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-1.5 px-3 rounded-lg border border-slate-200 flex items-center gap-1 cursor-pointer transition"
               >
                 <ArrowLeft className="w-3 h-3" />
                 Cambiar foto
@@ -323,7 +323,7 @@ export default function SpaceRemodeler() {
                 <Paintbrush className="w-5 h-5 text-indigo-600" />
                 Paso 2: ¿Qué cambio te gustaría ver?
               </h2>
-              <p className="text-slate-500 text-xs">
+              <p className="text-slate-600 text-xs">
                 Toca uno de nuestros deseos recomendados o escribe tu propia idea abajo.
               </p>
             </div>
@@ -358,7 +358,7 @@ export default function SpaceRemodeler() {
 
             {/* Or custom input box */}
             <div className="border-t border-slate-150 pt-5 space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">
+              <label className="text-xs font-black text-slate-500 uppercase tracking-wider block">
                 ✍️ O escribe tu deseo personalizado aquí:
               </label>
               <textarea
@@ -416,7 +416,7 @@ export default function SpaceRemodeler() {
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 animate-pulse" />
                   <span>¡TU ESPACIO NUEVO ESTÁ LISTO!</span>
                 </div>
-                <p className="text-slate-500 text-xs italic">
+                <p className="text-slate-600 text-xs italic">
                   Deseo cumplido: "{selectedPreset !== null ? presets[selectedPreset].title : customInstruction}"
                 </p>
               </div>
@@ -436,7 +436,7 @@ export default function SpaceRemodeler() {
               
               {/* Left: Original photo */}
               <div className="space-y-2">
-                <span className="text-[10px] font-black text-slate-450 uppercase tracking-widest font-mono block">📸 FOTO ANTERIOR:</span>
+                <span className="text-xs font-black text-slate-450 uppercase tracking-widest font-mono block">📸 FOTO ANTERIOR:</span>
                 <div className="aspect-square bg-slate-900 rounded-2xl overflow-hidden border border-slate-100 shadow-inner flex items-center justify-center">
                   <img 
                     src={originalImage || undefined} 
@@ -444,12 +444,12 @@ export default function SpaceRemodeler() {
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
-                <p className="text-center text-slate-400 text-[10px] font-semibold italic">El espacio original de tu hogar.</p>
+                <p className="text-center text-slate-500 text-xs font-semibold italic">El espacio original de tu hogar.</p>
               </div>
 
               {/* Right: Transformed photo */}
               <div className="space-y-2">
-                <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest font-mono block flex items-center gap-1">
+                <span className="text-xs font-black text-emerald-600 uppercase tracking-widest font-mono block flex items-center gap-1">
                   ✨ DISEÑO MEJORADO:
                 </span>
                 <div className="aspect-square bg-slate-950 rounded-2xl overflow-hidden border border-slate-100 shadow-inner flex items-center justify-center relative">
@@ -459,7 +459,7 @@ export default function SpaceRemodeler() {
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
-                <p className="text-center text-indigo-600 text-[10px] font-black italic">Rediseñado exclusivamente por Google GenAI.</p>
+                <p className="text-center text-indigo-600 text-xs font-black italic">Rediseñado exclusivamente por Google GenAI.</p>
               </div>
 
             </div>
@@ -471,7 +471,7 @@ export default function SpaceRemodeler() {
                   <Compass className="w-5 h-5 animate-spin" style={{ animationDuration: '6s' }} />
                 </div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block font-mono">El comentario del diseñador:</span>
+                  <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider block font-mono">El comentario del diseñador:</span>
                   <p className="text-slate-800 text-xs sm:text-sm font-semibold leading-relaxed">
                     {resultDescription}
                   </p>
@@ -501,7 +501,7 @@ export default function SpaceRemodeler() {
         <div className="bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2">
             <Heart className="w-5 h-5 text-indigo-500 fill-indigo-100 animate-pulse" />
-            <h3 className="text-xs font-black text-slate-500 tracking-wider uppercase">Tus remodelaciones guardadas</h3>
+            <h3 className="text-xs font-black text-slate-600 tracking-wider uppercase">Tus remodelaciones guardadas</h3>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -525,7 +525,7 @@ export default function SpaceRemodeler() {
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-2.5">
-                    <span className="text-[10px] font-black text-white leading-tight truncate w-full" title={space.instruction}>
+                    <span className="text-xs font-black text-white leading-tight truncate w-full" title={space.instruction}>
                       {space.instruction}
                     </span>
                   </div>
@@ -533,7 +533,7 @@ export default function SpaceRemodeler() {
 
                 {/* Footer bar with delete button */}
                 <div className="p-2 bg-white flex items-center justify-between border-t border-slate-100 z-10">
-                  <span className="text-[8px] text-slate-400 font-bold font-mono block">
+                  <span className="text-[8px] text-slate-500 font-bold font-mono block">
                     {space.timestamp}
                   </span>
                   <button
@@ -563,7 +563,7 @@ export default function SpaceRemodeler() {
               <h3 className="text-lg sm:text-xl font-black text-slate-900 leading-snug">
                 ¿Quieres borrar esta remodelación?
               </h3>
-              <p className="text-slate-500 text-xs sm:text-sm font-semibold leading-relaxed">
+              <p className="text-slate-600 text-xs sm:text-sm font-semibold leading-relaxed">
                 Esta acción quitará el diseño mejorado de tu lista de recuerdos favoritos de forma permanente.
               </p>
             </div>

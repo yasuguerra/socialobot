@@ -5,7 +5,7 @@
 ```text
 Document: PRD
 Feature: Database Migration Directory Presence in Production (Audit Fix)
-Venture: Seliabot
+Venture: Socialobot
 Date: 2026-06-13
 Author: PM (Product Manager)
 Approver: CPO

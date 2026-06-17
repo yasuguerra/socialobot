@@ -43,8 +43,8 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
   const handleBypass = () => {
     setBypassUser({
       uid: 'oF5XhOnCinhfFy5c8xYm4PbPzbI3',
-      email: 'dev@seliabot.com',
-      displayName: 'Dev Seliabot',
+      email: 'dev@socialobot.com',
+      displayName: 'Dev Socialobot',
       getIdToken: async () => 'dev-bypass-token',
     });
   };
@@ -104,7 +104,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
       <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-100 px-4">
         <div className="w-full max-w-md bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-2xl">
           <h1 className="text-2xl font-semibold mb-1">SOCIAL.FLOW</h1>
-          <p className="text-sm text-slate-400 mb-6">
+          <p className="text-sm text-slate-500 mb-6">
             {mode === 'signin' ? 'Sign in to your workspace.' : 'Create a new workspace.'}
           </p>
 
@@ -137,7 +137,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
             </button>
           </form>
 
-          <div className="my-4 flex items-center gap-3 text-xs text-slate-500">
+          <div className="my-4 flex items-center gap-3 text-xs text-slate-600">
             <span className="h-px flex-1 bg-slate-800" />
             or
             <span className="h-px flex-1 bg-slate-800" />
@@ -171,7 +171,7 @@ const AuthGate: React.FC<AuthGateProps> = ({ children }) => {
 
           {error && <p className="mt-4 text-sm text-rose-400">{error}</p>}
 
-          <p className="mt-6 text-sm text-slate-400 text-center">
+          <p className="mt-6 text-sm text-slate-500 text-center">
             {mode === 'signin' ? "Don't have an account? " : 'Already registered? '}
             <button
               type="button"

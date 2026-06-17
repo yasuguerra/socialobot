@@ -5,7 +5,7 @@ Feature: Gemini Vanguard Model Upgrade
 Version: 3.2.0
 
 ## Executive Summary
-Upgraded Seliabot's default model configurations and associated backend services to Google's brand-new frontier models: Gemini 3.1 Pro (for complex sales agent reasoning loops) and Gemini 3.5 Flash (for speed/latency-sensitive routing and simple greetings). This completely elevates our multi-tenant SaaS capabilities to the state-of-the-art of LLM technology in Latin America. All changes are completely backwards-compatible since we already use the unified @google/genai SDK, and all 164 unit/integration tests passed successfully.
+Upgraded Socialobot's default model configurations and associated backend services to Google's brand-new frontier models: Gemini 3.1 Pro (for complex sales agent reasoning loops) and Gemini 3.5 Flash (for speed/latency-sensitive routing and simple greetings). This completely elevates our multi-tenant SaaS capabilities to the state-of-the-art of LLM technology in Latin America. All changes are completely backwards-compatible since we already use the unified @google/genai SDK, and all 164 unit/integration tests passed successfully.
 
 ## Report Validation
 - QA: ✅ (All tests passed, configuration changes verified in env.ts and vertexAiProvider.ts)

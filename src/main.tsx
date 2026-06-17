@@ -4,12 +4,12 @@ import App from './App.tsx';
 import AuthGate from './components/AuthGate.tsx';
 import './index.css';
 
-import { AppProvider } from './context/AppContext.tsx';
+import { GlobalProviders } from './context/GlobalProviders.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppProvider>
+    <GlobalProviders>
       <AuthGate>{(user) => <App authUser={user} />}</AuthGate>
-    </AppProvider>
+    </GlobalProviders>
   </StrictMode>,
 );

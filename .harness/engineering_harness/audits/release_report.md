@@ -12,7 +12,7 @@
 ---
 
 ## 3. Observability and Log Tracing
-- **Status**: Fully documented the Seliabot telemetry system and conventions inside `project_context.md` under development tools, ensuring any future developer or AI agent has instant visibility into Winston logger traces on Cloud Run.
+- **Status**: Fully documented the Socialobot telemetry system and conventions inside `project_context.md` under development tools, ensuring any future developer or AI agent has instant visibility into Winston logger traces on Cloud Run.
 
 ---
 

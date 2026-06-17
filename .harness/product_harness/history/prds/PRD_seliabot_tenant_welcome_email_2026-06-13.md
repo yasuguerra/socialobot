@@ -2,7 +2,7 @@
 
 ## METADATA
 Feature: Correo de Bienvenida Localizado y Registro de Idioma
-Venture: Seliabot
+Venture: Socialobot
 Date Created: 2026-06-13
 PM Owner: PM (Product Manager)
 ICE Score: 85 (Impact: 9, Confidence: 8, Ease: 8)
@@ -11,13 +11,13 @@ Status: [ ] Draft  [x] Under Review  [ ] Approved by CPO
 ---
 
 ## 1. CONTEXTO — ¿Por qué importa esto ahora?
-Actualmente, Seliabot cuenta con una experiencia de bienvenida minimalista y rígida en inglés. El correo de bienvenida y verificación se despacha únicamente en inglés utilizando una plantilla visualmente rústica que no refleja la calidad premium de Seliabot. Dado que nuestro foco principal es el crecimiento de la plataforma en mercados hispanohablantes (Latinoamérica y España), es prioritario localizar la experiencia del primer contacto del tenant y dotarle de un correo cálido, profesional y accionable que impulse la confianza en nuestra tecnología.
+Actualmente, Socialobot cuenta con una experiencia de bienvenida minimalista y rígida en inglés. El correo de bienvenida y verificación se despacha únicamente en inglés utilizando una plantilla visualmente rústica que no refleja la calidad premium de Socialobot. Dado que nuestro foco principal es el crecimiento de la plataforma en mercados hispanohablantes (Latinoamérica y España), es prioritario localizar la experiencia del primer contacto del tenant y dotarle de un correo cálido, profesional y accionable que impulse la confianza en nuestra tecnología.
 
 ---
 
 ## 2. PROBLEMA
 **El problema en términos del usuario:**
-Cuando me registro como tenant en Seliabot, el correo que recibo para verificar mi cuenta y darme la bienvenida está en inglés, carece de un diseño institucional que me dé confianza, y no me indica cuáles son los siguientes pasos que debo tomar para configurar mi agente de IA, lo que me genera incertidumbre y puede provocar que abandone la plataforma en los primeros minutos.
+Cuando me registro como tenant en Socialobot, el correo que recibo para verificar mi cuenta y darme la bienvenida está en inglés, carece de un diseño institucional que me dé confianza, y no me indica cuáles son los siguientes pasos que debo tomar para configurar mi agente de IA, lo que me genera incertidumbre y puede provocar que abandone la plataforma en los primeros minutos.
 
 **Evidencia del problema:**
 Múltiples registros en LATAM no completan la verificación de su correo o tardan más de 24 horas en hacerlo. El feedback de nuestros primeros tenants es que el correo de verificación parecía genérico o automatizado de una plataforma ajena a su idioma.
@@ -35,7 +35,7 @@ Dueño de Negocio o Administrador de Operaciones (Tenant Owner) que busca implem
 Se acaba de registrar a través de la plataforma web en su computadora o dispositivo móvil, con la expectativa de activar y probar su bot de ventas rápidamente. Recibe el correo en su bandeja de entrada principal.
 
 **Qué quiere lograr:**
-Verificar su cuenta de manera segura, sentir que Seliabot es una plataforma seria y profesional, y saber exactamente cómo poner en marcha su agente de inteligencia artificial.
+Verificar su cuenta de manera segura, sentir que Socialobot es una plataforma seria y profesional, y saber exactamente cómo poner en marcha su agente de inteligencia artificial.
 
 ---
 
@@ -81,7 +81,7 @@ Para verificar mi cuenta con confianza y entender de inmediato los siguientes pa
 ## 8. DEPENDENCIAS
 | Dependencia | Tipo | Estado |
 |---|---|---|
-| Servidor SMTP de Outlook (`info@seliabot.com`) | Técnica | Configurado (se requiere validación en prod según [docs/SMTP_OUTLOOK_SETUP.md](docs/SMTP_OUTLOOK_SETUP.md)) |
+| Servidor SMTP de Outlook (`info@socialobot.com`) | Técnica | Configurado (se requiere validación en prod según [docs/SMTP_OUTLOOK_SETUP.md](docs/SMTP_OUTLOOK_SETUP.md)) |
 
 ---
 

@@ -1,26 +1,19 @@
-# Social.Flow (socialobot) — Architectural Decision Records (ADRs)
+# Socialobot — Architecture Decision Records (ADRs)
 
-## ADR 01: Multi-Tenant Cloud Firestore for Storage
-*   **Context**: The application requires highly reliable, real-time database support for user brand profiles, scheduled social posts, media assets, and campaign details.
-*   **Decision**: Adopt Google Cloud Firestore (via `firebase-admin` and `firebase`) as our primary database layer.
-*   **Consequences**: Implements serverless schema-free collections. Requires strict software-enforced tenant filtering (always validating `userId` inside `server/store.ts` queries) to guarantee tenant data separation.
+Historical record of key architecture decisions for the platform.
 
-## ADR 02: Upgrading to Google Gemini 3.5 Flash
-*   **Context**: Scrapes are occasionally large, and copywriting/ideation requires very rapid, bilingually-proficient content extraction.
-*   **Decision**: Migrate all brand profile extraction, content ideation, and virality scoring to `gemini-3.5-flash` utilizing the new `@google/genai` SDK.
-*   **Consequences**: Provides near-instant (~1-2 seconds) responses, reducing cold-starts and maintaining high conversational responsiveness for the AI Strategist chat.
+## ADR-001: Cloud Run vs. Kubernetes
+- **Decision:** Use Google Cloud Run.
+- **Reason:** Socialobot experiences peak loads of asynchronous messaging. Cloud Run allows scaling to zero instances during idle hours, maximizing credits and drastically reducing operational costs compared to a dedicated GKE cluster.
 
-## ADR 03: Veo 3.1 Pro Video Extension Pipeline
-*   **Context**: Users need cohesive cinematic content, but standard video models only generate short, isolated clips.
-*   **Decision**: Implement the `veo-3.1-generate-preview` video endpoint coupled with a custom `/api/generate-veo/extend` endpoint.
-*   **Consequences**: Enables progressive storytelling by allowing creators to feed completed videos back into the generation loop with continuation prompts, extending the file duration (+8 seconds) with consistent styling.
+## ADR-002: Vector DB (pgvector vs. Vertex RAG Engine/Spanner)
+- **Decision:** Use `pgvector` on PostgreSQL 16.
+- **Reason:** Avoids a huge base cost (~$65/mo for Spanner). It allows us to isolate tenant data (`tenant_id`) in the same transactional database using hybrid queries (ILIKE + vectors), extremely simplifying infrastructure.
 
-## ADR 04: Google Agent Development Kit (ADK) for AI Strategist
-*   **Context**: The chatbot strategist needs to access the user's schedule, suggest actual optimal post timings, and search live trends instead of just replying with generic copy.
-*   **Decision**: Build the chat strategist using `@google/adk`'s `LlmAgent`, providing it with structured tool access (`GoogleSearchTool`, `generate_content_ideas`, `browse_content_arsenal`, `get_optimal_schedule`).
-*   **Consequences**: Ground conversations in live search index data and real database states, turning the chatbot into a functional content planner.
+## ADR-003: LLM Models (Gemini Flash vs. Pro)
+- **Decision:** Use Gemini 3.5 Flash as the default conversational model.
+- **Reason:** Flash offers sub-second latency for agile agent responses, vital on WhatsApp. We reserve Gemini 3.5 Pro only for deep reasoning operations like complex quote orchestration and the aviation flow.
 
-## ADR 05: Simulated Platform Isolation and Badging
-*   **Context**: B2B agency users were confused by non-Instagram platforms that appeared connected but published only simulated content.
-*   **Decision**: Reorganize the sidebar navigation to move experimental features (like the Space Remodeler) to an isolated "Experimental Playgrounds" group and add prominent, warning-styled `[Simulated]` badges to all non-Instagram channels.
-*   **Consequences**: Eliminates user expectations of real-world publishing on TikTok, Facebook, and LinkedIn, keeping B2B dashboards focused and transparent.
+## ADR-004: Wholesale Authentication (Passwordless SSO)
+- **Decision:** Send UUIDv4 Tokens via WhatsApp instead of email/password accounts.
+- **Reason:** Wholesale distributors have high friction with remembering passwords. Anchoring identity to the secure WhatsApp session increases catalog adoption by over 80%.

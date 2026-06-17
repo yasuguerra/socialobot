@@ -1,6 +1,6 @@
 # 🔍 AUDIT — Usability Audit: Mobile Conversations & Date/Time Display
 
-This usability audit evaluates the mobile responsiveness and conversational UX of the Seliabot tenant dashboard and public-facing chat widget.
+This usability audit evaluates the mobile responsiveness and conversational UX of the Socialobot tenant dashboard and public-facing chat widget.
 
 ---
 
@@ -8,7 +8,7 @@ This usability audit evaluates the mobile responsiveness and conversational UX o
 
 ```text
 Feature: Mobile Conversations & Chat Date/Time Display
-Venture: Seliabot Platform
+Venture: Socialobot Platform
 Date: June 14, 2026
 Type: [ ] Conceptual (pre-build)   [X] Post-build / Refactoring
 Auditor: Product QA & Usability Team

@@ -19,9 +19,9 @@ For these 10 businesses, any failure in conversational flow, catalog parsing, or
 ### 2.2. Automated Catalog Extraction (`/api/products/extract-doc`)
 - **Status**: Pioneer clients often have product lists in chaotic formats (rough PDFs, complex Excel spreadsheets, or photos of printed catalogs).
 - **Verified**: The `/api/products/extract-doc` endpoint in [platform-api/src/api/routes/products.ts](platform-api/src/api/routes/products.ts) is a state-of-the-art onboarding tool.
-  - If they upload Excel/CSV, Seliabot uses a **local structured parser** to convert sheets into Markdown tables, avoiding token bloating.
-  - If they upload PDF/Images, Seliabot invokes the **Google Document AI Layout Parser** to extract clean semantic tables.
-  - Seliabot then feeds the markdown to **Gemini Pro** (`gemini-2.5-pro` / `gemini-1.5-pro` / `gemini-2.0-flash` depending on setting) to structure them into the exact database schema, parsing `price`, `wholesale_price`, `sku`, `category`, and `description`.
+  - If they upload Excel/CSV, Socialobot uses a **local structured parser** to convert sheets into Markdown tables, avoiding token bloating.
+  - If they upload PDF/Images, Socialobot invokes the **Google Document AI Layout Parser** to extract clean semantic tables.
+  - Socialobot then feeds the markdown to **Gemini Pro** (`gemini-2.5-pro` / `gemini-1.5-pro` / `gemini-2.0-flash` depending on setting) to structure them into the exact database schema, parsing `price`, `wholesale_price`, `sku`, `category`, and `description`.
 - **Mitigation for Pioneers**: Ensure the Google Document AI Service Account is pre-authorized with `roles/documentai.viewer` and the processor IDs (`DOC_AI_LAYOUT_PROCESSOR_ID`) are configured correctly in the GCP Console to prevent 500 errors on first upload.
 
 ---
@@ -31,7 +31,7 @@ For these 10 businesses, any failure in conversational flow, catalog parsing, or
 For our first 10 customers, the AI Agent must execute multi-step tools flawlessly. We audit the following critical flows:
 
 ### 3.1. Automatic Returning Customer Identification
-- **Mechanics**: When an incoming message arrives via WhatsApp, Seliabot reads `fromFormatted` in [platform-api/src/api/routes/whatsapp.ts](platform-api/src/api/routes/whatsapp.ts) and runs `customerRepo.findByPhone`.
+- **Mechanics**: When an incoming message arrives via WhatsApp, Socialobot reads `fromFormatted` in [platform-api/src/api/routes/whatsapp.ts](platform-api/src/api/routes/whatsapp.ts) and runs `customerRepo.findByPhone`.
 - **Validation**:
   - The customer is identified, and their profile (company, payment terms, credit limits, order count) is injected into the agent's system prompt context.
   - If B2B Mode is active, the agent immediately knows whether to present `wholesale_price` instead of standard `price`.
@@ -64,7 +64,7 @@ We audited known front-end unmounting vulnerabilities (white screens) that could
 
 ## 5. Catalog Quality & Health Checks
 
-We leverage Seliabot's built-in self-auditing endpoint `/api/products/health-summary` to check pioneer data:
+We leverage Socialobot's built-in self-auditing endpoint `/api/products/health-summary` to check pioneer data:
 * When a pioneer customer imports their catalog, the Dashboard immediately executes this query.
 * It calculates a **Data Quality Score (0-100)**:
   * For **Wholesale** clients: Identifies missing `wholesale_price` or `min_order_qty`.

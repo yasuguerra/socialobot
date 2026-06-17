@@ -1,7 +1,7 @@
 # PLAN: Affiliate Marketing, Web Crawling & Ingestion Sprint
 
 ## Objective
-Implement the new Affiliate Marketing Module for Seliabot (B2B2C), introducing automated deep scraping from supplier websites (like `ybera.pa` or `iberaclub.pa`), dynamic affiliate link generation, and time-bound promotional scheduling.
+Implement the new Affiliate Marketing Module for Socialobot (B2B2C), introducing automated deep scraping from supplier websites (like `ybera.pa` or `iberaclub.pa`), dynamic affiliate link generation, and time-bound promotional scheduling.
 
 ---
 

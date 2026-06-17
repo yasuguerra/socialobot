@@ -2,7 +2,7 @@
 
 ## METADATA
 Feature: Vista Previa de Mensajes en Automatic Triggers
-Venture: Seliabot
+Venture: Socialobot
 Date Created: 2026-06-14
 PM Owner: PM (Product Manager)
 ICE Score: 87 (Impact: 8, Confidence: 10, Ease: 9)
@@ -11,7 +11,7 @@ Status: [ ] Draft  [ ] Under Review  [x] Approved by CPO
 ---
 
 ## 1. CONTEXTO — ¿Por qué importa esto ahora?
-Seliabot permite a los tenants configurar "Automatic Triggers" (Disparadores Automáticos) que reaccionan a señales del negocio (como carritos abandonados, leads atascados, o nuevas conversaciones inactivas) y encolan automáticamente una secuencia de seguimiento ("Follow-Up Sequence"). Sin embargo, en la sección de "Automatic Triggers" dentro de la configuración actual, los tenants solo ven el nombre de la secuencia (ej. "Cotización Pendiente"), pero no tienen manera de verificar cuál es el contenido exacto de los mensajes o pasos que esa secuencia va a disparar automáticamente a sus clientes finales, lo que genera desconfianza y falta de visibilidad en las operaciones automatizadas de su negocio.
+Socialobot permite a los tenants configurar "Automatic Triggers" (Disparadores Automáticos) que reaccionan a señales del negocio (como carritos abandonados, leads atascados, o nuevas conversaciones inactivas) y encolan automáticamente una secuencia de seguimiento ("Follow-Up Sequence"). Sin embargo, en la sección de "Automatic Triggers" dentro de la configuración actual, los tenants solo ven el nombre de la secuencia (ej. "Cotización Pendiente"), pero no tienen manera de verificar cuál es el contenido exacto de los mensajes o pasos que esa secuencia va a disparar automáticamente a sus clientes finales, lo que genera desconfianza y falta de visibilidad en las operaciones automatizadas de su negocio.
 
 ---
 
@@ -23,7 +23,7 @@ Como tenant, cuando configuro un disparador automático que enviará mensajes a 
 Feedback de múltiples tenants de que no logran "ver qué mensaje se envía automáticamente a sus clientes" desde la tabla de Triggers, asumiendo erróneamente que la funcionalidad no existe o que requiere un esfuerzo técnico excesivo para ser auditada.
 
 **¿A quién afecta?**
-Afecta a todos los tenants activos de Seliabot que utilizan o desean implementar disparadores automáticos para automatizar sus flujos de ventas y reactivación.
+Afecta a todos los tenants activos de Socialobot que utilizan o desean implementar disparadores automáticos para automatizar sus flujos de ventas y reactivación.
 
 ---
 

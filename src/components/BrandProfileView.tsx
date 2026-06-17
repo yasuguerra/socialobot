@@ -44,9 +44,9 @@ export default function BrandProfileView({
         <div className="bg-slate-900 p-5 text-white flex justify-between items-center">
           <div>
             <h2 className="text-md font-bold tracking-tight">Active Brand DNA & Context</h2>
-            <p className="text-slate-400 text-xs">This data coordinates with the Gemini API to write captions targeted directly to buyers.</p>
+            <p className="text-slate-500 text-xs">This data coordinates with the Gemini API to write captions targeted directly to buyers.</p>
           </div>
-          <span className="text-[10px] uppercase font-mono font-bold bg-indigo-500 px-2 py-0.5 rounded text-white tracking-widest animate-pulse">
+          <span className="text-xs uppercase font-mono font-bold bg-indigo-500 px-2 py-0.5 rounded text-white tracking-widest animate-pulse">
             Autopilot Core
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function BrandProfileView({
         <form onSubmit={handleUpdateBrand} className="p-6 space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase">Website URL / Core Source Domain</label>
+              <label className="text-sm font-bold text-slate-600 uppercase">Website URL / Core Source Domain</label>
               <div className="flex gap-2">
                 <input
                   type="url"
@@ -75,7 +75,7 @@ export default function BrandProfileView({
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase">Company Name</label>
+              <label className="text-sm font-bold text-slate-600 uppercase">Company Name</label>
               <input
                 type="text"
                 required
@@ -89,14 +89,14 @@ export default function BrandProfileView({
 
           {/* Advanced Settings Toggle */}
           <details className="group border border-slate-200 rounded-xl bg-slate-50 overflow-hidden">
-            <summary className="p-3 text-[11px] font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 flex items-center justify-between select-none list-none [&::-webkit-details-marker]:hidden">
+            <summary className="p-3 text-sm font-bold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 flex items-center justify-between select-none list-none [&::-webkit-details-marker]:hidden">
               <span>⚙️ Advanced Brand Parameters</span>
-              <span className="text-slate-400 group-open:rotate-180 transition-transform">▼</span>
+              <span className="text-slate-500 group-open:rotate-180 transition-transform">▼</span>
             </summary>
             <div className="p-4 space-y-5 bg-white border-t border-slate-200">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase">Target Industry & Niche Products Category</label>
+              <label className="text-sm font-bold text-slate-600 uppercase">Target Industry & Niche Products Category</label>
               <input
                 type="text"
                 value={brandIndustryInput}
@@ -107,7 +107,7 @@ export default function BrandProfileView({
             </div>
 
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase">Social Voice & Persona Tone</label>
+              <label className="text-sm font-bold text-slate-600 uppercase">Social Voice & Persona Tone</label>
               <input
                 type="text"
                 value={brandToneInput}
@@ -119,7 +119,7 @@ export default function BrandProfileView({
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] font-bold text-slate-500 uppercase">Target Buyer Personas (Ages, Frustrations, Wants)</label>
+            <label className="text-sm font-bold text-slate-600 uppercase">Target Buyer Personas (Ages, Frustrations, Wants)</label>
             <textarea
               rows={2}
               value={brandBuyersInput}
@@ -130,7 +130,7 @@ export default function BrandProfileView({
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] font-bold text-slate-500 uppercase">Flagship Products or Core Offerings</label>
+            <label className="text-sm font-bold text-slate-600 uppercase">Flagship Products or Core Offerings</label>
             <input
               type="text"
               value={brandProductsInput}
@@ -141,7 +141,7 @@ export default function BrandProfileView({
           </div>
 
           <div className="space-y-1">
-            <label className="text-[11px] font-bold text-slate-500 uppercase">Brand Environmental Mission & Ecosystem parameters</label>
+            <label className="text-sm font-bold text-slate-600 uppercase">Brand Environmental Mission & Ecosystem parameters</label>
             <textarea
               rows={2}
               value={brandContextInput}
@@ -154,7 +154,7 @@ export default function BrandProfileView({
           </details>
 
           <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-            <p className="text-[10px] text-slate-400 font-mono">
+            <p className="text-xs text-slate-500 font-mono">
               Last synced: Just now • Context engine online.
             </p>
             <button
@@ -169,7 +169,7 @@ export default function BrandProfileView({
       </div>
 
       <div className="bg-slate-100 border border-slate-200 p-4 rounded-xl flex items-start gap-3">
-        <HelpCircle className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" />
+        <HelpCircle className="w-5 h-5 text-slate-600 shrink-0 mt-0.5" />
         <div className="text-xs text-slate-600 space-y-1">
           <h4 className="font-bold text-slate-900">How does Brand DNA extraction work?</h4>
           <p>

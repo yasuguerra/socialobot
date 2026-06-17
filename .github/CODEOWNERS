@@ -1,0 +1,28 @@
+# ==============================================================================
+# Socialobot — GitHub Code Owners Configuration
+# ==============================================================================
+# This file defines the repository owners responsible for reviewing and approving 
+# changes in specific directories of the codebase.
+#
+# Rules:
+# - Merges targeting protected branches will automatically require approval from
+#   the owners designated below.
+# - This does not apply to local development or direct admin pushes by the owner.
+# ==============================================================================
+
+# Default owner for the entire repository
+* @yasuguerra
+
+# Core Application & Backend (Strictly locked to engineering owner)
+/platform-api/ @yasuguerra
+/platform-dashboard/ @yasuguerra
+/platform-widget/ @yasuguerra
+/database/ @yasuguerra
+/infra/ @yasuguerra
+/deploy/ @yasuguerra
+/scripts/ @yasuguerra
+
+# Landing Page & Marketing Assets
+# Anyone with write access (like the CMO) can modify these, 
+# but changes targeting 'main' still require review/approval or normal PR workflow.
+/landing-page/ @yasuguerra

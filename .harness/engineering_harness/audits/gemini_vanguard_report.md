@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary
 
-This report evaluates Seliabot's current Artificial Intelligence (AI) stack and compares it with the latest official Google Gemini API releases (as of June 2026). The objective is to ensure that Seliabot remains at the absolute cutting edge ("vanguard") of conversational commerce and multi-tenant agent technology in Latin America.
+This report evaluates Socialobot's current Artificial Intelligence (AI) stack and compares it with the latest official Google Gemini API releases (as of June 2026). The objective is to ensure that Socialobot remains at the absolute cutting edge ("vanguard") of conversational commerce and multi-tenant agent technology in Latin America.
 
 ---
 
@@ -19,7 +19,7 @@ Our current AI configuration is defined across key core files:
 - [platform-api/src/config/env.ts](platform-api/src/config/env.ts) lists our environment variables.
 - [platform-api/src/agent/llm/vertexAiProvider.ts](platform-api/src/agent/llm/vertexAiProvider.ts) implements our Google Gen AI wrapper.
 
-### Technical Highlights of Seliabot's Current Stack:
+### Technical Highlights of Socialobot's Current Stack:
 1. **Unified Google Gen AI SDK:**
    We are currently using `"@google/genai": "^2.6.0"`. This is the latest unified SDK recommended by Google, replacing older packages like `@google/generative-ai` or `@google-cloud/vertexai`. It seamlessly resolves Google AI Studio keys and Vertex AI IAM credentials. We are already at the vanguard regarding SDK choice.
 2. **Model Selection:**
@@ -54,11 +54,11 @@ Based on our deep dive into the official Google documentation (`https://ai.googl
 
 ## 4. Gap Analysis & Strategic Recommendations
 
-To transition Seliabot from the Gemini 2.5 era to the absolute vanguard (Gemini 3/3.5 era), the engineering team should target three key upgrades:
+To transition Socialobot from the Gemini 2.5 era to the absolute vanguard (Gemini 3/3.5 era), the engineering team should target three key upgrades:
 
 ```mermaid
 graph TD
-    A[Seliabot Current Stack] -->|Upgrade 1: Model Core| B(Gemini 3.5 Flash & 3.1 Pro)
+    A[Socialobot Current Stack] -->|Upgrade 1: Model Core| B(Gemini 3.5 Flash & 3.1 Pro)
     A -->|Upgrade 2: Agent Quality| C(Thinking Mode Integration)
     A -->|Upgrade 3: Real-Time Voice| D(Live API Voice Agents)
     
@@ -79,7 +79,7 @@ graph TD
 
 ### 3. Move from "Voice Notes" to "Live Voice Calling" (Live API)
 *   **Action:** Build a real-time web socket pipeline targeting Google's new **Live API**.
-*   **Impact:** Enables Seliabot to act not just as a WhatsApp responder, but as a real-time, zero-latency phone receptionist and voice sales assistant for wholesale distributors across Latin America.
+*   **Impact:** Enables Socialobot to act not just as a WhatsApp responder, but as a real-time, zero-latency phone receptionist and voice sales assistant for wholesale distributors across Latin America.
 
 ### 4. Direct Visual Catalog Generation (Nano Banana)
 *   **Action:** Implement a fallback tool when a product is out of stock or custom-designed, leveraging `Nano Banana 2` to generate a preview image of a product in real-time.

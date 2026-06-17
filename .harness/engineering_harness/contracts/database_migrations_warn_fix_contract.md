@@ -4,7 +4,7 @@
 
 ```text
 Contract: DB_MIGRATION_PRESENCE_v1
-Venture: Seliabot
+Venture: Socialobot
 Architect: Chief Architect (Martin Fowler)
 Approved By: CTO (Demis Hassabis)
 Date: 2026-06-13

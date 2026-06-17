@@ -35,7 +35,7 @@ export async function requireAuth(
       token === "dev-bypass-token"
     ) {
       req.userId = "oF5XhOnCinhfFy5c8xYm4PbPzbI3";
-      req.userEmail = "dev@seliabot.com";
+      req.userEmail = "dev@socialobot.com";
       next();
       return;
     }

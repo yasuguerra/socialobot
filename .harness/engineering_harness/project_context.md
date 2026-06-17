@@ -7,9 +7,9 @@
 ## Project Identification
 
 ```
-Name:           Seliabot
+Name:           Socialobot
 Domain:         Multi-tenant AI Sales Agent SaaS for Latin America
-Repository:     https://github.com/seliabot/seliabot
+Repository:     https://github.com/socialobot/socialobot
 Current env:    development / production
 ```
 
@@ -62,7 +62,7 @@ Branching strategy:     feature/*, hotfix/*, release/*
 ## Business Context
 
 ```
-Brief description:      Seliabot is a multi-tenant AI-driven sales agent that automates B2B wholesale ordering, catalog recommendation, customer greeting, proforma generation, and automated follow-ups via WhatsApp for Latin American SMBs.
+Brief description:      Socialobot is a multi-tenant AI-driven sales agent that automates B2B wholesale ordering, catalog recommendation, customer greeting, proforma generation, and automated follow-ups via WhatsApp for Latin American SMBs.
 Target user:            SMB wholesale distributors, real estate companies, retail, e-commerce, and service companies in LATAM.
 Key metrics:            MRR ($1500 target), Conversion Rate (8% target), Conversation Volume, Tenant Retention.
 Critical constraints:   Strict multi-tenant security isolation, WhatsApp API rate limits, low-latency AI responses, private-IP DB connection, secure billing/payment processing.

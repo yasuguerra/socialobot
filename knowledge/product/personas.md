@@ -1,22 +1,22 @@
-# Social.Flow (socialobot) — Target Personas
+# Socialobot — Product Personas
 
-## 1. Lucas (The Agency Operator)
-*   **Role**: Senior Account Manager / Social Media Agency Lead.
-*   **Workflow Scope**: Manages 10+ distinct client brands simultaneously.
-*   **Key Needs**: Bulk scheduling, rapid multi-tenant workspace isolation (never leaking assets between client folders), fast copywriting, and visual variations.
-*   **Pain Point**: Copywriting client captions manually consumes half of the workweek.
-*   **Value in Social.Flow**: Uses the Multimodal Content Arsenal to catalog client assets, A/B Testing workspace to justify strategies to clients, and Gemini copy generation to draft caption variations in seconds.
+This document defines the primary archetypes of users interacting with Socialobot.
 
-## 2. Sofia (The E-Commerce Founder)
-*   **Role**: D2C Retail Brand Owner (e.g., boutique clothing, health foods).
-*   **Workflow Scope**: Handles marketing as a solo task alongside inventory, shipping, and customer support.
-*   **Key Needs**: Hands-off social scheduling and automated caption/graphic alignment.
-*   **Pain Point**: High cost of graphic designers and lack of scheduling experience.
-*   **Value in Social.Flow**: Inputs her store website URL to automatically extract a complete Brand Profile, generate a month of calendar posts, and publish directly to Instagram.
+## 1. The "Manual Orchestrator" (Our Direct Customer / Tenant)
+**Profile:** Owner or Sales Manager of a B2B SMB (Distributor, Wholesaler, Importer) in Latin America.
+**Company Size:** 1-20 employees.
+**Primary Tools:** WhatsApp, Excel, local legacy ERPs, physical notebooks.
+**Pain Points:**
+- **Double-Digitization:** Spends hours copying orders from WhatsApp into an ERP.
+- **Mobility Bottleneck:** Cannot answer pricing or stock questions without being physically in front of their PC.
+- **Time Starved:** Working "in" the business instead of "on" the business.
+**Goal with Socialobot:** Automate the repetitive inquiry process and capture orders 24/7 without losing the "human touch" of WhatsApp.
 
-## 3. Carlos (The Content Creator)
-*   **Role**: Creative Video Editor / Visual Narrative Creator.
-*   **Workflow Scope**: Focuses heavily on high-engagement visual mediums (Instagram Reels, TikToks, Shorts).
-*   **Key Needs**: AI cinematic video synthesis and timeline continuation features.
-*   **Pain Point**: Standard generative video tools are limited to short, disjointed clips, breaking visual cohesion.
-*   **Value in Social.Flow**: Utilizes Veo 3.1 Pro engine inside the Creative Studio Sandbox to generate beautiful, prompt-guided cinematic clips and apply timeline extensions (+8 seconds) for continuous storytelling.
+## 2. The "B2B Buyer" (The End Consumer)
+**Profile:** Small retailer, local shop owner, or independent professional buying supplies from the Manual Orchestrator.
+**Primary Tools:** Mobile phone (WhatsApp).
+**Pain Points:**
+- **Slow Responses:** Has to wait hours for the distributor to confirm stock or pricing.
+- **Friction:** Hates creating accounts or remembering passwords for B2B portals.
+- **After-Hours Ordering:** Often does inventory and purchasing at night or on weekends when the distributor is closed.
+**Goal with Socialobot:** Fast, frictionless ordering via WhatsApp, immediate quotes, and secure payment links without waiting for a human.

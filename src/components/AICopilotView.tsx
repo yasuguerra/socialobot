@@ -88,7 +88,7 @@ export default function AICopilotView({
             </div>
             <div>
               <h3 className="font-bold text-sm text-slate-900">Tu Copiloto de Social Media</h3>
-              <p className="text-[10px] text-slate-500 font-mono">Gemini 3.5 Flash Activo & Conectado</p>
+              <p className="text-xs text-slate-600 font-mono">Gemini 3.5 Flash Activo & Conectado</p>
             </div>
           </div>
           <div className="flex items-center gap-1.5">
@@ -96,32 +96,32 @@ export default function AICopilotView({
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
             </span>
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-mono">En Línea</span>
+            <span className="text-xs text-slate-600 font-bold uppercase tracking-wider font-mono">En Línea</span>
           </div>
         </div>
 
         <div className="py-3 border-b border-slate-100 flex gap-2 overflow-x-auto shrink-0 scrollbar-none">
           <button 
             onClick={() => handleSendSuggestedMsg("Sugiéreme un hilo de 3 historias de Instagram muy dinámicas e interesantes sobre mi empresa de hoy.")}
-            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
           >
             📱 Sugerir Historias
           </button>
           <button 
             onClick={() => handleSendSuggestedMsg("Dame una idea viral para un Reel de Instagram con un buen gancho, descripción y recomendación visual.")}
-            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
           >
             🎥 Sugerir un Reel
           </button>
           <button 
             onClick={() => handleSendSuggestedMsg("Crea una propuesta de carrusel educativo para mi cuenta sobre nuestros productos estrella.")}
-            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
           >
             📊 Sugerir Carrusel
           </button>
           <button 
             onClick={() => handleSendSuggestedMsg("Escribe un post estándar con hashtags optimizados y una llamada a la acción irresistible.")}
-            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
+            className="shrink-0 bg-slate-50 hover:bg-slate-100 text-slate-700 text-sm font-semibold px-3 py-1.5 rounded-lg border border-slate-200/60 transition cursor-pointer"
           >
             ✍️ Sugerir Post
           </button>
@@ -135,12 +135,12 @@ export default function AICopilotView({
               </div>
               <div className="space-y-1.5 max-w-sm">
                 <p className="text-sm font-bold text-slate-800">¡Hola! Soy tu asistente de redes sociales</p>
-                <p className="text-xs text-slate-500 leading-relaxed">
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Estoy aquí para facilitarte la gestión de tu cuenta de Instagram. Sube fotos y videos en la biblioteca de medios y pregúntame qué publicar en tus historias, reels o posts estándar.
                 </p>
               </div>
               <div className="pt-2 w-full space-y-2 max-w-md">
-                <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Ideas de sugerencias para empezar:</p>
+                <p className="text-xs uppercase font-bold text-slate-500 tracking-wider">Ideas de sugerencias para empezar:</p>
                 <button 
                   onClick={() => handleSendSuggestedMsg("Quiero subir algo hoy a mis historias. ¿Qué me sugieres según mi biblioteca de fotos?")}
                   className="w-full text-left p-3 bg-slate-50 hover:bg-slate-150 text-xs rounded-xl border border-slate-200/80 transition truncate block cursor-pointer text-slate-700"
@@ -161,7 +161,7 @@ export default function AICopilotView({
                 key={idx} 
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
-                <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">
+                <span className="text-[9px] text-slate-500 uppercase tracking-widest font-mono font-bold mb-1 px-1">
                   {msg.sender === 'user' ? 'Tú' : 'Copiloto de IA'}
                 </span>
                 <div className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[90%] ${
@@ -193,7 +193,7 @@ export default function AICopilotView({
                             setActiveCreatedPost(prev => prev ? { ...prev, caption: msg.text } : null);
                           }
                         }}
-                        className="bg-indigo-605 hover:bg-indigo-700 text-white text-[10px] font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
+                        className="bg-indigo-605 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
                       >
                         ✨ Usar como Borrador
                       </button>
@@ -205,8 +205,8 @@ export default function AICopilotView({
           )}
           {loadingAgent && (
             <div className="flex flex-col items-start">
-              <span className="text-[9px] text-slate-400 uppercase tracking-widest font-mono font-bold mb-1 px-1">Copiloto</span>
-              <div className="p-3 bg-slate-100 text-slate-500 rounded-2xl rounded-tl-none border border-slate-200/60 flex items-center gap-2 text-xs">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-mono font-bold mb-1 px-1">Copiloto</span>
+              <div className="p-3 bg-slate-100 text-slate-600 rounded-2xl rounded-tl-none border border-slate-200/60 flex items-center gap-2 text-xs">
                 <RefreshCw className="animate-spin w-3.5 h-3.5 text-indigo-600" />
                 <span>El copiloto está pensando la mejor estrategia...</span>
               </div>
@@ -251,7 +251,7 @@ export default function AICopilotView({
                 setReferenceImageUrl(null);
                 setImagePreview(null);
               }}
-              className="text-[10px] text-slate-400 hover:text-red-500 font-bold transition"
+              className="text-xs text-slate-500 hover:text-red-500 font-bold transition"
             >
               Limpiar
             </button>
@@ -284,7 +284,7 @@ export default function AICopilotView({
                   />
                 )
               ) : (
-                <div className="text-center p-4 text-slate-400">
+                <div className="text-center p-4 text-slate-500">
                   <ImageIcon className="w-8 h-8 mx-auto mb-1 text-slate-300" />
                   <p className="text-xs">Sin imagen o video cargado.</p>
                 </div>
@@ -297,8 +297,8 @@ export default function AICopilotView({
 
             <div className="space-y-1">
               <div className="flex justify-between items-center mb-0.5">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono">Texto de la Publicación (Copy)</span>
-                <span className="text-[9px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-md font-mono">{captionDraft.length} caracteres</span>
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono">Texto de la Publicación (Copy)</span>
+                <span className="text-[9px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded-md font-mono">{captionDraft.length} caracteres</span>
               </div>
               <textarea
                 rows={5}
@@ -315,7 +315,7 @@ export default function AICopilotView({
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">¿Dónde lo publicaremos?</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono block">¿Dónde lo publicaremos?</span>
               <div className="grid grid-cols-4 gap-1.5">
                 {(['Instagram', 'Facebook', 'TikTok', 'LinkedIn'] as const).map((plat) => {
                   const isSelected = (activeCreatedPost?.platform || creatorPlatform) === plat;
@@ -329,10 +329,10 @@ export default function AICopilotView({
                           setActiveCreatedPost(prev => prev ? { ...prev, platform: plat } : null);
                         }
                       }}
-                      className={`text-[10px] font-bold py-1.5 rounded-lg border transition text-center shrink-0 cursor-pointer ${
+                      className={`text-xs font-bold py-1.5 rounded-lg border transition text-center shrink-0 cursor-pointer ${
                         isSelected 
                           ? 'bg-indigo-50 border-indigo-300 text-indigo-700 shadow-sm' 
-                          : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                       }`}
                     >
                       {plat}
@@ -343,7 +343,7 @@ export default function AICopilotView({
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-mono block">Hora Sugerida / Programación</span>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider font-mono block">Hora Sugerida / Programación</span>
               <input
                 type="text"
                 value={scheduledDraftTime}
@@ -447,7 +447,7 @@ export default function AICopilotView({
                       alert("Fallo al programar: " + err.message);
                     }
                   }}
-                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-bold py-2 rounded-xl border border-slate-200/80 transition cursor-pointer text-center"
+                  className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold py-2 rounded-xl border border-slate-200/80 transition cursor-pointer text-center"
                 >
                   📅 Agendar en mi Calendario
                 </button>
@@ -462,7 +462,7 @@ export default function AICopilotView({
                     setReferenceImageUrl(null);
                     setImagePreview(null);
                   }}
-                  className="bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-500 p-2 rounded-xl border border-slate-200 transition cursor-pointer"
+                  className="bg-slate-50 hover:bg-red-50 text-slate-500 hover:text-red-500 p-2 rounded-xl border border-slate-200 transition cursor-pointer"
                   title="Eliminar Borrador"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -478,7 +478,7 @@ export default function AICopilotView({
             </div>
             <div className="space-y-1.5 max-w-xs">
               <h4 className="font-bold text-slate-800 text-xs">Sin Borrador Activo</h4>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
+              <p className="text-sm text-slate-600 leading-relaxed">
                 Selecciona un recurso desde tu <strong>Biblioteca de Medios</strong> o pídele algo al <strong>Copiloto de IA</strong> para empezar a generar contenido increíble con un solo toque.
               </p>
             </div>

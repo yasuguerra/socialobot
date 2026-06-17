@@ -41,6 +41,11 @@ import ABTestsView from './components/ABTestsView';
 import CreativeStudioView from './components/CreativeStudioView';
 
 import { useApp } from './context/AppContext';
+import { useBrand } from './context/BrandContext';
+import { useCopilot } from './context/CopilotContext';
+import { useStudio } from './context/StudioContext';
+import { useAnalytics } from './context/AnalyticsContext';
+import { useCampaigns } from './context/CampaignsContext';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import CalendarView from './components/CalendarView';
@@ -209,173 +214,41 @@ interface AppProps {
 }
 
 export default function App({ authUser }: AppProps) {
-  const isDevAccount = authUser?.email === 'dev@seliabot.com';
+  const isDevAccount = authUser?.email === 'dev@socialobot.com';
   const {
     activeTab, setActiveTab,
     posts, setPosts,
-    brandProfile, setBrandProfile,
-    chatHistory, setChatHistory,
-    loadingAgent, setLoadingAgent,
-    agentInput, setAgentInput,
-    activeCreatedPost, setActiveCreatedPost,
-    captionDraft, setCaptionDraft,
-    referenceImageUrl, setReferenceImageUrl,
-    imagePreview, setImagePreview,
-    creatorFormat, setCreatorFormat,
-    creatorPlatform, setCreatorPlatform,
-    creatorTitle, setCreatorTitle,
+    ideas, setIdeas,
+    arsenalMedia, setArsenalMedia,
+    loadingPosts, setLoadingPosts,
+    loadingIdeas, setLoadingIdeas,
+    loadingArsenal, setLoadingArsenal,
     apiConfig, setApiConfig
   } = useApp();
+
+  const { brandProfile, setBrandProfile, loadingBrand, setLoadingBrand, websiteInput, setWebsiteInput, brandNameInput, setBrandNameInput, brandIndustryInput, setBrandIndustryInput, brandToneInput, setBrandToneInput, brandBuyersInput, setBrandBuyersInput, brandProductsInput, setBrandProductsInput, brandContextInput, setBrandContextInput, scanStatus, setScanStatus } = useBrand();
+
+  const { chatHistory, setChatHistory, loadingAgent, setLoadingAgent, agentInput, setAgentInput, agentMessages, setAgentMessages, agentSessionId, setAgentSessionId } = useCopilot();
+
+  const { studioPrompt, setStudioPrompt, studioFormat, setStudioFormat, studioAspectRatio, setStudioAspectRatio, studioSize, setStudioSize, studioVideoResolution, setStudioVideoResolution, studioVideoModel, setStudioVideoModel, studioVideoDuration, setStudioVideoDuration, studioEnableGrounding, setStudioEnableGrounding, studioStarterImage, setStudioStarterImage, studioStarterImageMime, setStudioStarterImageMime, studioGenerating, setStudioGenerating, studioStatusText, setStudioStatusText, studioGeneratedUrl, setStudioGeneratedUrl, studioLastOperationName, setStudioLastOperationName, studioExtensionPrompt, setStudioExtensionPrompt, studioSavedMedia, setStudioSavedMedia, creatorVisualPrompt, setCreatorVisualPrompt, creatorCustomPrompt, setCreatorCustomPrompt, generatingAIImage, setGeneratingAIImage, aiImagePrompt, setAiImagePrompt, aiGeneratedUrl, setAiGeneratedUrl } = useStudio();
+
+  const { analytics, setAnalytics, loadingAnalytics, setLoadingAnalytics } = useAnalytics();
+
+  const { campaigns, setCampaigns, loadingCampaigns, setLoadingCampaigns, newAbName, setNewAbName, newAbProduct, setNewAbProduct, newAbSegment, setNewAbSegment, newAbStrategyA, setNewAbStrategyA, newAbStrategyB, setNewAbStrategyB, newAbToneA, setNewAbToneA, newAbToneB, setNewAbToneB } = useCampaigns();
+
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-  const [ideas, setIdeas] = useState<ContentIdea[]>([]);
-  const [campaigns, setCampaigns] = useState<ABCampaign[]>([]);
-  const [analytics, setAnalytics] = useState<any>(null);
-  const [arsenalMedia, setArsenalMedia] = useState<ArsenalMediaAsset[]>([]);
-  const [loadingArsenal, setLoadingArsenal] = useState(false);
   const [schedulerViewMode, setSchedulerViewMode] = useState<'calendar' | 'list'>('calendar');
-  
-  // Loading & Action states
-  const [loadingBrand, setLoadingBrand] = useState(false);
-  const [loadingIdeas, setLoadingIdeas] = useState(false);
-  const [loadingPosts, setLoadingPosts] = useState(false);
-  const [loadingCampaigns, setLoadingCampaigns] = useState(false);
-  const [loadingAnalytics, setLoadingAnalytics] = useState(false);
   const [generatingPostId, setGeneratingPostId] = useState<string | null>(null);
   const [publishingPostId, setPublishingPostId] = useState<string | null>(null);
-
-  // New item draft states
-  const [websiteInput, setWebsiteInput] = useState('');
-  const [brandNameInput, setBrandNameInput] = useState('');
-  const [brandIndustryInput, setBrandIndustryInput] = useState('');
-  const [brandToneInput, setBrandToneInput] = useState('');
-  const [brandBuyersInput, setBrandBuyersInput] = useState('');
-  const [brandProductsInput, setBrandProductsInput] = useState('');
-  const [brandContextInput, setBrandContextInput] = useState('');
-  const [scanStatus, setScanStatus] = useState<string | null>(null);
-
-  // Idea generation inputs
   const [referenceText, setReferenceText] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
-
-  // Creator workspace state
-  const [creatorVisualPrompt, setCreatorVisualPrompt] = useState('Clean flat lay commercial shot with warm studio lighting');
-  const [creatorCustomPrompt, setCreatorCustomPrompt] = useState('');
   const [activeActiveIdeaId, setActiveActiveIdeaId] = useState<string | undefined>(undefined);
-  
-  // Custom manual image generator states
-  const [generatingAIImage, setGeneratingAIImage] = useState(false);
-  const [aiImagePrompt, setAiImagePrompt] = useState('');
-  const [aiGeneratedUrl, setAiGeneratedUrl] = useState<string | null>(null);
-
-  // Creator editing custom draft states
   const [scheduledDraftTime, setScheduledDraftTime] = useState('Next Thursday, 4:00 PM');
-
-  // Instagram feed clone states
   const [igRecentMedia, setIgRecentMedia] = useState<any[]>([]);
   const [loadingIgMedia, setLoadingIgMedia] = useState(false);
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
-
-  // New A/B test draft details
-  const [newAbName, setNewAbName] = useState('');
-  const [newAbProduct, setNewAbProduct] = useState('');
-  const [newAbSegment, setNewAbSegment] = useState('');
-  const [newAbStrategyA, setNewAbStrategyA] = useState('');
-  const [newAbStrategyB, setNewAbStrategyB] = useState('');
-  const [newAbToneA, setNewAbToneA] = useState('Relatable, Punchy');
-  const [newAbToneB, setNewAbToneB] = useState('Informative, Expert');
-
-  // Verify Gemini active on server
   const [isApiActive, setIsApiActive] = useState(false);
-
-  // Agent Chat states
-  const [agentMessages, setAgentMessages] = useState<any[]>([]);
-  const [agentSessionId, setAgentSessionId] = useState<string | null>(null);
-
-  const handleSendAgentMsg = async () => {
-    if (!agentInput.trim() || loadingAgent) return;
-    const userMsg = agentInput.trim();
-    setAgentInput('');
-    setAgentMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
-    setLoadingAgent(true);
-
-    try {
-      const response = await apiFetch('/api/agent/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMsg,
-          sessionId: agentSessionId
-        })
-      });
-      const data = await response.json();
-      if (data.text) {
-        setAgentMessages(prev => [...prev, { sender: 'agent', text: data.text }]);
-      }
-      if (data.sessionId) {
-        setAgentSessionId(data.sessionId);
-      }
-    } catch (err) {
-      console.error("Agent chat failed:", err);
-      setAgentMessages(prev => [...prev, { sender: 'agent', text: "Lo siento, tuvimos un problema al conectar con tu estratega de IA en el servidor. Por favor verifica las credenciales." }]);
-    } finally {
-      setLoadingAgent(false);
-    }
-  };
-
-  const handleSendSuggestedMsg = async (msg: string) => {
-    if (loadingAgent) return;
-    setAgentMessages(prev => [...prev, { sender: 'user', text: msg }]);
-    setLoadingAgent(true);
-
-    try {
-      const response = await apiFetch('/api/agent/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: msg,
-          sessionId: agentSessionId
-        })
-      });
-      const data = await response.json();
-      if (data.text) {
-        setAgentMessages(prev => [...prev, { sender: 'agent', text: data.text }]);
-      }
-      if (data.sessionId) {
-        setAgentSessionId(data.sessionId);
-      }
-    } catch (err) {
-      console.error("Agent chat failed:", err);
-      setAgentMessages(prev => [...prev, { sender: 'agent', text: "Lo siento, tuvimos un problema al conectar con tu estratega de IA en el servidor. Por favor verifica las credenciales." }]);
-    } finally {
-      setLoadingAgent(false);
-    }
-  };
-
-  // AI Creative Studio states
-  const [studioPrompt, setStudioPrompt] = useState('Premium commercial photography of raw ecological linen textile garments layered neatly on white ocean sand, warm studio lighting rays, 8k professional editorial look');
-  const [studioFormat, setStudioFormat] = useState<'image' | 'video'>('image');
-  const [studioAspectRatio, setStudioAspectRatio] = useState('1:1');
-  const [studioSize, setStudioSize] = useState('1K');
-  const [studioVideoResolution, setStudioVideoResolution] = useState('720p');
-  const [studioVideoModel, setStudioVideoModel] = useState('veo-3.1-generate-preview');
-  const [studioVideoDuration, setStudioVideoDuration] = useState<number>(5);
-  const [studioEnableGrounding, setStudioEnableGrounding] = useState(false);
-  const [studioStarterImage, setStudioStarterImage] = useState<string | null>(null);
-  const [studioStarterImageMime, setStudioStarterImageMime] = useState<string>('image/png');
-  const [studioGenerating, setStudioGenerating] = useState(false);
-  const [studioStatusText, setStudioStatusText] = useState('');
-  const [studioGeneratedUrl, setStudioGeneratedUrl] = useState<string | null>(null);
-  const [studioLastOperationName, setStudioLastOperationName] = useState<string | null>(null);
-  const [studioExtensionPrompt, setStudioExtensionPrompt] = useState<string>('');
-  const [studioSavedMedia, setStudioSavedMedia] = useState<any[]>(() => {
-    try {
-      const saved = localStorage.getItem('social_flow_studio_media');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
 
   // Initial Fetch Setup
   useEffect(() => {
@@ -1362,16 +1235,7 @@ export default function App({ authUser }: AppProps) {
   return (
     <div className="flex h-screen w-screen bg-slate-50 font-sans text-slate-900 overflow-hidden" id="main-content-window">
       {/* Sidebar navigation component */}
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        brandName={brandProfile?.name || 'Not Configured'} 
-        apiActive={isApiActive}
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        userEmail={authUser?.email}
-        userDisplayName={authUser?.displayName}
-      />
+      <Sidebar apiActive={isApiActive} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onSignOut={() => auth.signOut()} />
 
       {/* Main Console view */}
       <main className="flex-1 flex flex-col h-full overflow-hidden" id="console-workspace">
@@ -1409,12 +1273,12 @@ export default function App({ authUser }: AppProps) {
             {/* Quick stats indicators in header to make the density high-fidelity */}
             <div className="hidden xl:flex items-center gap-4 border-r border-slate-200 pr-4 text-xs">
               <div>
-                <span className="text-slate-400 block font-bold text-[9px] uppercase">Synced Score</span>
+                <span className="text-slate-500 block font-bold text-[9px] uppercase">Synced Score</span>
                 <span className="font-sans font-bold text-indigo-600 block text-right">86.2 Viral Avg</span>
               </div>
               <div className="h-6 w-px bg-slate-200"></div>
               <div>
-                <span className="text-slate-400 block font-bold text-[9px] uppercase">Active Queue</span>
+                <span className="text-slate-500 block font-bold text-[9px] uppercase">Active Queue</span>
                 <span className="font-sans font-bold text-emerald-600 block text-right">
                   {posts.filter(p => p.status === 'Scheduled').length} items queued
                 </span>
@@ -1437,7 +1301,7 @@ export default function App({ authUser }: AppProps) {
                   setActiveCreatedPost(null);
                   setActiveTab('copilot');
                 }}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-[11px] md:text-xs px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-lg transition-all duration-200 shadow-sm cursor-pointer"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm md:text-xs px-2.5 py-1.5 md:px-3.5 md:py-2 rounded-lg transition-all duration-200 shadow-sm cursor-pointer"
               >
                 + Nuevo Borrador
               </button>
@@ -1452,7 +1316,7 @@ export default function App({ authUser }: AppProps) {
               <Sparkles className="w-4 h-4 text-indigo-600 animate-pulse" />
               <span>{scanStatus}</span>
             </div>
-            <button onClick={() => setScanStatus(null)} className="text-slate-400 hover:text-slate-600">&times;</button>
+            <button onClick={() => setScanStatus(null)} className="text-slate-500 hover:text-slate-600">&times;</button>
           </div>
         )}
 
@@ -1576,7 +1440,7 @@ export default function App({ authUser }: AppProps) {
               <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <h2 className="text-sm font-bold text-slate-900 font-sans tracking-tight">Post Autopilot Deployment Console</h2>
-                  <p className="text-slate-500 text-xs">These post drafts deploy automatically. Drag items across coordinates on the Visual Calendar tool grid to reschedule.</p>
+                  <p className="text-slate-600 text-xs">These post drafts deploy automatically. Drag items across coordinates on the Visual Calendar tool grid to reschedule.</p>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -1603,7 +1467,7 @@ export default function App({ authUser }: AppProps) {
                     </button>
                   </div>
 
-                  <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-400 font-mono pl-3 border-l border-slate-200 font-bold">
+                  <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-500 font-mono pl-3 border-l border-slate-200 font-bold">
                     <Check className="w-4 h-4 text-indigo-500" />
                     <span>Autopilot Active</span>
                   </div>
@@ -1625,10 +1489,10 @@ export default function App({ authUser }: AppProps) {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                   {/* Deployment list */}
                   <div className="lg:col-span-8 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
-                    <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-400">Scheduled & Logged Automations</h3>
+                    <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider text-slate-500">Scheduled & Logged Automations</h3>
                     
                     {posts.length === 0 ? (
-                      <div className="text-center p-8 text-slate-400">
+                      <div className="text-center p-8 text-slate-500">
                         <CalendarRange className="w-8 h-8 text-slate-300 mx-auto mb-2" />
                         <p className="text-xs">No active posts planned yet. Push content from the Idea Vault to start.</p>
                       </div>
@@ -1685,11 +1549,11 @@ export default function App({ authUser }: AppProps) {
                                     {post.platform}
                                   </span>
                                 </div>
-                                <p className="text-[11px] text-slate-500 line-clamp-2 italic mb-2">
+                                <p className="text-sm text-slate-600 line-clamp-2 italic mb-2">
                                   "{post.caption || 'No caption'}"
                                 </p>
                                 
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-slate-400 font-mono">
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 font-mono">
                                   <span className="flex items-center gap-1">
                                     <Clock className="w-3" />
                                     <span>{post.scheduledTime}</span>
@@ -1707,14 +1571,14 @@ export default function App({ authUser }: AppProps) {
                                 {!isPosted && (
                                   <button
                                     onClick={() => handlePublishPostNow(post.id)}
-                                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold px-2 py-1 rounded transition"
+                                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-2 py-1 rounded transition"
                                   >
                                     Deploy Now
                                   </button>
                                 )}
                                 <button
                                   onClick={() => handleDeletePost(post.id)}
-                                  className="text-slate-400 hover:text-red-500 p-1.5 transition"
+                                  className="text-slate-500 hover:text-red-500 p-1.5 transition"
                                   title="Delete automation post"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
@@ -1733,7 +1597,7 @@ export default function App({ authUser }: AppProps) {
                       <Sparkles className="w-4 h-4 text-indigo-600" />
                       <h3 className="font-bold text-slate-900 text-xs uppercase tracking-wider">Channel Smart Peak Hours</h3>
                     </div>
-                    <p className="text-slate-500 text-xs">
+                    <p className="text-slate-600 text-xs">
                       Our database tracking identifies matching traffic peaks based on the sustainable apparel buyer segments:
                     </p>
 
@@ -1741,25 +1605,25 @@ export default function App({ authUser }: AppProps) {
                       <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-rose-400">
                         <div className="flex justify-between items-center mb-0.5">
                           <span className="font-bold text-rose-700">Instagram Feeds</span>
-                          <span className="text-[10px] bg-slate-200 px-1.5 rounded font-mono">11:00 AM Sundays</span>
+                          <span className="text-xs bg-slate-200 px-1.5 rounded font-mono">11:00 AM Sundays</span>
                         </div>
-                        <p className="text-[10px] text-slate-500">Perfect for swipes & detailed storytelling on wellness organic textiles.</p>
+                        <p className="text-xs text-slate-600">Perfect for swipes & detailed storytelling on wellness organic textiles.</p>
                       </div>
 
                       <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-teal-400">
                         <div className="flex justify-between items-center mb-0.5">
                           <span className="font-bold text-teal-700">TikTok Shorts</span>
-                          <span className="text-[10px] bg-slate-200 px-1.5 rounded font-mono">6:30 PM Thursdays</span>
+                          <span className="text-xs bg-slate-200 px-1.5 rounded font-mono">6:30 PM Thursdays</span>
                         </div>
-                        <p className="text-[10px] text-slate-500">Video loops hit maximum organic algorithmic velocity during evening commutes.</p>
+                        <p className="text-xs text-slate-600">Video loops hit maximum organic algorithmic velocity during evening commutes.</p>
                       </div>
 
                       <div className="p-3 bg-slate-50 rounded-lg border-l-4 border-sky-400">
                         <div className="flex justify-between items-center mb-0.5">
                           <span className="font-bold text-sky-700">LinkedIn Business Post</span>
-                          <span className="text-[10px] bg-slate-200 px-1.5 rounded font-mono">8:45 AM Tuesdays</span>
+                          <span className="text-xs bg-slate-200 px-1.5 rounded font-mono">8:45 AM Tuesdays</span>
                         </div>
-                        <p className="text-[10px] text-slate-500">CSR corporate executives view supply transparency data directly on breakfast tables.</p>
+                        <p className="text-xs text-slate-600">CSR corporate executives view supply transparency data directly on breakfast tables.</p>
                       </div>
                     </div>
                   </div>
@@ -1863,3 +1727,4 @@ export default function App({ authUser }: AppProps) {
     </div>
   );
 }
+

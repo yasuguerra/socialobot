@@ -90,7 +90,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-900 tracking-tight">Performance Analytics</h1>
-          <p className="text-slate-500 text-xs">Real-time audience impressions, automated engagements, and channel conversions.</p>
+          <p className="text-slate-600 text-xs">Real-time audience impressions, automated engagements, and channel conversions.</p>
         </div>
         <button
           onClick={onRefresh}
@@ -126,7 +126,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-0.5">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-0.5">
                     {widget.title}
                   </span>
                   <span className="text-xl font-bold text-slate-900 font-sans tracking-tight">
@@ -144,7 +144,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
                   {widget.isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
                   {widget.change}
                 </span>
-                <span className="text-[9px] text-slate-400 font-mono">Autopilot Active</span>
+                <span className="text-[9px] text-slate-500 font-mono">Autopilot Active</span>
               </div>
               {/* Soft bottom accent bar */}
               <div className={`absolute bottom-0 left-0 right-0 h-1 bg-current opacity-70 ${
@@ -163,9 +163,9 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
           <div className="flex justify-between items-center mb-4">
             <div>
               <h3 className="font-bold text-slate-900 text-sm">Autopilot Impression Curve</h3>
-              <p className="text-[11px] text-slate-500">Monthly overview of zero-touch visual impression delivery.</p>
+              <p className="text-sm text-slate-600">Monthly overview of zero-touch visual impression delivery.</p>
             </div>
-            <span className="text-[10px] bg-slate-100 px-2.5 py-0.5 rounded-full text-slate-600 font-mono font-bold">
+            <span className="text-xs bg-slate-100 px-2.5 py-0.5 rounded-full text-slate-600 font-mono font-bold">
               Predictive Live Feed
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
         {/* Platform Share PieChart */}
         <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
           <h3 className="font-bold text-slate-900 text-sm mb-0.5">Platform Share Value</h3>
-          <p className="text-slate-500 text-[11px] mb-4">Traffic share ratio by scheduled destination campaign.</p>
+          <p className="text-slate-600 text-sm mb-4">Traffic share ratio by scheduled destination campaign.</p>
 
           <div className="h-44 w-full flex items-center justify-center relative" style={{ minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
@@ -224,7 +224,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
             
             {/* Display static center metrics */}
             <div className="absolute text-center">
-              <span className="text-[10px] text-slate-400 uppercase tracking-wide block font-mono">Engine</span>
+              <span className="text-xs text-slate-500 uppercase tracking-wide block font-mono">Engine</span>
               <span className="text-lg font-bold text-slate-900 leading-none">4 Channels</span>
             </div>
           </div>
@@ -236,7 +236,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className="font-semibold text-slate-700">{item.name}</span>
                 </div>
-                <div className="flex items-center gap-4 text-slate-500 font-mono text-[11px]">
+                <div className="flex items-center gap-4 text-slate-600 font-mono text-sm">
                   <span>{item.postsCount} posts</span>
                   <span className="font-semibold text-slate-800">{item.value}%</span>
                 </div>
@@ -253,7 +253,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
         {/* Brand Buyer Persona Demographics BarChart */}
         <div className="lg:col-span-1 bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
           <h3 className="font-bold text-slate-900 text-sm mb-0.5">Target Persona Demographics</h3>
-          <p className="text-slate-500 text-[11px] mb-4">Ages segments showing highest buying conversions.</p>
+          <p className="text-slate-600 text-sm mb-4">Ages segments showing highest buying conversions.</p>
 
           <div className="h-48 w-full" style={{ minWidth: 0 }}>
             <ResponsiveContainer width="100%" height="100%" minWidth={0}>
@@ -277,16 +277,16 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
           <div>
             <div className="flex items-center justify-between mb-1">
               <h3 className="font-bold text-slate-900 text-sm">Autopilot Analytical Export</h3>
-              <span className="text-[10px] text-indigo-700 bg-indigo-50 font-bold px-2.5 py-0.5 rounded-full font-sans uppercase">A/B Strategy Audit</span>
+              <span className="text-xs text-indigo-700 bg-indigo-50 font-bold px-2.5 py-0.5 rounded-full font-sans uppercase">A/B Strategy Audit</span>
             </div>
-            <p className="text-slate-500 text-[11px] mb-4">
+            <p className="text-slate-600 text-sm mb-4">
               Export professional CSV matrices or high-fidelity JSON arrays of overall social deployments, viral score logs, and metric logs.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4">
               {/* Select Report Template */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase">Select Report Dataset</label>
+                <label className="text-sm font-bold text-slate-600 uppercase">Select Report Dataset</label>
                 <select
                   value={exportReportType}
                   onChange={(e) => setExportReportType(e.target.value)}
@@ -300,7 +300,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
 
               {/* Format selection */}
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase">Report File Extension</label>
+                <label className="text-sm font-bold text-slate-600 uppercase">Report File Extension</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setExportFormat('csv')}
@@ -348,7 +348,7 @@ export default function Dashboard({ analyticsData, onRefresh, loading }: Analyti
               )}
             </button>
             {exportStatus && (
-              <p className="text-[10px] font-mono font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 p-2 rounded text-center">
+              <p className="text-xs font-mono font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 p-2 rounded text-center">
                 {exportStatus}
               </p>
             )}

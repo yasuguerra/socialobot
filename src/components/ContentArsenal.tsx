@@ -204,7 +204,7 @@ export default function ContentArsenal({
             <FolderHeart className="w-6 h-6 text-indigo-500 shrink-0" />
             Multimodal Content Arsenal
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Upload photos and videos. Our AI will instantly analyze them to plan organic posts or inspire new creations.
           </p>
         </div>
@@ -236,7 +236,7 @@ export default function ContentArsenal({
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
             <h3 className="text-md font-semibold text-white">Analyzing and uploading file...</h3>
-            <p className="text-xs text-slate-400 max-w-xs">
+            <p className="text-xs text-slate-500 max-w-xs">
               Gemini is scanning your content multimodally to catalogue the scene and generate visual inspiration prompts.
             </p>
           </div>
@@ -246,7 +246,7 @@ export default function ContentArsenal({
               <Upload className="w-6 h-6" />
             </div>
             <h3 className="text-md font-semibold text-white">Drag & drop your photos or videos here</h3>
-            <p className="text-xs text-slate-400 max-w-sm">
+            <p className="text-xs text-slate-500 max-w-sm">
               Supports JPG, PNG, WEBP and MP4 up to 100 MB. AI labels ("AI Lens") will be generated automatically.
             </p>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-indigo-300 border border-slate-700/60 mt-1">
@@ -260,7 +260,7 @@ export default function ContentArsenal({
       <div className="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center bg-slate-900/55 p-4 rounded-xl border border-slate-800/80">
         {/* Search */}
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
           <input
             type="text"
             placeholder="Search by name or AI description..."
@@ -277,7 +277,7 @@ export default function ContentArsenal({
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               filterType === 'all' 
                 ? 'bg-indigo-600 text-white' 
-                : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:bg-slate-900'
+                : 'bg-slate-950 text-slate-500 border border-slate-800 hover:text-white hover:bg-slate-900'
             }`}
           >
             All ({mediaList.length})
@@ -287,7 +287,7 @@ export default function ContentArsenal({
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
               filterType === 'image' 
                 ? 'bg-indigo-600 text-white' 
-                : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:bg-slate-900'
+                : 'bg-slate-950 text-slate-500 border border-slate-800 hover:text-white hover:bg-slate-900'
             }`}
           >
             <ImageIcon className="w-3.5 h-3.5" />
@@ -298,7 +298,7 @@ export default function ContentArsenal({
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5 ${
               filterType === 'video' 
                 ? 'bg-indigo-600 text-white' 
-                : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white hover:bg-slate-900'
+                : 'bg-slate-950 text-slate-500 border border-slate-800 hover:text-white hover:bg-slate-900'
             }`}
           >
             <VideoIcon className="w-3.5 h-3.5" />
@@ -311,13 +311,13 @@ export default function ContentArsenal({
       {loading ? (
         <div className="text-center py-20">
           <Loader2 className="w-10 h-10 text-indigo-500 animate-spin mx-auto mb-4" />
-          <p className="text-slate-400 text-sm">Loading content library...</p>
+          <p className="text-slate-500 text-sm">Loading content library...</p>
         </div>
       ) : filteredMedia.length === 0 ? (
         <div className="text-center py-20 bg-slate-900/20 border border-slate-800/60 rounded-xl">
           <FolderOpen className="w-12 h-12 text-slate-600 mx-auto mb-4" />
           <h3 className="text-md font-semibold text-white">Your arsenal is empty or has no matches</h3>
-          <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+          <p className="text-sm text-slate-600 mt-1 max-w-sm mx-auto">
             Upload photos or videos in the upper panel to let the AI catalogue them and start structuring your visual strategy.
           </p>
         </div>
@@ -353,7 +353,7 @@ export default function ContentArsenal({
                   )}
                   
                   {/* Floating media type indicator */}
-                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-slate-300 border border-slate-850 flex items-center gap-1">
+                  <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider text-slate-300 border border-slate-850 flex items-center gap-1">
                     {isVideo ? <VideoIcon className="w-3 h-3 text-amber-500" /> : <ImageIcon className="w-3 h-3 text-indigo-400" />}
                     {isVideo ? 'Video' : 'Imagen'}
                   </div>
@@ -379,7 +379,7 @@ export default function ContentArsenal({
                     <h4 className="text-sm font-bold text-white truncate" title={item.fileName}>
                       {item.fileName}
                     </h4>
-                    <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-500">
+                    <div className="flex items-center gap-2 mt-1 text-xs text-slate-600">
                       <span>{formatBytes(item.sizeBytes)}</span>
                       <span>•</span>
                       <span>{formatDate(item.createdAt)}</span>
@@ -387,7 +387,7 @@ export default function ContentArsenal({
 
                     {/* AI Description (AI Lens) */}
                     <div className="mt-3.5 bg-slate-950/40 p-3 rounded-lg border border-slate-800/80">
-                      <span className="text-[10px] font-black uppercase tracking-wider text-indigo-400 flex items-center gap-1">
+                      <span className="text-xs font-black uppercase tracking-wider text-indigo-400 flex items-center gap-1">
                         <Sparkles className="w-3 h-3 text-indigo-400 shrink-0" />
                         AI Lens (Descripción)
                       </span>
@@ -399,20 +399,20 @@ export default function ContentArsenal({
                     {/* AI Prompt Spark */}
                     <div className="mt-3 bg-slate-950/40 p-3 rounded-lg border border-slate-800/80">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1">
+                        <span className="text-xs font-black uppercase tracking-wider text-emerald-400 flex items-center gap-1">
                           <RefreshCw className="w-3 h-3 text-emerald-400 shrink-0 animate-spin-slow" />
                           Visual Spark (Prompt)
                         </span>
                         <button
                           onClick={() => handleCopyPrompt(item.id, item.visualPrompt)}
-                          className="text-[10px] text-slate-500 hover:text-white flex items-center gap-1 transition"
+                          className="text-xs text-slate-600 hover:text-white flex items-center gap-1 transition"
                           title="Copiar prompt de generación"
                         >
                           {copiedId === item.id ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
                           {copiedId === item.id ? 'Copiado' : 'Copiar'}
                         </button>
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1.5 font-mono leading-relaxed line-clamp-2 italic" title={item.visualPrompt}>
+                      <p className="text-sm text-slate-500 mt-1.5 font-mono leading-relaxed line-clamp-2 italic" title={item.visualPrompt}>
                         "{item.visualPrompt}"
                       </p>
                     </div>

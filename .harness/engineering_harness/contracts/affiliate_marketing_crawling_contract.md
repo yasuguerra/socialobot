@@ -1,6 +1,6 @@
 # Engineering Contract: Affiliate Marketing, Crawling & Product Ingestion Module
 
-This contract defines the specifications, deliverables, and verification metrics required to implement the Affiliate Marketing and Automated Web Ingestion Module for Seliabot, specifically tailored for the Ibera Club use case.
+This contract defines the specifications, deliverables, and verification metrics required to implement the Affiliate Marketing and Automated Web Ingestion Module for Socialobot, specifically tailored for the Ibera Club use case.
 
 ---
 
@@ -23,14 +23,14 @@ The deliverables for this module are:
 ### 1.3. Dynamic Affiliate Link Rewriting
 - Integrate a link-rewriter helper within the conversation loop in [platform-api/src/agent/agentController.ts](platform-api/src/agent/agentController.ts).
 - When sending a product card or purchase link to a B2C client, the system will look up the agent config's `affiliate_id` or `affiliate_slug`.
-- If present, Seliabot will automatically parse the outgoing product link (e.g. `https://ybera.pa/product-name`) and append the referral tag (e.g. `https://ybera.pa/product-name?ref=8023963` or `https://iberaclub.pa/YoleliAndrade/product-name`) based on tenant-specific routing rules.
+- If present, Socialobot will automatically parse the outgoing product link (e.g. `https://ybera.pa/product-name`) and append the referral tag (e.g. `https://ybera.pa/product-name?ref=8023963` or `https://iberaclub.pa/YoleliAndrade/product-name`) based on tenant-specific routing rules.
 
 ### 1.4. In-App Promotional Scheduling
 - Update [platform-api/src/db/repositories/productRepo.ts](platform-api/src/db/repositories/productRepo.ts) query logic so that whenever a product's price is requested, if `CURRENT_TIMESTAMP` is within the product's `promo_start_date` and `promo_end_date`, the system applies the promotional discount automatically instead of the standard retail price.
 
 ### 1.5. Dashboard "Import from Website" UI Component
 - In [platform-dashboard/src/pages/Products.tsx](platform-dashboard/src/pages/Products.tsx), add an "Import from Website" button in the action bar.
-- Clicking the button will open an interactive modal that prompts the user for a Website URL, calls the `POST /api/products/scrape-import` API, displays a table of extracted products (with images, prices, categories), and lets the user click "Approve and Save" to insert them into their active Seliabot catalog.
+- Clicking the button will open an interactive modal that prompts the user for a Website URL, calls the `POST /api/products/scrape-import` API, displays a table of extracted products (with images, prices, categories), and lets the user click "Approve and Save" to insert them into their active Socialobot catalog.
 
 ---
 

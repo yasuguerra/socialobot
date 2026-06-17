@@ -1,45 +1,23 @@
-# Social.Flow (socialobot) — Product Feature Specifications
+# Socialobot — Core Features & Capabilities
 
-## Core Features
+This document catalogs the core modules of the Socialobot platform, mapped to our pricing tiers.
 
-### 1. Brand Scraper & Profiler
-*   **Purpose**: Automatically ingest raw brand context to establish a marketing baseline.
-*   **Flow**: Scraping input URL -> cheerio extracts text tags -> `gemini-3.5-flash` analyzes tone, voice, and products -> returns structured **Brand Profile** (Buyer Persona, Brand Voice, Product List).
+## 1. Omnichannel AI Agents
+- **WhatsApp Agent:** Natively integrates via Meta Cloud API / Evolution API. Handles text, voice notes (STT), and PDFs.
+- **Web Widget:** Embeddable React-based widget for customer websites.
 
-### 2. Creative Studio Sandbox (Generative AI)
-*   **Imagen 3 Integration**: Generate high-fidelity marketing images with custom aspect ratios, utilizing `gemini-3.1-flash-image` and `gemini-3-pro-image`.
-*   **Veo 3.1 Integration**: Generate cinematic preview clips.
-*   **Video Continuation**: Select a generated video, append an extension prompt, and extend the timeline (+8 seconds) while preserving narrative and visual continuity.
-*   **Generative History**: Historical prompts and parameters are stored in Firestore, enabling one-click reloading back into the canvas workspace.
+## 2. Authentication & Identity
+- **Passwordless B2B Auth (OTP):** Secure authentication via WhatsApp. No passwords required. Grants access to private wholesale catalogs.
+- **Tenant Isolation:** Multi-tenant architecture ensuring complete data privacy between businesses.
 
-### 3. Multimodal Content Arsenal
-*   **Purpose**: Catalog and inspect user-uploaded media.
-*   **Flow**: Firebase Storage uploads -> `gemini-3.5-flash` analyzes layout and content -> outputs Spanish descriptions for B2B logs and English style prompts for recreating assets.
+## 3. Commerce & Transactions
+- **Automated Quoting:** Calculates shipping, applies volume discounts, and generates PDF proforma invoices instantly.
+- **Payment Gateway Integration:** Native generation of payment links via Wompi, Stripe, and PayPal for immediate closing.
 
-### 4. Smart Social Calendar
-*   **Purpose**: Centralized scheduling grid showing post states (`Draft`, `Scheduled`, `Posted`, `Failed`).
-*   **Features**: Editable cells, rescheduling, visual drag-and-drop cues, and queue views.
+## 4. Knowledge Base & RAG Engine
+- **Semantic Search:** Powered by `pgvector` in PostgreSQL. Allows the agent to query product catalogs, PDFs, and URLs semantically.
+- **Automated Scraper:** Ingests the customer's existing website to train the AI instantly.
 
-### 5. Instagram Graph Direct-Publisher
-*   **Purpose**: Multi-step direct release container flow for Instagram Business Profiles.
-*   **Flow**: Facebook OAuth login -> token encrypted at rest -> create container via Graph API -> poll container ingest -> trigger release container.
-
-### 6. Simulated Platforms Transparency
-*   **Purpose**: Transparent mock states for TikTok, LinkedIn, and Facebook.
-*   **Implementation**: Cards and schedules display clear amber `[Simulated]` warning badges and synthetic performance metrics to prevent B2B user confusion.
-
-### 7. Virality Auditor & Optimization
-*   **Purpose**: Pre-publish grading of captions and graphic concepts.
-*   **Flow**: Scans copy for Hook Strength, Trend Alignment, Shareability, and CTA -> returns a numeric Virality Score (0-100) and optimization advice.
-
-### 8. A/B Campaign split-testing
-*   **Purpose**: Create an `ABCampaign` comparing two strategy variations.
-*   **Features**: Track simulated engagements (impressions, clicks, conversions) and declare a clear Winner.
-
-### 9. Agentic AI Strategist (Google ADK)
-*   **Purpose**: An on-demand CMO chatbot.
-*   **Tools**: Search engine (`GoogleSearchTool`), `generate_content_ideas`, `analyze_viral_score`, `get_optimal_schedule`, `research_hashtags`, and `browse_content_arsenal`.
-
-### 10. Space Remodeler (Mamá's Corner)
-*   **Purpose**: Isolated household design sandbox.
-*   **UX**: Positioned under a separate "Experimental Playgrounds" sidebar section. Elder-friendly residential presets using Imagen 3.
+## 5. Operations & CRM
+- **Lead Capture:** Automatically extracts Name, Phone, Company, and Email from natural conversation.
+- **CRM Sync:** Hooks to push qualified leads to external CRMs like HubSpot or Salesforce.

@@ -21,6 +21,7 @@ To preserve the context window, this file serves as the master INDEX. Full roles
 * **CEO**: [.harness/executive_harness/CEO.md](.harness/executive_harness/CEO.md)
 * **Chief of Staff**: [.harness/executive_harness/Chief_of_Staff.md](.harness/executive_harness/Chief_of_Staff.md)
 * **Strategy Analyst**: [.harness/executive_harness/Strategy_Analyst.md](.harness/executive_harness/Strategy_Analyst.md)
+* **Conflict Resolution**: [.harness/executive_harness/conflict_resolution.md](.harness/executive_harness/conflict_resolution.md)
 
 ### 📦 2. Product Harness (v1.0)
 * **CPO (Chief Product Officer)**: [.harness/product_harness/roles/CPO.md](.harness/product_harness/roles/CPO.md)
@@ -81,4 +82,3 @@ Before writing any code, evaluate options in this exact order:
 - **Internal Specs**: All internal plans, contracts, and audit reports must remain in **English**.
 - **Role Identity**: At the start of every response, state your current active role: e.g., `[ROLE: CPO]`, `[ROLE: CTO (Demis)]`, `[ROLE: Chief Architect (Fowler)]`, `[ROLE: Security Architect (Schneier)]`, `[ROLE: Principal Engineer (Karpathy)]`, `[ROLE: QA Engineer (Beck)]`.
 - **NO BACKTICKS FOR FILE NAMES**: Never wrap file names, paths, or links in backticks. Always use clean Markdown links with workspace-relative paths: `[path/file.ts](path/file.ts)`.
-

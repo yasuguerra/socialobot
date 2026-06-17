@@ -133,7 +133,7 @@ export default function ConnectedPlatforms({
     (async () => {
       // Always fetch Instagram stats directly from backend to see if there is an active OAuth connection.
       // This bridges any delay in brand profile synchronization.
-      const isDevAccount = auth.currentUser?.email === 'dev@seliabot.com';
+      const isDevAccount = auth.currentUser?.email === 'dev@socialobot.com';
       let igStats: any = null;
       try {
         const res = await apiFetch('/api/platforms/instagram/stats');
@@ -400,9 +400,9 @@ export default function ConnectedPlatforms({
             <Globe className="w-4 h-4 text-indigo-500" />
             <span>Social Platforms Management & Auto-Scanner</span>
           </h2>
-          <p className="text-slate-500 text-xs">Configure your active accounts, verify developer OAuth links, and use the smart crawler to feed your Brand DNA from active profiles.</p>
+          <p className="text-slate-600 text-xs">Configure your active accounts, verify developer OAuth links, and use the smart crawler to feed your Brand DNA from active profiles.</p>
         </div>
-        <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-lg p-1 text-[11px] font-bold text-indigo-600 font-mono">
+        <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 rounded-lg p-1 text-sm font-bold text-indigo-600 font-mono">
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>AES-256 Auth Shield Active</span>
         </div>
@@ -415,7 +415,7 @@ export default function ConnectedPlatforms({
           <div className="flex justify-between items-center pb-3 border-b border-slate-150">
             <div>
               <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider font-mono">Linked Social Channels</h3>
-              <p className="text-[10px] text-slate-400">Activate or toggle access privileges for Gemini-powered smart publishing.</p>
+              <p className="text-xs text-slate-500">Activate or toggle access privileges for Gemini-powered smart publishing.</p>
             </div>
             
             <span className="bg-slate-100 text-slate-700 font-mono text-[9px] font-bold px-2 py-0.5 rounded border border-slate-200">
@@ -456,9 +456,9 @@ export default function ConnectedPlatforms({
                           )}
                         </div>
                         {isConnected ? (
-                          <span className="text-[10px] text-indigo-650 font-bold truncate block">{platform.handle}</span>
+                          <span className="text-xs text-indigo-650 font-bold truncate block">{platform.handle}</span>
                         ) : (
-                          <span className="text-[10px] text-slate-400 font-medium block">Not authorized</span>
+                          <span className="text-xs text-slate-500 font-medium block">Not authorized</span>
                         )}
                       </div>
                     </div>
@@ -466,7 +466,7 @@ export default function ConnectedPlatforms({
                     <span className={`text-[8px] font-mono font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
                       isConnected 
                         ? 'bg-emerald-500 text-white' 
-                        : 'bg-slate-200 text-slate-500'
+                        : 'bg-slate-200 text-slate-600'
                     }`}>
                       {platform.status}
                     </span>
@@ -475,18 +475,18 @@ export default function ConnectedPlatforms({
                   {isConnected && (
                     <div className="grid grid-cols-2 gap-2 bg-white border border-slate-150 rounded-lg p-2 mb-3 text-center">
                       <div>
-                        <span className="text-[8px] text-slate-400 block font-bold font-mono uppercase">Followers</span>
+                        <span className="text-[8px] text-slate-500 block font-bold font-mono uppercase">Followers</span>
                         <span className="font-bold text-slate-800 text-xs">{platform.followers}</span>
                       </div>
                       <div>
-                        <span className="text-[8px] text-slate-400 block font-bold font-mono uppercase">Av. Engagement</span>
+                        <span className="text-[8px] text-slate-500 block font-bold font-mono uppercase">Av. Engagement</span>
                         <span className="font-bold text-indigo-600 text-xs">{platform.avgEngagement}</span>
                       </div>
                     </div>
                   )}
 
                   <div className="flex items-center justify-between gap-2 text-[9.5px]">
-                    <span className="text-slate-400 font-mono">
+                    <span className="text-slate-500 font-mono">
                       Synced {platform.lastSynced}
                     </span>
 
@@ -514,7 +514,7 @@ export default function ConnectedPlatforms({
 
           <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-xl flex items-start gap-2 text-xs">
             <Settings className="w-4 h-4 text-slate-450 shrink-0 mt-0.5" />
-            <div className="text-slate-500 text-[11px] leading-relaxed">
+            <div className="text-slate-600 text-sm leading-relaxed">
               <span className="font-bold text-slate-700">Autopilot API Publisher:</span> By establishing real links, the system automates scheduling, downloads organic trend parameters, and publishes items seamlessly via secured platform Webhooks.
             </div>
           </div>
@@ -524,12 +524,12 @@ export default function ConnectedPlatforms({
         <div className="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
           <div>
             <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider font-mono">Contextual Feed Scanner</h3>
-            <p className="text-[10px] text-slate-400">Scan active social feeds, comment patterns, and bio coordinates to train the Gemini AI model automatically.</p>
+            <p className="text-xs text-slate-500">Scan active social feeds, comment patterns, and bio coordinates to train the Gemini AI model automatically.</p>
           </div>
 
           <div className="space-y-3.5 pt-1">
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-500 uppercase block">Target Social Platform</label>
+              <label className="text-xs font-bold text-slate-600 uppercase block">Target Social Platform</label>
               <div className="grid grid-cols-4 gap-1.5">
                 {(['Instagram', 'TikTok', 'LinkedIn', 'Facebook'] as SocialPlatform[]).map((p) => (
                   <button
@@ -539,7 +539,7 @@ export default function ConnectedPlatforms({
                       const existing = platforms.find(item => item.id === p);
                       setScanHandle(existing?.handle || '@');
                     }}
-                    className={`px-1 py-1.5 rounded-lg border text-[10px] font-bold transition flex flex-col items-center justify-center gap-1 ${
+                    className={`px-1 py-1.5 rounded-lg border text-xs font-bold transition flex flex-col items-center justify-center gap-1 ${
                       scanPlatform === p
                         ? 'bg-indigo-600 border-indigo-650 text-white'
                         : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border-slate-200'
@@ -552,10 +552,10 @@ export default function ConnectedPlatforms({
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-500 uppercase block">Platform Profile Handle / Link</label>
+              <label className="text-xs font-bold text-slate-600 uppercase block">Platform Profile Handle / Link</label>
               <div className="flex gap-1.5">
                 <div className="relative flex-1">
-                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
                     value={scanHandle}
@@ -577,7 +577,7 @@ export default function ConnectedPlatforms({
             {/* SCANNING ACTIVE STATE OR LOGGER COMPONENT */}
             {scanState === 'scanning' && (
               <div className="bg-slate-900 text-slate-300 font-mono text-[9px] p-3 rounded-lg border border-slate-800 space-y-1.5 max-h-[160px] overflow-y-auto shadow-inner">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-slate-400 font-bold uppercase tracking-widest">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-1 text-slate-500 font-bold uppercase tracking-widest">
                   <span className="flex items-center gap-1">
                     <Terminal className="w-3" />
                     <span>Crawler Node Logs</span>
@@ -600,7 +600,7 @@ export default function ConnectedPlatforms({
             {scanState === 'completed' && scannedResults && (
               <div className="bg-indigo-50/60 border border-indigo-150 rounded-xl p-4 space-y-3.5 transition-all">
                 <div className="flex items-center justify-between border-b border-indigo-200/50 pb-1.5">
-                  <div className="flex items-center gap-1 font-bold text-indigo-900 text-[11px] uppercase tracking-wider">
+                  <div className="flex items-center gap-1 font-bold text-indigo-900 text-sm uppercase tracking-wider">
                     <Sparkles className="w-3.5 h-3.5 text-indigo-650" />
                     <span>Gemini Social Analysis Scanned DNA</span>
                   </div>
@@ -609,22 +609,22 @@ export default function ConnectedPlatforms({
 
                 <div className="space-y-2 text-[10.5px] leading-relaxed">
                   <div>
-                    <span className="font-bold text-slate-500 uppercase block font-mono text-[8.5px]">Identified Target Industry</span>
+                    <span className="font-bold text-slate-600 uppercase block font-mono text-[8.5px]">Identified Target Industry</span>
                     <p className="font-medium text-slate-800">{scannedResults.industry}</p>
                   </div>
 
                   <div>
-                    <span className="font-bold text-slate-500 uppercase block font-mono text-[8.5px]">Trained Social Tone</span>
+                    <span className="font-bold text-slate-600 uppercase block font-mono text-[8.5px]">Trained Social Tone</span>
                     <p className="font-medium text-slate-800">{scannedResults.tone}</p>
                   </div>
 
                   <div>
-                    <span className="font-bold text-slate-500 uppercase block font-mono text-[8.5px]">Core Scanned Buyers Segment</span>
+                    <span className="font-bold text-slate-600 uppercase block font-mono text-[8.5px]">Core Scanned Buyers Segment</span>
                     <p className="font-sans text-slate-600 italic block">"{scannedResults.targetBuyers}"</p>
                   </div>
 
                   <div>
-                    <span className="font-bold text-slate-500 uppercase block font-mono text-[8.5px]">Flagship Products Context found</span>
+                    <span className="font-bold text-slate-600 uppercase block font-mono text-[8.5px]">Flagship Products Context found</span>
                     <p className="font-medium text-slate-800">{scannedResults.keyProducts}</p>
                   </div>
                 </div>
@@ -675,7 +675,7 @@ export default function ConnectedPlatforms({
                   <Compass className="w-6 h-6 animate-pulse" />
                 </div>
                 <h3 className="font-bold text-slate-800 text-sm">Synchronize {modalPlatform} API</h3>
-                <p className="text-slate-500 text-[11px] leading-relaxed max-w-xs mx-auto">Authorize Social.Flow Autopilot Engine to publish content and query feedback analytics on your behalf.</p>
+                <p className="text-slate-600 text-sm leading-relaxed max-w-xs mx-auto">Authorize Social.Flow Autopilot Engine to publish content and query feedback analytics on your behalf.</p>
               </div>
 
               {connectionSuccess ? (
@@ -686,7 +686,7 @@ export default function ConnectedPlatforms({
               ) : (
                 <div className="space-y-3.5 pt-1">
                   <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-slate-500 uppercase block">Platform Profile Handle</label>
+                    <label className="text-xs font-bold text-slate-600 uppercase block">Platform Profile Handle</label>
                     <input
                       type="text"
                       required
@@ -697,8 +697,8 @@ export default function ConnectedPlatforms({
                     />
                   </div>
 
-                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-[10px] shrink-0 text-slate-500 space-y-1 font-mono">
-                    <div className="flex items-center justify-between text-[8px] font-black uppercase text-slate-400 mb-1">
+                  <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 text-xs shrink-0 text-slate-600 space-y-1 font-mono">
+                    <div className="flex items-center justify-between text-[8px] font-black uppercase text-slate-500 mb-1">
                       <span>Security Audit Permissions</span>
                       <span className="text-indigo-600">Verified</span>
                     </div>

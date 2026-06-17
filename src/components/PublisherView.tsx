@@ -94,7 +94,7 @@ export default function PublisherView({
         {!creationMode && (
           <div className="bg-white border border-slate-200 p-8 rounded-xl shadow-sm text-center">
             <h2 className="text-2xl font-black text-slate-900 mb-2">What do you want to create?</h2>
-            <p className="text-slate-500 text-sm mb-8">Choose a path to generate your next high-converting post.</p>
+            <p className="text-slate-600 text-sm mb-8">Choose a path to generate your next high-converting post.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button 
@@ -105,7 +105,7 @@ export default function PublisherView({
                   <Wand2 className="w-8 h-8 text-indigo-600" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">AI Autopilot Post</h3>
-                <p className="text-xs text-slate-500 mt-2 max-w-xs">Give a topic, and AI will generate both a brand-new image and the perfect caption.</p>
+                <p className="text-xs text-slate-600 mt-2 max-w-xs">Give a topic, and AI will generate both a brand-new image and the perfect caption.</p>
               </button>
 
               <button 
@@ -116,7 +116,7 @@ export default function PublisherView({
                   <FolderHeart className="w-8 h-8 text-emerald-600" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Use My Arsenal</h3>
-                <p className="text-xs text-slate-500 mt-2 max-w-xs">Pick a photo or video you already uploaded, and AI will write the perfect caption for it.</p>
+                <p className="text-xs text-slate-600 mt-2 max-w-xs">Pick a photo or video you already uploaded, and AI will write the perfect caption for it.</p>
               </button>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function PublisherView({
               <div className="flex items-center gap-3">
                 <button 
                   onClick={() => setCreationMode(null)}
-                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-500 transition cursor-pointer"
+                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition cursor-pointer"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </button>
@@ -146,7 +146,7 @@ export default function PublisherView({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase block">Target Platform</label>
+                <label className="text-xs font-bold text-slate-600 uppercase block">Target Platform</label>
                 <select
                   value={creatorPlatform}
                   onChange={(e) => setCreatorPlatform(e.target.value as any)}
@@ -161,7 +161,7 @@ export default function PublisherView({
 
               {creationMode === 'ai' && (
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-500 uppercase block">Format</label>
+                  <label className="text-xs font-bold text-slate-600 uppercase block">Format</label>
                   <select
                     value={creatorFormat}
                     onChange={(e) => setCreatorFormat(e.target.value as any)}
@@ -175,7 +175,7 @@ export default function PublisherView({
             </div>
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-500 uppercase block">1. What is this post about?</label>
+              <label className="text-xs font-bold text-slate-600 uppercase block">1. What is this post about?</label>
               <input
                 type="text"
                 value={creatorTitle}
@@ -187,7 +187,7 @@ export default function PublisherView({
 
             {creationMode === 'ai' && (
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-500 uppercase block">2. What should the AI image look like?</label>
+                <label className="text-xs font-bold text-slate-600 uppercase block">2. What should the AI image look like?</label>
                 <textarea
                   rows={2}
                   value={creatorVisualPrompt}
@@ -200,11 +200,11 @@ export default function PublisherView({
 
             {creationMode === 'arsenal' && (
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase block">2. Select a file from your Arsenal</label>
+                <label className="text-xs font-bold text-slate-600 uppercase block">2. Select a file from your Arsenal</label>
                 
                 {arsenalMedia.length === 0 ? (
                   <div className="text-center p-6 bg-slate-50 border border-slate-200 border-dashed rounded-xl">
-                    <p className="text-sm text-slate-500">Your Arsenal is empty. Upload media in the "Content Arsenal" tab first!</p>
+                    <p className="text-sm text-slate-600">Your Arsenal is empty. Upload media in the "Content Arsenal" tab first!</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto max-h-64 p-1">
@@ -249,7 +249,7 @@ export default function PublisherView({
             )}
 
             <div className="space-y-1">
-              <label className="text-[10px] font-bold text-slate-500 uppercase block">3. Special Caption Instructions (Optional)</label>
+              <label className="text-xs font-bold text-slate-600 uppercase block">3. Special Caption Instructions (Optional)</label>
               <textarea
                 rows={2}
                 value={creatorCustomPrompt}
@@ -296,7 +296,7 @@ export default function PublisherView({
                 </div>
                 <div>
                   <span className="font-bold text-slate-900 text-xs block leading-none">{brandName || 'Brand'}</span>
-                  <span className="text-[10px] text-indigo-600 font-mono font-bold">
+                  <span className="text-xs text-indigo-600 font-mono font-bold">
                     {(activeCreatedPost?.platform || creatorPlatform || 'Instagram')} Mock Feed
                   </span>
                 </div>
@@ -323,7 +323,7 @@ export default function PublisherView({
                   <img src={activeCreatedPost.mediaUrl} className="w-full h-full object-cover" alt="Generated" />
                 )
               ) : (
-                <div className="text-center p-4 text-slate-400">
+                <div className="text-center p-4 text-slate-500">
                   <ImageIcon className="w-8 h-8 mx-auto mb-1 text-slate-300" />
                   <p className="text-xs">No media rendered yet.</p>
                 </div>
@@ -333,7 +333,7 @@ export default function PublisherView({
             <div className="p-5 space-y-4">
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Live Caption Editor</span>
+                  <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Live Caption Editor</span>
                 </div>
                 <textarea
                   rows={6}
@@ -366,7 +366,7 @@ export default function PublisherView({
 
                   <button
                     onClick={() => handleDeletePost(activeCreatedPost.id)}
-                    className="text-slate-400 hover:text-red-500 bg-slate-50 hover:bg-rose-50 p-2.5 rounded-xl transition cursor-pointer"
+                    className="text-slate-500 hover:text-red-500 bg-slate-50 hover:bg-rose-50 p-2.5 rounded-xl transition cursor-pointer"
                     title="Delete draft"
                   >
                     <Trash2 className="w-5 h-5" />
@@ -374,18 +374,18 @@ export default function PublisherView({
                 </div>
               ) : (
                 <div className="pt-3 border-t border-slate-100 text-center">
-                  <p className="text-xs text-slate-500">Generate the post to unlock publishing controls.</p>
+                  <p className="text-xs text-slate-600">Generate the post to unlock publishing controls.</p>
                 </div>
               )}
             </div>
           </div>
         ) : (
-          <div className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-12 text-center text-slate-400 h-full flex flex-col items-center justify-center">
+          <div className="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-12 text-center text-slate-500 h-full flex flex-col items-center justify-center">
             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
               <Sparkles className="w-8 h-8 text-indigo-300" />
             </div>
             <h3 className="font-bold text-slate-700 mb-2">Live Preview Sandbox</h3>
-            <p className="text-sm text-slate-500 max-w-xs">
+            <p className="text-sm text-slate-600 max-w-xs">
               Complete the setup on the left and hit generate to see a live mock-up of how your post will look on social media.
             </p>
           </div>

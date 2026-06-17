@@ -1,6 +1,6 @@
 # Security & Architecture Contract: B2B Catalog SSO & Gating (Phase 6)
 
-This contract defines the strict security, performance, and API specifications required to implement the B2B Passwordless Catalog SSO for Seliabot.
+This contract defines the strict security, performance, and API specifications required to implement the B2B Passwordless Catalog SSO for Socialobot.
 
 ---
 
@@ -35,4 +35,4 @@ The swapped customer JWT must contain:
 - [ ] **Token Exchange works**: Swapping a valid UUID token yields a JWT session and marks the token used.
 - [ ] **Token Replay Blocked**: Re-submitting the same token yields `401 Unauthorized` instantly.
 - [ ] **Token Expiration**: Requesting with a token older than 1 hour yields `401 Unauthorized`.
-- [ ] **CORS Compliance**: Allows requests from localhost during development and `app.seliabot.com` / custom domains in production.
+- [ ] **CORS Compliance**: Allows requests from localhost during development and `app.socialobot.com` / custom domains in production.
