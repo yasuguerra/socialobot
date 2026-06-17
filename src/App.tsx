@@ -1291,12 +1291,16 @@ export default function App({ authUser }: AppProps) {
           {/* TAB 1: AI Copilot Assistant */}
           {activeTab === 'copilot' && (
             <AICopilotView 
-              chatHistory={chatHistory}
-              chatHistoryRef={chatHistoryRef}
+              agentMessages={agentMessages}
               loadingAgent={loadingAgent}
               agentInput={agentInput}
               setAgentInput={setAgentInput}
               handleSendAgentMsg={handleSendAgentMsg}
+              handleSendSuggestedMsg={(msg) => {
+                setAgentInput(msg);
+                handleSendAgentMsg(msg);
+              }}
+              captionDraft={captionDraft}
               setCaptionDraft={setCaptionDraft}
               activeCreatedPost={activeCreatedPost}
               setActiveCreatedPost={setActiveCreatedPost}
@@ -1304,20 +1308,19 @@ export default function App({ authUser }: AppProps) {
               setReferenceImageUrl={setReferenceImageUrl}
               imagePreview={imagePreview}
               setImagePreview={setImagePreview}
-              creatorFormat={creatorFormat}
+              creatorFormat={creatorFormat as any}
               setCreatorPlatform={setCreatorPlatform}
               creatorPlatform={creatorPlatform}
               scheduledDraftTime={scheduledDraftTime}
               setScheduledDraftTime={setScheduledDraftTime}
               publishingPostId={publishingPostId}
-              setPublishingPostId={setPublishingPostId}
               creatorTitle={creatorTitle}
               handlePublishPostNow={handlePublishPostNow}
-              setPosts={setPosts}
               handleSchedulePost={handleSchedulePost}
               setActiveTab={setActiveTab}
               handleDeletePost={handleDeletePost}
-              handleCreateManualDraft={handleCreateManualDraft}
+              setPosts={setPosts}
+              apiFetch={apiFetch}
             />
           )}
 
