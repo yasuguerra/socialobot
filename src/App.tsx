@@ -214,6 +214,7 @@ export default function App({ authUser }: AppProps) {
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
   const [isApiActive, setIsApiActive] = useState(false);
   const chatHistoryRef = React.useRef<HTMLDivElement>(null);
+  const [captionDraft, setCaptionDraft] = useState<string>('');
 
   // Initial Fetch Setup
   useEffect(() => {
