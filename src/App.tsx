@@ -213,6 +213,7 @@ export default function App({ authUser }: AppProps) {
   const [loadingIgMedia, setLoadingIgMedia] = useState(false);
   const [selectedMediaId, setSelectedMediaId] = useState<string | null>(null);
   const [isApiActive, setIsApiActive] = useState(false);
+  const chatHistoryRef = React.useRef<HTMLDivElement>(null);
 
   // Initial Fetch Setup
   useEffect(() => {
