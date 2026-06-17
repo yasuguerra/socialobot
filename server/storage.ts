@@ -6,6 +6,7 @@
  * signed download URL suitable for handing to Meta Graph API.
  */
 import { adminStorage, STORAGE_BUCKET } from "./admin";
+import { v4 as uuidv4 } from "uuid";
 
 const ALLOWED_MIME = /^(image\/(jpeg|png|webp)|video\/(mp4|quicktime))$/i;
 const MAX_BYTES = 100 * 1024 * 1024; // 100 MB
@@ -56,23 +57,19 @@ export async function uploadMediaForUser(
 
   let url = "";
   try {
+    const token = uuidv4();
     await file.save(buffer, {
       contentType: mimeType,
       resumable: false,
-      metadata: { metadata: { uploadedBy: uid } },
+      metadata: { 
+        metadata: { 
+          uploadedBy: uid,
+          firebaseStorageDownloadTokens: token
+        } 
+      },
     });
 
-    // Signed URL valid for 7 days — long enough for IG container ingestion.
-    try {
-      const [signedUrl] = await file.getSignedUrl({
-        action: "read",
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-      });
-      url = signedUrl;
-    } catch (err) {
-      console.warn("Could not get signed URL (likely running with local developer ADC credentials). Falling back to public Firebase Storage link.", err);
-      url = `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/${encodeURIComponent(storagePath)}?alt=media`;
-    }
+    url = `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/${encodeURIComponent(storagePath)}?alt=media&token=${token}`;
   } catch (storageSaveError) {
     console.error("Firebase Storage bucket save failed, falling back to local base64/dataUri embedding:", storageSaveError);
     url = dataUriOrBase64;
@@ -120,23 +117,19 @@ export async function uploadArsenalMediaForUser(
 
   let url = "";
   try {
+    const token = uuidv4();
     await file.save(buffer, {
       contentType: mimeType,
       resumable: false,
-      metadata: { metadata: { uploadedBy: uid } },
+      metadata: { 
+        metadata: { 
+          uploadedBy: uid,
+          firebaseStorageDownloadTokens: token
+        } 
+      },
     });
 
-    // Signed URL valid for 7 days
-    try {
-      const [signedUrl] = await file.getSignedUrl({
-        action: "read",
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
-      });
-      url = signedUrl;
-    } catch (err) {
-      console.warn("Could not get signed URL (likely running with local developer ADC credentials). Falling back to public Firebase Storage link.", err);
-      url = `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/${encodeURIComponent(storagePath)}?alt=media`;
-    }
+    url = `https://firebasestorage.googleapis.com/v0/b/${STORAGE_BUCKET}/o/${encodeURIComponent(storagePath)}?alt=media&token=${token}`;
   } catch (storageSaveError) {
     console.error("Firebase Storage bucket save failed in Arsenal, falling back to local base64/dataUri embedding:", storageSaveError);
     url = dataUriOrBase64;
