@@ -215,6 +215,7 @@ export default function App({ authUser }: AppProps) {
   const [isApiActive, setIsApiActive] = useState(false);
   const chatHistoryRef = React.useRef<HTMLDivElement>(null);
   const [captionDraft, setCaptionDraft] = useState<string>('');
+  const [activeCreatedPost, setActiveCreatedPost] = useState<SocialPost | null>(null);
 
   // Initial Fetch Setup
   useEffect(() => {
