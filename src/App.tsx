@@ -1548,22 +1548,24 @@ export default function App({ authUser }: AppProps) {
               setCreatorCustomPrompt={setCreatorCustomPrompt}
               creatorVisualPrompt={creatorVisualPrompt}
               setCreatorVisualPrompt={setCreatorVisualPrompt}
-              creatorThemePrompt={creatorThemePrompt}
-              setCreatorThemePrompt={setCreatorThemePrompt}
+              brandName={brandProfile?.companyName || "Mi Empresa"}
+              handleGenerateAIImage={handleGenerateAIImage}
+              generatingAIImage={generatingAIImage}
+              scheduledDraftTime={scheduledDraftTime}
+              setScheduledDraftTime={setScheduledDraftTime}
+              handleGeneratePostCapAndScore={handleGeneratePostCapAndScore}
+              loadingPosts={loadingPosts}
+              activeCreatedPost={activeCreatedPost}
+              referenceImageUrl={referenceImageUrl}
               imagePreview={imagePreview}
-              imageFile={imageFile}
-              handleImageChange={handleImageChange}
-              creatorGenerating={creatorGenerating}
-              handleGenerateDraft={handleGenerateDraft}
-              creatorAiSuggestions={creatorAiSuggestions}
-              setCreatorAiSuggestions={setCreatorAiSuggestions}
               aiGeneratedUrl={aiGeneratedUrl}
-              setAiGeneratedUrl={setAiGeneratedUrl}
-              aiImageStatus={aiImageStatus}
-              handleGenerateAiImage={handleGenerateAiImage}
-              setActiveCreatedPost={setActiveCreatedPost}
+              captionDraft={captionDraft}
               setCaptionDraft={setCaptionDraft}
-              brandProfile={brandProfile}
+              handlePublishPostNow={handlePublishPostNow}
+              publishingPostId={publishingPostId}
+              handleSchedulePost={handleSchedulePost}
+              handleDeletePost={handleDeletePost}
+              arsenalMedia={arsenalMedia}
             />
           )}
 
