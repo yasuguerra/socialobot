@@ -217,6 +217,13 @@ export default function App({ authUser }: AppProps) {
   const [captionDraft, setCaptionDraft] = useState<string>('');
   const [activeCreatedPost, setActiveCreatedPost] = useState<SocialPost | null>(null);
 
+  // Re-add missing states
+  const [creatorPlatform, setCreatorPlatform] = useState<any>('Instagram');
+  const [creatorFormat, setCreatorFormat] = useState<string>('Image');
+  const [creatorTitle, setCreatorTitle] = useState<string>('');
+  const [referenceImageUrl, setReferenceImageUrl] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
   // Initial Fetch Setup
   useEffect(() => {
     fetchBrandProfile();
