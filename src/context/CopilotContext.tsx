@@ -11,6 +11,7 @@ interface CopilotContextType {
   setAgentMessages: React.Dispatch<React.SetStateAction<any[]>>;
   agentSessionId: string | null;
   setAgentSessionId: (val: string | null) => void;
+  handleSendAgentMsg: (retryText?: string) => Promise<void>;
 }
 
 const CopilotContext = createContext<CopilotContextType | undefined>(undefined);
@@ -22,13 +23,48 @@ export function CopilotProvider({ children }: { children: React.ReactNode }) {
   const [agentMessages, setAgentMessages] = useState<any[]>([]);
   const [agentSessionId, setAgentSessionId] = useState<string | null>(null);
 
+  const handleSendAgentMsg = async (retryText?: string) => {
+    const userMsg = retryText || agentInput.trim();
+    if (!userMsg || loadingAgent) return;
+    
+    if (!retryText) setAgentInput('');
+    setAgentMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
+    setLoadingAgent(true);
+
+    try {
+      const response = await fetch('/api/agent/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg, sessionId: agentSessionId })
+      });
+      const data = await response.json();
+      if (data.text) {
+        setAgentMessages(prev => [...prev, { sender: 'agent', text: data.text }]);
+      }
+      if (data.sessionId) {
+        setAgentSessionId(data.sessionId);
+      }
+    } catch (err) {
+      console.error("Agent chat failed:", err);
+      setAgentMessages(prev => [...prev, { 
+        sender: 'agent', 
+        text: "La conexión con el Agente falló. Por favor, revisa tu conexión o intenta de nuevo.", 
+        isError: true,
+        failedPrompt: userMsg
+      }]);
+    } finally {
+      setLoadingAgent(false);
+    }
+  };
+
   return (
     <CopilotContext.Provider value={{
       chatHistory, setChatHistory,
       loadingAgent, setLoadingAgent,
       agentInput, setAgentInput,
       agentMessages, setAgentMessages,
-      agentSessionId, setAgentSessionId
+      agentSessionId, setAgentSessionId,
+      handleSendAgentMsg
     }}>
       {children}
     </CopilotContext.Provider>

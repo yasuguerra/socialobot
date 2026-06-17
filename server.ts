@@ -1708,13 +1708,29 @@ app.post("/api/analytics/export", async (req, res) => {
   const profile = await getBrandProfile(uid);
   const fileName = `${reportName || 'social-autopilot'}-report-${new Date().toISOString().split('T')[0]}.${format === 'csv' ? 'csv' : 'json'}`;
   
-  // Send virtual report details
-  res.json({
-    success: true,
-    fileName,
-    linesCount: posts.length + 5,
-    downloadUrl: `data:text/plain;charset=utf-8,${encodeURIComponent("Export report data simulated: " + JSON.stringify({ posts: posts, brand: profile }, null, 2))}`
-  });
+  if (format === 'csv') {
+    let csvContent = "Post ID,Date,Content,Platform,Status,Impressions,Reach,Clicks,Shares,EngagementRate\n";
+    posts.forEach(p => {
+      const pAnalytics = p.analytics || { impressions: 0, reach: 0, clicks: 0, shares: 0, engagementRate: 0 };
+      const safeContent = `"${(p.content || '').replace(/"/g, '""')}"`;
+      csvContent += `${p.id},${p.createdAt},${safeContent},${p.platform},${p.status},${pAnalytics.impressions},${pAnalytics.reach},${pAnalytics.clicks},${pAnalytics.shares},${pAnalytics.engagementRate}\n`;
+    });
+    
+    res.json({
+      success: true,
+      fileName,
+      linesCount: posts.length,
+      downloadUrl: `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`
+    });
+  } else {
+    // JSON export
+    res.json({
+      success: true,
+      fileName,
+      linesCount: posts.length,
+      downloadUrl: `data:application/json;charset=utf-8,${encodeURIComponent(JSON.stringify({ posts: posts, brand: profile }, null, 2))}`
+    });
+  }
 });
 
 // Vite middleware for dev or production file serving

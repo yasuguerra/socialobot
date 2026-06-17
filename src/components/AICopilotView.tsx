@@ -8,7 +8,7 @@ interface AICopilotViewProps {
   setAgentInput: (val: string) => void;
   loadingAgent: boolean;
   handleSendSuggestedMsg: (msg: string) => void;
-  handleSendAgentMsg: () => void;
+  handleSendAgentMsg: (retryText?: string) => void;
   captionDraft: string;
   setCaptionDraft: (val: string) => void;
   activeCreatedPost: SocialPost | null;
@@ -153,7 +153,7 @@ export default function AICopilotView({
                 >
                   🎬 "Dame un guion rápido para un Reel corto de 15 segundos."
                 </button>
-              </div>
+                            </div>
             </div>
           ) : (
             agentMessages.map((msg, idx) => (
@@ -167,11 +167,24 @@ export default function AICopilotView({
                 <div className={`p-3.5 rounded-2xl text-xs leading-relaxed max-w-[90%] ${
                   msg.sender === 'user' 
                     ? 'bg-indigo-600 text-white rounded-tr-none' 
-                    : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200/60 shadow-xs'
+                    : msg.isError 
+                      ? 'bg-rose-50 text-rose-800 rounded-tl-none border border-rose-200 shadow-sm'
+                      : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200/60 shadow-sm'
                 }`}>
                   <p className="whitespace-pre-line">{msg.text}</p>
                   
-                  {msg.sender === 'agent' && (
+                  {msg.isError && msg.failedPrompt && (
+                    <div className="mt-3 pt-2.5 border-t border-rose-200/50 flex gap-2 shrink-0">
+                      <button
+                        onClick={() => handleSendAgentMsg(msg.failedPrompt)}
+                        className="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold px-3 py-1.5 rounded-md transition cursor-pointer flex items-center gap-1.5"
+                      >
+                        <RefreshCw className="w-3 h-3" /> Reintentar
+                      </button>
+                    </div>
+                  )}
+
+                  {msg.sender === 'agent' && !msg.isError && (
                     <div className="mt-3 pt-2.5 border-t border-slate-200/50 flex gap-2 shrink-0">
                       <button
                         onClick={() => {
@@ -193,9 +206,9 @@ export default function AICopilotView({
                             setActiveCreatedPost(prev => prev ? { ...prev, caption: msg.text } : null);
                           }
                         }}
-                        className="bg-indigo-605 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2.5 py-1.5 rounded-md transition cursor-pointer"
                       >
-                        ✨ Usar como Borrador
+                        📝 Usar como Borrador
                       </button>
                     </div>
                   )}
@@ -494,3 +507,5 @@ export default function AICopilotView({
     </div>
   );
 }
+
+

@@ -76,42 +76,6 @@ const EMPTY_ANALYTICS_DATA = {
   ]
 };
 
-const MOCK_ANALYTICS_DATA = {
-  summary: {
-    totalImpressions: 48920,
-    totalReach: 39540,
-    totalClicks: 2890,
-    totalShares: 840,
-    avgEngagement: 4.8,
-    totalPostsCount: 12
-  },
-  chartData: [
-    { month: 'Feb', impressions: 8400, clicks: 540, engagement: 4.2 },
-    { month: 'Mar', impressions: 12500, clicks: 810, engagement: 4.5 },
-    { month: 'Apr', impressions: 15600, clicks: 980, engagement: 4.7 },
-    { month: 'May', impressions: 19800, clicks: 1220, engagement: 4.8 },
-    { month: 'Jun', impressions: 22400, clicks: 1440, engagement: 5.1 }
-  ],
-  platformStats: [
-    { name: "Instagram", value: 40, color: "#EC4899", postsCount: 5 },
-    { name: "TikTok", value: 25, color: "#10B981", postsCount: 3 },
-    { name: "LinkedIn", value: 20, color: "#3B82F6", postsCount: 2 },
-    { name: "Facebook", value: 15, color: "#6366F1", postsCount: 2 }
-  ],
-  demographics: [
-    { name: '18-24', percentage: 35 },
-    { name: '25-34', percentage: 45 },
-    { name: '35-44', percentage: 15 },
-    { name: '45+', percentage: 5 }
-  ],
-  widgets: [
-    { title: "Total Impressions", metric: "48,920", change: "12 published", isPositive: true, type: "impressions" },
-    { title: "Average Engagement", metric: "4.8%", change: "Based on real analytics", isPositive: true, type: "engagement" },
-    { title: "Click-Through Actions", metric: "2,890", change: "Live data", isPositive: true, type: "growth" },
-    { title: "Total Shares", metric: "840", change: "Live data", isPositive: true, type: "shares" }
-  ]
-};
-
 const MOCK_INSTAGRAM_FEED = [
   {
     id: "ig-mock-1",
@@ -228,7 +192,7 @@ export default function App({ authUser }: AppProps) {
 
   const { brandProfile, setBrandProfile, loadingBrand, setLoadingBrand, websiteInput, setWebsiteInput, brandNameInput, setBrandNameInput, brandIndustryInput, setBrandIndustryInput, brandToneInput, setBrandToneInput, brandBuyersInput, setBrandBuyersInput, brandProductsInput, setBrandProductsInput, brandContextInput, setBrandContextInput, scanStatus, setScanStatus } = useBrand();
 
-  const { chatHistory, setChatHistory, loadingAgent, setLoadingAgent, agentInput, setAgentInput, agentMessages, setAgentMessages, agentSessionId, setAgentSessionId } = useCopilot();
+  const { chatHistory, setChatHistory, loadingAgent, setLoadingAgent, agentInput, setAgentInput, agentMessages, setAgentMessages, agentSessionId, setAgentSessionId, handleSendAgentMsg } = useCopilot();
 
   const { studioPrompt, setStudioPrompt, studioFormat, setStudioFormat, studioAspectRatio, setStudioAspectRatio, studioSize, setStudioSize, studioVideoResolution, setStudioVideoResolution, studioVideoModel, setStudioVideoModel, studioVideoDuration, setStudioVideoDuration, studioEnableGrounding, setStudioEnableGrounding, studioStarterImage, setStudioStarterImage, studioStarterImageMime, setStudioStarterImageMime, studioGenerating, setStudioGenerating, studioStatusText, setStudioStatusText, studioGeneratedUrl, setStudioGeneratedUrl, studioLastOperationName, setStudioLastOperationName, studioExtensionPrompt, setStudioExtensionPrompt, studioSavedMedia, setStudioSavedMedia, creatorVisualPrompt, setCreatorVisualPrompt, creatorCustomPrompt, setCreatorCustomPrompt, generatingAIImage, setGeneratingAIImage, aiImagePrompt, setAiImagePrompt, aiGeneratedUrl, setAiGeneratedUrl } = useStudio();
 
@@ -350,12 +314,12 @@ export default function App({ authUser }: AppProps) {
       } else {
         // Fallback for API error on production/bypass
         console.warn("fetchAnalytics response was not ok, falling back to mock/empty analytics.");
-        setAnalytics(isDevAccount ? MOCK_ANALYTICS_DATA : EMPTY_ANALYTICS_DATA);
+        setAnalytics(EMPTY_ANALYTICS_DATA);
         setIsApiActive(false);
       }
     } catch (err) {
       console.warn("fetchAnalytics threw error, falling back to mock/empty analytics:", err);
-      setAnalytics(isDevAccount ? MOCK_ANALYTICS_DATA : EMPTY_ANALYTICS_DATA);
+      setAnalytics(EMPTY_ANALYTICS_DATA);
       setIsApiActive(false);
     } finally {
       setLoadingAnalytics(false);
@@ -1727,4 +1691,6 @@ export default function App({ authUser }: AppProps) {
     </div>
   );
 }
+
+
 
