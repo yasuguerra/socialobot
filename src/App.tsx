@@ -1209,7 +1209,7 @@ export default function App({ authUser }: AppProps) {
   return (
     <div className="flex h-screen w-screen bg-slate-50 font-sans text-slate-900 overflow-hidden" id="main-content-window">
       {/* Sidebar navigation component */}
-      <Sidebar apiActive={isApiActive} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onSignOut={() => auth.signOut()} />
+      <Sidebar apiActive={isApiActive} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onSignOut={() => auth.signOut()} userEmail={authUser?.email} />
 
       {/* Main Console view */}
       <main className="flex-1 flex flex-col h-full overflow-hidden" id="console-workspace">

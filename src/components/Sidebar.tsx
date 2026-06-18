@@ -5,7 +5,8 @@ import {
   Palette,
   LineChart,
   LogOut,
-  X
+  X,
+  User
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -14,9 +15,10 @@ interface SidebarProps {
   onSignOut: () => void;
   isOpen?: boolean;
   onClose?: () => void;
+  userEmail?: string | null;
 }
 
-export default function Sidebar({ apiActive, onSignOut, isOpen = false, onClose }: SidebarProps) {
+export default function Sidebar({ apiActive, onSignOut, isOpen = false, onClose, userEmail }: SidebarProps) {
   const { activeTab, setActiveTab, brandProfile } = useApp();
   const brandName = brandProfile?.companyName || "Mi Empresa";
 
@@ -127,6 +129,19 @@ export default function Sidebar({ apiActive, onSignOut, isOpen = false, onClose 
               </span>
             </div>
           </div>
+          
+          <div className="mb-4 p-3 bg-slate-800/40 rounded-xl border border-slate-700/50 flex items-center gap-3">
+            <div className="bg-slate-700 h-9 w-9 rounded-full flex items-center justify-center shrink-0">
+              <User className="h-4 w-4 text-slate-300" />
+            </div>
+            <div className="overflow-hidden">
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-0.5">Usuario Activo</p>
+              <p className="text-xs font-semibold text-slate-300 truncate" title={userEmail || 'usuario@socialobot.com'}>
+                {userEmail || 'usuario@socialobot.com'}
+              </p>
+            </div>
+          </div>
+
           <button
             onClick={onSignOut}
             className="w-full flex items-center justify-center px-4 py-3 border border-slate-700/80 rounded-xl text-sm font-bold text-slate-400 hover:bg-slate-800 hover:text-white transition-all group"
