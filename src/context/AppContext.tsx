@@ -18,6 +18,8 @@ interface AppContextType {
   setLoadingArsenal: (val: boolean) => void;
   apiConfig: any;
   setApiConfig: React.Dispatch<React.SetStateAction<any>>;
+  pendingMediaTransfer: string | null;
+  setPendingMediaTransfer: (url: string | null) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -30,6 +32,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [loadingIdeas, setLoadingIdeas] = useState(false);
   const [loadingArsenal, setLoadingArsenal] = useState(false);
+  const [pendingMediaTransfer, setPendingMediaTransfer] = useState<string | null>(null);
   
   const [apiConfig, setApiConfig] = useState({ 
     geminiApiKey: '', 
@@ -47,7 +50,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       loadingPosts, setLoadingPosts,
       loadingIdeas, setLoadingIdeas,
       loadingArsenal, setLoadingArsenal,
-      apiConfig, setApiConfig
+      apiConfig, setApiConfig,
+      pendingMediaTransfer, setPendingMediaTransfer
     }}>
       {children}
     </AppContext.Provider>

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RefreshCw, Sparkles, Check, Globe, Trash2, Image as ImageIcon, Wand2, FolderHeart, ArrowLeft } from 'lucide-react';
 import { SocialPost, ArsenalMediaAsset } from '../types';
+import { useApp } from '../context/AppContext';
 
 interface PublisherViewProps {
   fetchIgRecentMedia: () => void;
@@ -64,11 +65,20 @@ export default function PublisherView({
   setCaptionDraft,
   handlePublishPostNow,
   publishingPostId,
+  handleSchedulePost,
   handleDeletePost,
   arsenalMedia = []
 }: PublisherViewProps) {
-  
+  const { pendingMediaTransfer, setPendingMediaTransfer } = useApp();
   const [creationMode, setCreationMode] = useState<'ai' | 'arsenal' | null>(null);
+
+  useEffect(() => {
+    if (pendingMediaTransfer) {
+      setCreationMode('arsenal');
+      setReferenceImageUrl(pendingMediaTransfer);
+      setPendingMediaTransfer(null);
+    }
+  }, [pendingMediaTransfer, setPendingMediaTransfer, setReferenceImageUrl]);
 
   const resetForm = () => {
     setSelectedMediaId(null);
@@ -202,22 +212,38 @@ export default function PublisherView({
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-600 uppercase block">2. Select a file from your Arsenal</label>
                 
-                {arsenalMedia.length === 0 ? (
+                {arsenalMedia.length === 0 && (!referenceImageUrl || !referenceImageUrl.startsWith('http')) ? (
                   <div className="text-center p-6 bg-slate-50 border border-slate-200 border-dashed rounded-xl">
                     <p className="text-sm text-slate-600">Your Arsenal is empty. Upload media in the "Content Arsenal" tab first!</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto max-h-64 p-1">
-                    {arsenalMedia.map((item) => {
-                      const isSelected = selectedMediaId === item.id;
-                      const isVideo = item.mimeType.startsWith('video/');
-                      
+                    {referenceImageUrl && referenceImageUrl.startsWith('http') && !arsenalMedia.find(a => a.url === referenceImageUrl) && (
+                      <button
+                        type="button"
+                        className="relative aspect-square rounded-xl overflow-hidden cursor-pointer ring-4 ring-indigo-500 shadow-md"
+                      >
+                        {referenceImageUrl.includes('.mp4') ? (
+                          <video src={referenceImageUrl} className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={referenceImageUrl} alt="Generated Draft" className="w-full h-full object-cover" />
+                        )}
+                        <div className="absolute inset-0 bg-indigo-500/20" />
+                        <div className="absolute bottom-2 left-2 right-2 bg-indigo-600/90 text-white text-[10px] py-0.5 px-2 rounded-md font-medium text-center backdrop-blur-sm shadow-sm truncate">
+                          Draft (Studio)
+                        </div>
+                      </button>
+                    )}
+                    {arsenalMedia.map((asset) => {
+                      const isSelected = selectedMediaId === asset.id || referenceImageUrl === asset.url;
+                      const isVideo = asset.mimeType.startsWith('video/');
+
                       return (
                         <div
-                          key={item.id}
+                          key={asset.id}
                           onClick={() => {
-                            setSelectedMediaId(item.id);
-                            setReferenceImageUrl(item.url);
+                            setSelectedMediaId(asset.id);
+                            setReferenceImageUrl(asset.url);
                             setCreatorFormat(isVideo ? 'Video' : 'Image');
                           }}
                           className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer transition-all duration-200 border-2 ${
@@ -227,9 +253,9 @@ export default function PublisherView({
                           }`}
                         >
                           {isVideo ? (
-                            <video src={item.url} className="w-full h-full object-cover" />
+                            <video src={asset.url} className="w-full h-full object-cover" />
                           ) : (
-                            <img src={item.url} className="w-full h-full object-cover" alt={item.fileName} />
+                            <img src={asset.url} className="w-full h-full object-cover" alt={asset.fileName} />
                           )}
                           
                           {isSelected && (
@@ -238,7 +264,7 @@ export default function PublisherView({
                             </div>
                           )}
                           <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                            <p className="text-[8px] text-white truncate">{item.fileName}</p>
+                            <p className="text-[8px] text-white truncate">{asset.fileName}</p>
                           </div>
                         </div>
                       );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, ImageIcon, Video as VideoIcon, Search, Upload, RefreshCw, ArrowRight, Download, History, Trash2, Settings2, Sparkles, Wand2 } from 'lucide-react';
+import { Palette, ImageIcon, VideoIcon, Sparkles, Wand2, Settings2, RefreshCw, Layers, SlidersHorizontal, ArrowRight, Save, Trash2, DownloadCloud } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 interface CreativeStudioViewProps {
   studioFormat: 'image' | 'video';
@@ -10,8 +11,8 @@ interface CreativeStudioViewProps {
   setStudioPrompt: (val: string) => void;
   studioSize: string;
   setStudioSize: (val: string) => void;
-  studioEnableGrounding: boolean;
-  setStudioEnableGrounding: (val: boolean) => void;
+  studioEnablegrounding: boolean;
+  setStudioEnablegrounding: (val: boolean) => void;
   studioVideoModel: string;
   setStudioVideoModel: (val: string) => void;
   studioVideoResolution: string;
@@ -48,8 +49,8 @@ export default function CreativeStudioView({
   setStudioPrompt,
   studioSize,
   setStudioSize,
-  studioEnableGrounding,
-  setStudioEnableGrounding,
+  studioEnablegrounding,
+  setStudioEnablegrounding,
   studioVideoModel,
   setStudioVideoModel,
   studioVideoResolution,
@@ -77,6 +78,8 @@ export default function CreativeStudioView({
   setActiveTab
 }: CreativeStudioViewProps) {
   
+  const { setPendingMediaTransfer } = useApp();
+
   // Local state for the simplified UX
   const [userConcept, setUserConcept] = useState('');
   const [visualStyle, setVisualStyle] = useState('Cinemático Comercial');
@@ -277,8 +280,8 @@ export default function CreativeStudioView({
                     <div className="flex items-center gap-2 pt-1.5">
                       <input
                         type="checkbox"
-                        checked={studioEnableGrounding}
-                        onChange={(e) => setStudioEnableGrounding(e.target.checked)}
+                        checked={studioEnablegrounding}
+                        onChange={(e) => setStudioEnablegrounding(e.target.checked)}
                         className="w-4 h-4 accent-indigo-600 rounded cursor-pointer"
                       />
                       <span className="text-xs text-slate-600 font-semibold">Incrustar contexto en vivo</span>
@@ -391,6 +394,7 @@ export default function CreativeStudioView({
               <div className="p-5 border-t border-slate-100 bg-white flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
+                    setPendingMediaTransfer(studioGeneratedUrl);
                     setAiGeneratedUrl(studioGeneratedUrl);
                     setCreatorFormat(studioFormat === 'image' ? 'Image' : 'Video');
                     if (userConcept) {
@@ -404,17 +408,32 @@ export default function CreativeStudioView({
                   <span>Usar en Publicación</span>
                 </button>
 
-                <div className="flex gap-2">
-                  <a
-                    href={studioGeneratedUrl}
-                    download={`socialflow-${studioFormat === 'image' ? 'image.png' : 'video.mp4'}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-indigo-50 text-indigo-700 hover:bg-indigo-100 p-3 rounded-xl text-xs transition flex items-center justify-center font-bold gap-2 cursor-pointer border border-indigo-100"
+                <div className="flex gap-2 w-full mt-3">
+                  <button
+                    onClick={() => {
+                      setStudioGeneratedUrl(pastUrl);
+                      setStudioPrompt(job.visualPrompt || '');
+                      setUserConcept(job.visualPrompt || '');
+                    }}
+                    className="flex-1 bg-white border border-slate-200 hover:border-indigo-300 text-slate-700 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center cursor-pointer"
                   >
-                    <Download className="w-4 h-4" />
-                    <span className="sm:inline hidden">Descargar HD</span>
-                  </a>
+                    Cargar en Lienzo
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPendingMediaTransfer(pastUrl);
+                      setAiGeneratedUrl(pastUrl);
+                      setCreatorFormat(job.format === 'Image' ? 'Image' : 'Video');
+                      if (job.visualPrompt) {
+                        setCreatorVisualPrompt(job.visualPrompt);
+                      }
+                      setActiveTab('publisher');
+                    }}
+                    className="px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 py-1.5 rounded-lg text-xs font-bold transition flex items-center justify-center cursor-pointer"
+                    title="Usar en publicación"
+                  >
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             )}
