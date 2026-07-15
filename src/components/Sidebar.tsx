@@ -6,7 +6,8 @@ import {
   LineChart,
   LogOut,
   X,
-  User
+  User,
+  FolderHeart
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -103,6 +104,14 @@ export default function Sidebar({ apiActive, onSignOut, isOpen = false, onClose,
             >
               <LineChart className={`mr-3 h-5 w-5 ${activeTab === 'campaigns' ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
               Dashboard Analítico
+            </button>
+
+            <button
+              onClick={() => { setActiveTab('arsenal'); onClose?.(); }}
+              className={`w-full flex items-center px-4 py-3.5 text-sm font-bold rounded-xl transition-all duration-200 group ${activeTab === 'arsenal' ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/20' : 'border border-transparent hover:bg-slate-800/50 hover:text-slate-100'}`}
+            >
+              <FolderHeart className={`mr-3 h-5 w-5 ${activeTab === 'arsenal' ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'}`} />
+              Content Arsenal
             </button>
 
             <p className="px-3 text-[11px] font-black text-slate-500 uppercase tracking-widest mb-3 mt-6">
